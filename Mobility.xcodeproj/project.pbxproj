@@ -19,6 +19,10 @@
 		1E3FD0EF1A3EC330000C7E58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */; };
 		1E3FD0F71A3EC330000C7E58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F51A3EC330000C7E58 /* InfoPlist.strings */; };
 		1E3FD0F91A3EC330000C7E58 /* MobilityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */; };
+		1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */; };
+		1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */; };
+		1E3FD1091A3EC596000C7E58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */; };
+		1E3FD10C1A3ECA45000C7E58 /* MobilityLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,13 @@
 		1E3FD0F41A3EC330000C7E58 /* MobilityTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MobilityTests-Info.plist"; sourceTree = "<group>"; };
 		1E3FD0F61A3EC330000C7E58 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobilityTests.m; sourceTree = "<group>"; };
+		1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityViewController.h; sourceTree = "<group>"; };
+		1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityViewController.m; sourceTree = "<group>"; };
+		1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityLogger.h; sourceTree = "<group>"; };
+		1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityLogger.m; sourceTree = "<group>"; };
+		1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		1E3FD10A1A3ECA45000C7E58 /* MobilityLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityLogEntry.h; sourceTree = "<group>"; };
+		1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityLogEntry.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3FD1091A3EC596000C7E58 /* CoreMotion.framework in Frameworks */,
 				1E3FD0D61A3EC32F000C7E58 /* CoreGraphics.framework in Frameworks */,
 				1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */,
 				1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */,
@@ -96,6 +108,7 @@
 		1E3FD0D21A3EC32F000C7E58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */,
 				1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */,
 				1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */,
 				1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */,
@@ -111,6 +124,12 @@
 				1E3FD0E31A3EC330000C7E58 /* AppDelegate.m */,
 				1E3FD0E51A3EC330000C7E58 /* Images.xcassets */,
 				1E3FD0DA1A3EC32F000C7E58 /* Supporting Files */,
+				1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */,
+				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
+				1E3FD10A1A3ECA45000C7E58 /* MobilityLogEntry.h */,
+				1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */,
+				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
+				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
 			);
 			path = Mobility;
 			sourceTree = "<group>";
@@ -191,6 +210,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Open mHealth";
 				TargetAttributes = {
+					1E3FD0CF1A3EC32F000C7E58 = {
+						DevelopmentTeam = N6LPGP6RYT;
+					};
 					1E3FD0EA1A3EC330000C7E58 = {
 						TestTargetID = 1E3FD0CF1A3EC32F000C7E58;
 					};
@@ -239,8 +261,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
+				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
+				1E3FD10C1A3ECA45000C7E58 /* MobilityLogEntry.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,6 +462,7 @@
 				1E3FD0FE1A3EC330000C7E58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		1E3FD0FF1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "MobilityTests" */ = {
 			isa = XCConfigurationList;
@@ -445,6 +471,7 @@
 				1E3FD1011A3EC330000C7E58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
