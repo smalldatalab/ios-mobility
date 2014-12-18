@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E1C75F31A42AB2A004AA4EA /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 1E1C75D31A42AB2A004AA4EA /* .gitignore */; };
+		1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */; };
+		1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D81A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m */; };
+		1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75DA1A42AB2A004AA4EA /* AFHTTPSessionManager.m */; };
+		1E1C75F71A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75DC1A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m */; };
+		1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75DF1A42AB2A004AA4EA /* AFNetworkReachabilityManager.m */; };
+		1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75E11A42AB2A004AA4EA /* AFSecurityPolicy.m */; };
+		1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75E31A42AB2A004AA4EA /* AFURLConnectionOperation.m */; };
+		1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75E51A42AB2A004AA4EA /* AFURLRequestSerialization.m */; };
+		1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75E71A42AB2A004AA4EA /* AFURLResponseSerialization.m */; };
+		1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75E91A42AB2A004AA4EA /* AFURLSessionManager.m */; };
+		1E1C75FE1A42AB2A004AA4EA /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1C75EB1A42AB2A004AA4EA /* GoogleOpenSource.framework */; };
+		1E1C75FF1A42AB2A004AA4EA /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E1C75EC1A42AB2A004AA4EA /* GooglePlus.bundle */; };
+		1E1C76001A42AB2A004AA4EA /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1C75ED1A42AB2A004AA4EA /* GooglePlus.framework */; };
+		1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */; };
+		1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */; };
+		1E1C76051A42C946004AA4EA /* DummyActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C76041A42C946004AA4EA /* DummyActivity.m */; };
 		1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */; };
 		1E3FD0D61A3EC32F000C7E58 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */; };
 		1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */; };
@@ -22,7 +39,7 @@
 		1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */; };
 		1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */; };
 		1E3FD1091A3EC596000C7E58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */; };
-		1E3FD10C1A3ECA45000C7E58 /* MobilityLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */; };
+		1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +53,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E1C75D31A42AB2A004AA4EA /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		1E1C75D51A42AB2A004AA4EA /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
+		1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
+		1E1C75D71A42AB2A004AA4EA /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
+		1E1C75D81A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
+		1E1C75D91A42AB2A004AA4EA /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPSessionManager.h; sourceTree = "<group>"; };
+		1E1C75DA1A42AB2A004AA4EA /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		1E1C75DB1A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
+		1E1C75DC1A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkActivityIndicatorManager.m; sourceTree = "<group>"; };
+		1E1C75DD1A42AB2A004AA4EA /* AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworking.h; sourceTree = "<group>"; };
+		1E1C75DE1A42AB2A004AA4EA /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
+		1E1C75DF1A42AB2A004AA4EA /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
+		1E1C75E01A42AB2A004AA4EA /* AFSecurityPolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFSecurityPolicy.h; sourceTree = "<group>"; };
+		1E1C75E11A42AB2A004AA4EA /* AFSecurityPolicy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFSecurityPolicy.m; sourceTree = "<group>"; };
+		1E1C75E21A42AB2A004AA4EA /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLConnectionOperation.h; sourceTree = "<group>"; };
+		1E1C75E31A42AB2A004AA4EA /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLConnectionOperation.m; sourceTree = "<group>"; };
+		1E1C75E41A42AB2A004AA4EA /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		1E1C75E51A42AB2A004AA4EA /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLRequestSerialization.m; sourceTree = "<group>"; };
+		1E1C75E61A42AB2A004AA4EA /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLResponseSerialization.h; sourceTree = "<group>"; };
+		1E1C75E71A42AB2A004AA4EA /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLResponseSerialization.m; sourceTree = "<group>"; };
+		1E1C75E81A42AB2A004AA4EA /* AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFURLSessionManager.h; sourceTree = "<group>"; };
+		1E1C75E91A42AB2A004AA4EA /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
+		1E1C75EB1A42AB2A004AA4EA /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
+		1E1C75EC1A42AB2A004AA4EA /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlus.bundle; sourceTree = "<group>"; };
+		1E1C75ED1A42AB2A004AA4EA /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
+		1E1C75EE1A42AB2A004AA4EA /* OMHClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHClient.h; sourceTree = "<group>"; };
+		1E1C75EF1A42AB2A004AA4EA /* OMHClientDSUConnector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHClientDSUConnector.h; sourceTree = "<group>"; };
+		1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHClientDSUConnector.m; sourceTree = "<group>"; };
+		1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHDataPoint.h; sourceTree = "<group>"; };
+		1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
+		1E1C76031A42C946004AA4EA /* DummyActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyActivity.h; sourceTree = "<group>"; };
+		1E1C76041A42C946004AA4EA /* DummyActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DummyActivity.m; sourceTree = "<group>"; };
 		1E3FD0D01A3EC32F000C7E58 /* Mobility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobility.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -57,8 +106,8 @@
 		1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityLogger.h; sourceTree = "<group>"; };
 		1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityLogger.m; sourceTree = "<group>"; };
 		1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		1E3FD10A1A3ECA45000C7E58 /* MobilityLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityLogEntry.h; sourceTree = "<group>"; };
-		1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityLogEntry.m; sourceTree = "<group>"; };
+		1E3FD10A1A3ECA45000C7E58 /* MobilityDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityDataPoint.h; sourceTree = "<group>"; };
+		1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityDataPoint.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +115,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E1C75FE1A42AB2A004AA4EA /* GoogleOpenSource.framework in Frameworks */,
+				1E1C76001A42AB2A004AA4EA /* GooglePlus.framework in Frameworks */,
 				1E3FD1091A3EC596000C7E58 /* CoreMotion.framework in Frameworks */,
 				1E3FD0D61A3EC32F000C7E58 /* CoreGraphics.framework in Frameworks */,
 				1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */,
@@ -86,6 +137,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E1C75D21A42AB2A004AA4EA /* OMHClient */ = {
+			isa = PBXGroup;
+			children = (
+				1E1C75D31A42AB2A004AA4EA /* .gitignore */,
+				1E1C75D41A42AB2A004AA4EA /* AFNetworking */,
+				1E1C75EA1A42AB2A004AA4EA /* GoogleSDK */,
+				1E1C75EE1A42AB2A004AA4EA /* OMHClient.h */,
+				1E1C75EF1A42AB2A004AA4EA /* OMHClientDSUConnector.h */,
+				1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */,
+				1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */,
+				1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */,
+			);
+			path = OMHClient;
+			sourceTree = SOURCE_ROOT;
+		};
+		1E1C75D41A42AB2A004AA4EA /* AFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				1E1C75D51A42AB2A004AA4EA /* AFHTTPRequestOperation.h */,
+				1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */,
+				1E1C75D71A42AB2A004AA4EA /* AFHTTPRequestOperationManager.h */,
+				1E1C75D81A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m */,
+				1E1C75D91A42AB2A004AA4EA /* AFHTTPSessionManager.h */,
+				1E1C75DA1A42AB2A004AA4EA /* AFHTTPSessionManager.m */,
+				1E1C75DB1A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.h */,
+				1E1C75DC1A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m */,
+				1E1C75DD1A42AB2A004AA4EA /* AFNetworking.h */,
+				1E1C75DE1A42AB2A004AA4EA /* AFNetworkReachabilityManager.h */,
+				1E1C75DF1A42AB2A004AA4EA /* AFNetworkReachabilityManager.m */,
+				1E1C75E01A42AB2A004AA4EA /* AFSecurityPolicy.h */,
+				1E1C75E11A42AB2A004AA4EA /* AFSecurityPolicy.m */,
+				1E1C75E21A42AB2A004AA4EA /* AFURLConnectionOperation.h */,
+				1E1C75E31A42AB2A004AA4EA /* AFURLConnectionOperation.m */,
+				1E1C75E41A42AB2A004AA4EA /* AFURLRequestSerialization.h */,
+				1E1C75E51A42AB2A004AA4EA /* AFURLRequestSerialization.m */,
+				1E1C75E61A42AB2A004AA4EA /* AFURLResponseSerialization.h */,
+				1E1C75E71A42AB2A004AA4EA /* AFURLResponseSerialization.m */,
+				1E1C75E81A42AB2A004AA4EA /* AFURLSessionManager.h */,
+				1E1C75E91A42AB2A004AA4EA /* AFURLSessionManager.m */,
+			);
+			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		1E1C75EA1A42AB2A004AA4EA /* GoogleSDK */ = {
+			isa = PBXGroup;
+			children = (
+				1E1C75EB1A42AB2A004AA4EA /* GoogleOpenSource.framework */,
+				1E1C75EC1A42AB2A004AA4EA /* GooglePlus.bundle */,
+				1E1C75ED1A42AB2A004AA4EA /* GooglePlus.framework */,
+			);
+			path = GoogleSDK;
+			sourceTree = "<group>";
+		};
 		1E3FD0C71A3EC32F000C7E58 = {
 			isa = PBXGroup;
 			children = (
@@ -120,16 +224,19 @@
 		1E3FD0D91A3EC32F000C7E58 /* Mobility */ = {
 			isa = PBXGroup;
 			children = (
+				1E1C75D21A42AB2A004AA4EA /* OMHClient */,
 				1E3FD0E21A3EC330000C7E58 /* AppDelegate.h */,
 				1E3FD0E31A3EC330000C7E58 /* AppDelegate.m */,
 				1E3FD0E51A3EC330000C7E58 /* Images.xcassets */,
 				1E3FD0DA1A3EC32F000C7E58 /* Supporting Files */,
 				1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */,
 				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
-				1E3FD10A1A3ECA45000C7E58 /* MobilityLogEntry.h */,
-				1E3FD10B1A3ECA45000C7E58 /* MobilityLogEntry.m */,
+				1E3FD10A1A3ECA45000C7E58 /* MobilityDataPoint.h */,
+				1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */,
 				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
 				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
+				1E1C76031A42C946004AA4EA /* DummyActivity.h */,
+				1E1C76041A42C946004AA4EA /* DummyActivity.m */,
 			);
 			path = Mobility;
 			sourceTree = "<group>";
@@ -242,6 +349,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E3FD0DE1A3EC330000C7E58 /* InfoPlist.strings in Resources */,
+				1E1C75F31A42AB2A004AA4EA /* .gitignore in Resources */,
+				1E1C75FF1A42AB2A004AA4EA /* GooglePlus.bundle in Resources */,
 				1E3FD0E61A3EC330000C7E58 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,11 +370,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
+				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
 				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
+				1E1C76051A42C946004AA4EA /* DummyActivity.m in Sources */,
+				1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */,
 				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
+				1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */,
+				1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */,
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
+				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
+				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
-				1E3FD10C1A3ECA45000C7E58 /* MobilityLogEntry.m in Sources */,
+				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
+				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,
+				1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */,
+				1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */,
+				1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */,
+				1E1C75F71A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +504,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
 				INFOPLIST_FILE = "Mobility/Mobility-Info.plist";
@@ -395,6 +521,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
 				INFOPLIST_FILE = "Mobility/Mobility-Info.plist";
