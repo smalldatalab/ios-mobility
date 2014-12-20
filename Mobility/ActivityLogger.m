@@ -14,7 +14,6 @@
 
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
-@property (nonatomic, strong) NSMutableArray *activities;
 @property (nonatomic, strong) NSMutableArray *privateDataPoints;
 
 
@@ -28,7 +27,15 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedLogger = [[self alloc] initPrivate];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSData *encodedClient = [defaults objectForKey:@"MobilityActivityLogger"];
+        if (encodedClient != nil) {
+            _sharedLogger = (ActivityLogger *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
+        } else {
+            _sharedLogger = [[self alloc] initPrivate];
+        }
+        
+        [_sharedLogger startLogging];
     });
     
     return _sharedLogger;
@@ -46,9 +53,33 @@
 {
     self = [super init];
     if (self) {
-        [self startLogging];
+        self.privateDataPoints = [NSMutableArray array];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    self = [super init];
+    if (self != nil) {
+        _privateDataPoints = [decoder decodeObjectForKey:@"logger.dataPoints"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:self.privateDataPoints forKey:@"logger.dataPoints"];
+}
+
+- (void)archiveDataPoints
+{
+    NSLog(@"archiving data points, count: %d", (int)self.privateDataPoints.count);
+    NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger"];
+    [userDefaults synchronize];
 }
 
 - (CMMotionActivityManager *)motionActivitiyManager
@@ -57,22 +88,6 @@
         _motionActivitiyManager = [[CMMotionActivityManager alloc] init];
     }
     return _motionActivitiyManager;
-}
-
-- (NSMutableArray *)activities
-{
-    if (_activities == nil) {
-        _activities = [NSMutableArray array];
-    }
-    return _activities;
-}
-
-- (NSMutableArray *)privateDataPoints
-{
-    if (_privateDataPoints == nil) {
-        _privateDataPoints = [NSMutableArray array];
-    }
-    return _privateDataPoints;
 }
 
 - (NSArray *)dataPoints
@@ -85,7 +100,6 @@
 {
     if ([CMMotionActivityManager isActivityAvailable]) {
         __weak typeof(self) weakSelf = self;
-        [self.activities removeAllObjects];
         [self.motionActivitiyManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
                                                      withHandler:^(CMMotionActivity *activity) {
                                                          [weakSelf logActivity:activity];
@@ -111,8 +125,6 @@
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
     if (![self motionActivityHasActivity:activity]) return;
     
-    [self.activities insertObject:activity atIndex:0];
-    
     MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:nil];
     if (dataPoint.body.activities.count == 0) {
         NSLog(@"no activities for motion activity: %@", activity);
@@ -122,6 +134,8 @@
     if (self.newDataPointBlock != nil) {
         self.newDataPointBlock(dataPoint);
     }
+    
+    [self archiveDataPoints];
 }
 
 
