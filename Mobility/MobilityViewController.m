@@ -25,8 +25,8 @@
     self.logger = [ActivityLogger sharedLogger];
     
     __weak typeof(self) weakSelf = self;
-    self.logger.newLogEntryBlock = ^(MobilityLogEntry *logEntry) {
-        NSLog(@"new log entry: %@", logEntry);
+    self.logger.newDataPointBlock = ^(MobilityDataPoint *dataPoint) {
+//        NSLog(@"new log entry: %@", dataPoint);
         [weakSelf.tableView reloadData];
     };
     
@@ -41,7 +41,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.logger.logEntries.count;
+    return self.logger.dataPoints.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -51,7 +51,22 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"Entry %d", (int)indexPath.row];
+    
+    MobilityDataPoint *dataPoint = self.logger.dataPoints[indexPath.row];
+    
+    NSArray *activities = dataPoint.body.activities;
+    NSMutableString *text = [NSMutableString string];
+    MobilityActivity *activity;
+    for (int i = 0; i < activities.count; i++) {
+        if (i > 0) [text appendString:@", "];
+        activity = activities[i];
+        [text appendString:activity.activity];
+    }
+    if (activity == nil) {
+        NSLog(@"nil activity for data point: %@", dataPoint);
+    }
+    cell.textLabel.text = text;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, confidence: %@", dataPoint.header.creationDateTime, activity.confidence];
     
     return cell;
 }

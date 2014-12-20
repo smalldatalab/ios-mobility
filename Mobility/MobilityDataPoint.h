@@ -27,6 +27,9 @@ typedef NSMutableDictionary MobilityLocation;
 
 @interface NSMutableDictionary (MobilityDataPointBody)
 
++ (NSMutableDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
+                                         location:(CLLocation *)location;
+
 @property (nonatomic, strong) MobilityLocation *location;
 @property (nonatomic, strong) NSMutableArray *activities;
 
@@ -44,10 +47,10 @@ typedef NSMutableDictionary MobilityLocation;
 @end
 
 
-@interface NSMutableDictionary (MobilityActivity)
+@interface NSDictionary (MobilityActivity)
 
-@property (nonatomic, strong) NSString *activity;
-@property (nonatomic, strong) NSNumber *confidence;
+@property (nonatomic, readonly) NSString *activity;
+@property (nonatomic, readonly) NSString *confidence;
 
 @end
 

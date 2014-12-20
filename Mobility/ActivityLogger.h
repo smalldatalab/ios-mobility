@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MobilityLogEntry.h"
+#import "MobilityDataPoint.h"
 
 @interface ActivityLogger : NSObject
 
 + (instancetype)sharedLogger;
 
-@property (nonatomic, readonly) NSArray *logEntries;
-@property (copy) void (^newLogEntryBlock)(MobilityLogEntry *logEntry);
+@property (nonatomic, readonly) NSArray *dataPoints;
+@property (copy) void (^newDataPointBlock)(MobilityDataPoint *dataPoint);
 
 - (void)startLogging;
 

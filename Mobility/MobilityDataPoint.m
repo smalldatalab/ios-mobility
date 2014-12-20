@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Open mHealth. All rights reserved.
 //
 
-#import "MobilityDataPoint"
+#import "MobilityDataPoint.h"
 
 #import <CoreMotion/CoreMotion.h>
 
@@ -19,7 +19,7 @@
     dataPoint.header.schemaID = [self schemaID];
     dataPoint.header.acquisitionProvenance = [self acquisitionProvenance];
     dataPoint.header.creationDateTime = motionActivity.startDate;
-    dataPoint.body = [MobilityDataPointBody dataPointWithMotionActivity:motionActivity location:location];
+    dataPoint.body = [MobilityDataPointBody dataPointBodyWithMotionActivity:motionActivity location:location];
     
     return dataPoint;
 }
@@ -54,21 +54,21 @@
 
 @implementation NSMutableDictionary (MobilityDataPointBody)
 
-+ (NSDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
++ (NSMutableDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
                                          location:(CLLocation *)location
 {
     return [[MobilityDataPointBody alloc] initWithMotionActivity:motionActivity location:location];
 }
 
-+ (NSNumber *)confidenceForMotionActivity:(CMMotionActivity *)activity
++ (NSString *)confidenceForMotionActivity:(CMMotionActivity *)activity
 {
     switch (activity.confidence) {
         case CMMotionActivityConfidenceLow:
-            return @(0);
+            return @"low";
         case CMMotionActivityConfidenceMedium:
-            return @(50);
+            return @"medium";
         case CMMotionActivityConfidenceHigh:
-            return @(100);
+            return @"high";
         default:
             return nil;
     }
@@ -86,7 +86,7 @@
 
 - (void)createMobilityActivitiesFromMotionActivity:(CMMotionActivity *)motionActivity
 {
-    NSNumber *confidence = [MobilityDataPointBody confidenceForMotionActivity:motionActivity];
+    NSString *confidence = [MobilityDataPointBody confidenceForMotionActivity:motionActivity];
     
     if (motionActivity.stationary) {
         [self.activities addObject:@{@"activity" : @"still",
@@ -106,6 +106,10 @@
     }
     if (motionActivity.cycling) {
         [self.activities addObject:@{@"activity" : @"cycling",
+                                     @"confidence" : confidence}];
+    }
+    if (motionActivity.unknown) {
+        [self.activities addObject:@{@"activity" : @"unknown",
                                      @"confidence" : confidence}];
     }
 }
@@ -205,25 +209,25 @@
 
 #pragma mark - MobilityLocation
 
-@implementation NSMutableDictionary (MobilityActivity)
+@implementation NSDictionary (MobilityActivity)
 
 
-- (void)setActivity:(NSString *)activity
-{
-    self[@"activity"] = activity;
-}
+//- (void)setActivity:(NSString *)activity
+//{
+//    self[@"activity"] = activity;
+//}
 
 - (NSString *)activity
 {
     return self[@"activity"];
 }
 
-- (void)setConfidence:(NSNumber *)confidence
-{
-    self[@"confidence"] = confidence;
-}
+//- (void)setConfidence:(NSString *)confidence
+//{
+//    self[@"confidence"] = confidence;
+//}
 
-- (NSNumber *)confidence
+- (NSString *)confidence
 {
     return self[@"confidence"];
 }
