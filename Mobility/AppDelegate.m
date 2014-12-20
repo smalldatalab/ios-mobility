@@ -8,6 +8,20 @@
 
 #import "AppDelegate.h"
 #import "MobilityViewController.h"
+#import "LoginViewController.h"
+#import "OMHClient.h"
+
+
+NSString * const kMobilityGoogleClientID = @"48636836762-ba1jcrir6sft063gkvpav0e3o9p4mtb5.apps.googleusercontent.com";
+NSString * const kOMHServerGoogleClientID = @"48636836762-mulldgpmet2r4s3f16s931ea9crcc64m.apps.googleusercontent.com";
+NSString * const kMobilityDSUClientID = @"com.openmhealth.ios.mobility";
+NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
+
+@interface AppDelegate ()
+
+@property (nonatomic, strong) LoginViewController *loginViewController;
+
+@end
 
 @implementation AppDelegate
 
@@ -15,13 +29,54 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    MobilityViewController *vc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nav;
+    [self setupOMHClient];
+    
+    UIViewController *root = nil;
+    if (![OMHClient sharedClient].isSignedIn) {
+        self.loginViewController = [[LoginViewController alloc] init];
+        root = self.loginViewController;
+    }
+    else {
+        MobilityViewController *vc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
+        UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
+        root = navcon;
+    }
+    
+    self.window.rootViewController = root;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
     return YES;
+}
+
+- (void)setupOMHClient
+{
+    OMHClient *client = [OMHClient sharedClient];
+    client.appGoogleClientID = kMobilityGoogleClientID;
+    client.serverGoogleClientID = kOMHServerGoogleClientID;
+    client.appDSUClientID = kMobilityDSUClientID;
+    client.appDSUClientSecret = kMobilityDSUClientSecret;
+}
+
+- (void)userDidLogin
+{
+    MobilityViewController *vc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
+    [UIView transitionFromView:self.loginViewController.view toView:navcon.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+        self.window.rootViewController = navcon;
+        self.loginViewController = nil;
+    }];
+}
+
+- (BOOL)application: (UIApplication *)application
+            openURL: (NSURL *)url
+  sourceApplication: (NSString *)sourceApplication
+         annotation: (id)annotation {
+    NSLog(@"openURL: %@, source: %@, annotation: %@", url, sourceApplication, annotation);
+    return [[OMHClient sharedClient] handleURL:url
+                             sourceApplication:sourceApplication
+                                    annotation:annotation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

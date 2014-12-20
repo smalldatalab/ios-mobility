@@ -29,9 +29,6 @@
 //        NSLog(@"new log entry: %@", dataPoint);
         [weakSelf.tableView reloadData];
     };
-    
-    UIBarButtonItem *startButton = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self.logger action:@selector(startLogging)];
-    self.navigationItem.rightBarButtonItem = startButton;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

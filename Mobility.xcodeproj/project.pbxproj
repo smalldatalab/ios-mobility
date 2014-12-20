@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6CD1A4555EF00331827 /* LoginViewController.m */; };
+		1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */; };
 		1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */; };
 		1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D81A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m */; };
 		1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75DA1A42AB2A004AA4EA /* AFHTTPSessionManager.m */; };
@@ -45,6 +47,7 @@
 		1E5BB3A61A441636008B6B95 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A51A441636008B6B95 /* CoreText.framework */; };
 		1E5BB3A81A441643008B6B95 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A71A441643008B6B95 /* AssetsLibrary.framework */; };
 		1E5BB3AA1A441647008B6B95 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A91A441647008B6B95 /* AddressBook.framework */; };
+		1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +61,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E12F6CC1A4555EF00331827 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		1E12F6CD1A4555EF00331827 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayoutHelpers.h"; sourceTree = "<group>"; };
+		1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AutoLayoutHelpers.m"; sourceTree = "<group>"; };
 		1E1C75D51A42AB2A004AA4EA /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		1E1C75D71A42AB2A004AA4EA /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -118,6 +125,7 @@
 		1E5BB3A51A441636008B6B95 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		1E5BB3A71A441643008B6B95 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1E5BB3A91A441647008B6B95 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */,
 				1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */,
 				1E1C75FE1A42AB2A004AA4EA /* GoogleOpenSource.framework in Frameworks */,
 				1E1C76001A42AB2A004AA4EA /* GooglePlus.framework in Frameworks */,
@@ -227,6 +236,7 @@
 		1E3FD0D21A3EC32F000C7E58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */,
 				1E5BB3A91A441647008B6B95 /* AddressBook.framework */,
 				1E5BB3A71A441643008B6B95 /* AssetsLibrary.framework */,
 				1E5BB3A51A441636008B6B95 /* CoreText.framework */,
@@ -256,6 +266,10 @@
 				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
 				1E4000EF1A431F350007C2D4 /* LocationManager.h */,
 				1E4000F01A431F350007C2D4 /* LocationManager.m */,
+				1E12F6CC1A4555EF00331827 /* LoginViewController.h */,
+				1E12F6CD1A4555EF00331827 /* LoginViewController.m */,
+				1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */,
+				1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */,
 				1E3FD0E51A3EC330000C7E58 /* Images.xcassets */,
 				1E3FD0DA1A3EC32F000C7E58 /* Supporting Files */,
 			);
@@ -393,6 +407,7 @@
 				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
 				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
 				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
+				1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */,
 				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
 				1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */,
@@ -405,6 +420,7 @@
 				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
 				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,
 				1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */,
+				1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */,
 				1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */,
 				1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */,
 				1E1C75F71A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -533,6 +549,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
 				INFOPLIST_FILE = "Mobility/Mobility-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
@@ -553,6 +570,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
 				INFOPLIST_FILE = "Mobility/Mobility-Info.plist";
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
