@@ -19,7 +19,12 @@
     OMHDataPoint *dataPoint = [OMHDataPoint templateDataPoint];
     dataPoint.header.schemaID = [self schemaID];
     dataPoint.header.acquisitionProvenance = [self acquisitionProvenance];
-    dataPoint.header.creationDateTime = motionActivity.startDate;
+    if (motionActivity) {
+        dataPoint.header.creationDateTime = motionActivity.startDate;
+    }
+    else if (location) {
+        dataPoint.header.creationDateTime = location.timestamp;
+    }
     dataPoint.body = [MobilityDataPointBody dataPointBodyWithMotionActivity:motionActivity location:location];
     
     return dataPoint;
@@ -79,7 +84,9 @@
 {
     self = [self init];
     if (self) {
-        [self createMobilityActivitiesFromMotionActivity:motionActivity];
+        if (motionActivity != nil) {
+            [self createMobilityActivitiesFromMotionActivity:motionActivity];
+        }
         if (location != nil) {
             self.location = [MobilityLocation mobilityLocationWithCLLocation:location];
         }
@@ -112,7 +119,7 @@
         [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeCycle],
                                      @"confidence" : confidence}];
     }
-    if (motionActivity.unknown) {
+    if (motionActivity.unknown || self.activities.count == 0) {
         [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
                                      @"confidence" : confidence}];
     }
@@ -192,7 +199,7 @@
 
 - (NSNumber *)latitude
 {
-    return self[@"latitide"];
+    return self[@"latitude"];
 }
 
 - (void)setLongitude:(NSNumber *)longitude

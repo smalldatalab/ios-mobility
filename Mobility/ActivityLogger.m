@@ -16,8 +16,9 @@
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
-@property (nonatomic, strong) NSMutableArray *privateDataPoints;
-@property (strong) CMMotionActivity *lastLoggedActivity;
+@property (nonatomic, strong) NSMutableArray *privateActivityDataPoints;
+@property (nonatomic, strong) NSMutableArray *privateLocationDataPoints;
+@property (strong) NSDate *lastLoggedActivityDate;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
@@ -60,7 +61,8 @@
 {
     self = [super init];
     if (self) {
-        self.privateDataPoints = [NSMutableArray array];
+        self.privateActivityDataPoints = [NSMutableArray array];
+        self.privateLocationDataPoints = [NSMutableArray array];
     }
     return self;
 }
@@ -69,7 +71,9 @@
 {
     self = [super init];
     if (self != nil) {
-        _privateDataPoints = [decoder decodeObjectForKey:@"logger.dataPoints"];
+        _privateActivityDataPoints = [decoder decodeObjectForKey:@"logger.activityDataPoints"];
+        _privateLocationDataPoints = [decoder decodeObjectForKey:@"logger.locationDataPoints"];
+        _lastLoggedActivityDate = [decoder decodeObjectForKey:@"logger.lastLoggedActivityDate"];
     }
     
     return self;
@@ -77,17 +81,24 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.privateDataPoints forKey:@"logger.dataPoints"];
+    [encoder encodeObject:self.privateActivityDataPoints forKey:@"logger.activityDataPoints"];
+    [encoder encodeObject:self.privateLocationDataPoints forKey:@"logger.locationDataPoints"];
+    [encoder encodeObject:self.lastLoggedActivityDate forKey:@"logger.lastLoggedActivityDate"];
 }
 
-- (NSArray *)dataPoints
+- (NSArray *)activityDataPoints
 {
-    return self.privateDataPoints;
+    return self.privateActivityDataPoints;
+}
+
+- (NSArray *)locationDataPoints
+{
+    return self.privateLocationDataPoints;
 }
 
 - (void)archiveDataPoints
 {
-    NSLog(@"archiving data points, count: %d", (int)self.privateDataPoints.count);
+    NSLog(@"archiving data points, activites: %d, locations: %d", (int)self.privateActivityDataPoints.count, (int)self.privateLocationDataPoints);
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger"];
@@ -106,7 +117,7 @@
     NSLog(@"exit background mode");
     self.backgroundMode = NO;
     [self.locationManager disallowDeferredLocationUpdates];
-    [self startLogging];
+//    [self startLogging];
 }
 
 #pragma mark - Motion Activity
@@ -125,10 +136,7 @@
         __weak typeof(self) weakSelf = self;
         [self.motionActivitiyManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
                                                      withHandler:^(CMMotionActivity *activity) {
-                                                         [weakSelf logActivity:activity
-                                                                  withLocation:weakSelf.locationManager.location
-                                                                      deferred:NO
-                                                                     timestamp:[NSDate date]];
+                                                         [weakSelf logActivity:activity];
                                                      }];
     }
     else {
@@ -151,27 +159,24 @@
             || activity.unknown);
 }
 
-- (void)logActivity:(CMMotionActivity *)activity withLocation:(CLLocation *)location deferred:(BOOL)deferred timestamp:(NSDate *)timestamp
+- (void)logActivity:(CMMotionActivity *)activity
 {
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
-    if (![self motionActivityHasActivity:activity]) return;
+//    if (![self motionActivityHasActivity:activity]) return;
     
-    self.lastLoggedActivity = activity;
+    self.lastLoggedActivityDate = activity.startDate;
     
-    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:location];
-    NSString *defStr = deferred ? @"yes" : @"no";
-    dataPoint[@"timestamp"] = timestamp;
-    dataPoint[@"deferred"] = defStr;
+    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:nil];
     
-    NSLog(@"log activity: %@ (%@), location: %@, deferred: %d", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence, location, deferred);
+    NSLog(@"log activity: %@ (%@)", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence);
     
     if (dataPoint.body.activities.count == 0) {
         NSLog(@"no activities for motion activity: %@", activity);
     }
-    [self.privateDataPoints insertObject:dataPoint atIndex:0];
+    [self.privateActivityDataPoints insertObject:dataPoint atIndex:0];
     
-    if (self.newDataPointBlock != nil) {
-        self.newDataPointBlock(dataPoint);
+    if (self.newActivityDataPointBlock != nil) {
+        self.newActivityDataPointBlock(dataPoint);
     }
     
     [self archiveDataPoints];
@@ -179,23 +184,9 @@
 //    [[OMHClient sharedClient] submitDataPoint:dataPoint];
 }
 
-- (CLLocation *)closestLocationToDate:(NSDate *)date fromLocations:(NSArray *)locations
+- (void)logActivities:(NSArray *)activities
 {
-    CLLocation *closest = locations.firstObject;
-    NSTimeInterval dif = fabs([date timeIntervalSinceDate:closest.timestamp]);
-    for (CLLocation *location in locations) {
-        NSTimeInterval newDif = fabs([date timeIntervalSinceDate:location.timestamp]);
-        if (newDif < dif) {
-            dif = newDif;
-            closest = location;
-        }
-    }
-    return closest;
-}
-
-- (void)logActivities:(NSArray *)activities withLocations:(NSArray *)locations
-{
-//    NSLog(@"ACTIVITES: %d", (int)activities.count);
+    NSLog(@"LOG ACTIVITES: %d", (int)activities.count);
 //    for (CMMotionActivity *activity in activities) {
 //        NSLog(@"%@", activity);
 //    }
@@ -205,33 +196,13 @@
 //    }
     
     for (CMMotionActivity *activity in activities) {
-        NSComparisonResult comp = [activity.startDate compare:self.lastLoggedActivity.startDate];
-        if (comp == NSOrderedAscending || comp == NSOrderedSame) continue;
-        CLLocation *location = [self closestLocationToDate:activity.startDate fromLocations:locations];
-        [self logActivity:activity withLocation:location deferred:YES timestamp:[NSDate date]];
+        if (self.lastLoggedActivityDate) {
+            NSComparisonResult comp = [activity.startDate compare:self.lastLoggedActivityDate];
+            if (comp == NSOrderedAscending || comp == NSOrderedSame) continue;
+        }
+        
+        [self logActivity:activity];
     }
-}
-
-- (void)fetchActivitiesForLocations:(NSArray *)locations
-{
-    CLLocation *firstLocation = locations.firstObject;
-    NSDate *startDate = [firstLocation.timestamp dateByAddingTimeInterval:-600];
-//    NSLog(@"start date: %@, now: %@", startDate, [NSDate date]);
-    __block NSArray *blockLocations = locations;
-    __weak typeof(self) weakSelf = self;
-    [self.motionActivitiyManager queryActivityStartingFromDate:startDate
-                                                        toDate:[NSDate date]
-                                                       toQueue:[NSOperationQueue mainQueue]
-                                                   withHandler:^(NSArray *activities, NSError *error)
-    {
-        if (error) {
-            NSLog(@"activity fetch error: %@", error);
-        }
-        else {
-            [weakSelf logActivities:activities withLocations:blockLocations];
-        }
-
-    }];
 }
 
 
@@ -244,6 +215,10 @@
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [_locationManager setDistanceFilter:kCLDistanceFilterNone];
         [_locationManager setDelegate:self];
+        
+        if ( [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){
+            [_locationManager requestAlwaysAuthorization];
+        }
     }
     return _locationManager;
 }
@@ -262,7 +237,28 @@
 //    for (CLLocation *location in locations) {
 //        NSLog(@"%@", location);
 //    }
-    [self fetchActivitiesForLocations:locations];
+    
+    if (!self.lastLoggedActivityDate) {
+        CLLocation *firstLocation = locations.firstObject;
+        self.lastLoggedActivityDate = firstLocation.timestamp;
+    }
+    
+    __weak typeof(self) weakSelf = self;
+    [self.motionActivitiyManager queryActivityStartingFromDate:self.lastLoggedActivityDate
+                                                        toDate:[NSDate date]
+                                                       toQueue:[NSOperationQueue mainQueue]
+                                                   withHandler:^(NSArray *activities, NSError *error)
+     {
+         if (error) {
+             NSLog(@"activity fetch error: %@", error);
+         }
+         else {
+             [weakSelf logActivities:activities];
+         }
+         
+     }];
+    
+    [self logLocations:locations];
     
     if (self.backgroundMode) {
         [self.locationManager allowDeferredLocationUpdatesUntilTraveled:CLLocationDistanceMax timeout:60.0];
@@ -291,6 +287,24 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         // Location services have just been authorized on the device, start updating now.
         [self.locationManager startUpdatingLocation];
     }
+}
+
+- (void)logLocations:(NSArray *)locations
+{
+    NSLog(@"LOG LOCATIONS: %d", (int)locations.count);
+    for (CLLocation *location in locations) {
+        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:nil location:location];
+    
+        NSLog(@"log location: %@", location);
+
+        [self.privateLocationDataPoints insertObject:dataPoint atIndex:0];
+        
+        if (self.newLocationDataPointBlock != nil) {
+            self.newLocationDataPointBlock(dataPoint);
+        }
+    }
+    
+    [self archiveDataPoints];
 }
 
 @end

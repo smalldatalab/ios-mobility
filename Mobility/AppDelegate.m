@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MobilityViewController.h"
+#import "LocationTableViewController.h"
 #import "LoginViewController.h"
 #import "OMHClient.h"
 #import "ActivityLogger.h"
@@ -38,9 +39,16 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
         root = self.loginViewController;
     }
     else {
-        MobilityViewController *vc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
-        UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
-        root = navcon;
+        MobilityViewController *mvc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
+        UINavigationController *navconM = [[UINavigationController alloc] initWithRootViewController:mvc];
+        
+        LocationTableViewController *lvc = [[LocationTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
+        
+        UITabBarController *tbc = [[UITabBarController alloc] init];
+        tbc.viewControllers = @[navconM, navconL];
+        
+        root = tbc;
     }
     
     self.window.rootViewController = root;

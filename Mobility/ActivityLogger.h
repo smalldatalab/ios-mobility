@@ -13,8 +13,10 @@
 
 + (instancetype)sharedLogger;
 
-@property (nonatomic, readonly) NSArray *dataPoints;
-@property (copy) void (^newDataPointBlock)(MobilityDataPoint *dataPoint);
+@property (nonatomic, readonly) NSArray *activityDataPoints;
+@property (nonatomic, readonly) NSArray *locationDataPoints;
+@property (copy) void (^newActivityDataPointBlock)(MobilityDataPoint *dataPoint);
+@property (copy) void (^newLocationDataPointBlock)(MobilityDataPoint *dataPoint);
 
 - (void)startLogging;
 
