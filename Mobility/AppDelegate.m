@@ -33,7 +33,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
     [self setupOMHClient];
     
     UIViewController *root = nil;
-    if (![OMHClient sharedClient].isSignedIn) {
+    if (0 && ![OMHClient sharedClient].isSignedIn) {
         self.loginViewController = [[LoginViewController alloc] init];
         root = self.loginViewController;
     }

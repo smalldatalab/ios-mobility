@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */; };
 		1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6CD1A4555EF00331827 /* LoginViewController.m */; };
 		1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */; };
 		1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */; };
@@ -61,6 +62,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Additions.h"; sourceTree = "<group>"; };
+		1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Additions.m"; sourceTree = "<group>"; };
 		1E12F6CC1A4555EF00331827 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1E12F6CD1A4555EF00331827 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayoutHelpers.h"; sourceTree = "<group>"; };
@@ -270,6 +273,8 @@
 				1E12F6CD1A4555EF00331827 /* LoginViewController.m */,
 				1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */,
 				1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */,
+				1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */,
+				1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */,
 				1E3FD0E51A3EC330000C7E58 /* Images.xcassets */,
 				1E3FD0DA1A3EC32F000C7E58 /* Supporting Files */,
 			);
@@ -416,6 +421,7 @@
 				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
 				1E4000F11A431F350007C2D4 /* LocationManager.m in Sources */,
+				1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
 				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
 				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,

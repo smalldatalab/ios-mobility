@@ -63,8 +63,8 @@
         NSLog(@"no activities in data point: %@", dataPoint);
     }
     
-    cell.textLabel.text = dataPoint.body.debugActivityString;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, confidence: %@", [self formattedDate:dataPoint.header.creationDateTime], dataPoint.body.debugActivityConfidence];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@), %@", dataPoint.body.debugActivityString, dataPoint.debugActivityConfidence, [self formattedDate:dataPoint.header.creationDateTime]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@, deferred: %@", [self formattedDate:dataPoint[@"timestamp"]], dataPoint[@"deferred"]];
     
     return cell;
 }

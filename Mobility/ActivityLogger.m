@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) NSMutableArray *privateDataPoints;
+@property (strong) CMMotionActivity *lastLoggedActivity;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
@@ -124,7 +125,10 @@
         __weak typeof(self) weakSelf = self;
         [self.motionActivitiyManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
                                                      withHandler:^(CMMotionActivity *activity) {
-                                                         [weakSelf logActivity:activity];
+                                                         [weakSelf logActivity:activity
+                                                                  withLocation:weakSelf.locationManager.location
+                                                                      deferred:NO
+                                                                     timestamp:[NSDate date]];
                                                      }];
     }
     else {
@@ -147,17 +151,19 @@
             || activity.unknown);
 }
 
-- (void)logActivity:(CMMotionActivity *)activity
+- (void)logActivity:(CMMotionActivity *)activity withLocation:(CLLocation *)location deferred:(BOOL)deferred timestamp:(NSDate *)timestamp
 {
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
     if (![self motionActivityHasActivity:activity]) return;
     
-    CLLocation *location = self.locationManager.location;
-    
+    self.lastLoggedActivity = activity;
     
     MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:location];
+    NSString *defStr = deferred ? @"yes" : @"no";
+    dataPoint[@"timestamp"] = timestamp;
+    dataPoint[@"deferred"] = defStr;
     
-    NSLog(@"log activity: %@ (%@), location: %@", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence, location);
+    NSLog(@"log activity: %@ (%@), location: %@, deferred: %d", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence, location, deferred);
     
     if (dataPoint.body.activities.count == 0) {
         NSLog(@"no activities for motion activity: %@", activity);
@@ -173,12 +179,46 @@
 //    [[OMHClient sharedClient] submitDataPoint:dataPoint];
 }
 
+- (CLLocation *)closestLocationToDate:(NSDate *)date fromLocations:(NSArray *)locations
+{
+    CLLocation *closest = locations.firstObject;
+    NSTimeInterval dif = fabs([date timeIntervalSinceDate:closest.timestamp]);
+    for (CLLocation *location in locations) {
+        NSTimeInterval newDif = fabs([date timeIntervalSinceDate:location.timestamp]);
+        if (newDif < dif) {
+            dif = newDif;
+            closest = location;
+        }
+    }
+    return closest;
+}
+
+- (void)logActivities:(NSArray *)activities withLocations:(NSArray *)locations
+{
+//    NSLog(@"ACTIVITES: %d", (int)activities.count);
+//    for (CMMotionActivity *activity in activities) {
+//        NSLog(@"%@", activity);
+//    }
+//    NSLog(@"LOCATIONS: %d", (int)locations.count);
+//    for (CLLocation *location in locations) {
+//        NSLog(@"%@", location);
+//    }
+    
+    for (CMMotionActivity *activity in activities) {
+        NSComparisonResult comp = [activity.startDate compare:self.lastLoggedActivity.startDate];
+        if (comp == NSOrderedAscending || comp == NSOrderedSame) continue;
+        CLLocation *location = [self closestLocationToDate:activity.startDate fromLocations:locations];
+        [self logActivity:activity withLocation:location deferred:YES timestamp:[NSDate date]];
+    }
+}
+
 - (void)fetchActivitiesForLocations:(NSArray *)locations
 {
     CLLocation *firstLocation = locations.firstObject;
     NSDate *startDate = [firstLocation.timestamp dateByAddingTimeInterval:-600];
-    NSLog(@"start date: %@, now: %@", startDate, [NSDate date]);
+//    NSLog(@"start date: %@, now: %@", startDate, [NSDate date]);
     __block NSArray *blockLocations = locations;
+    __weak typeof(self) weakSelf = self;
     [self.motionActivitiyManager queryActivityStartingFromDate:startDate
                                                         toDate:[NSDate date]
                                                        toQueue:[NSOperationQueue mainQueue]
@@ -187,14 +227,10 @@
         if (error) {
             NSLog(@"activity fetch error: %@", error);
         }
-        NSLog(@"ACTIVITES: %d", (int)activities.count);
-        for (CMMotionActivity *activity in activities) {
-            NSLog(@"%@", activity);
+        else {
+            [weakSelf logActivities:activities withLocations:blockLocations];
         }
-        NSLog(@"LOCATIONS: %d", (int)blockLocations.count);
-        for (CLLocation *location in blockLocations) {
-            NSLog(@"%@", location);
-        }
+
     }];
 }
 
@@ -206,7 +242,7 @@
     if (_locationManager == nil) {
         _locationManager = [[CLLocationManager alloc] init];
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [_locationManager setDistanceFilter:1.0];
+        [_locationManager setDistanceFilter:kCLDistanceFilterNone];
         [_locationManager setDelegate:self];
     }
     return _locationManager;
