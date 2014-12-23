@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */; };
 		1E0F7BBA1A495C9C00D1E347 /* LocationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */; };
+		1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */; };
 		1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6CD1A4555EF00331827 /* LoginViewController.m */; };
 		1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */; };
 		1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */; };
@@ -67,6 +68,7 @@
 		1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Additions.m"; sourceTree = "<group>"; };
 		1E0F7BB81A495C9C00D1E347 /* LocationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationTableViewController.h; sourceTree = "<group>"; };
 		1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewController.m; sourceTree = "<group>"; };
+		1E0F7BBC1A49A4BB00D1E347 /* Mobility.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Mobility.xcdatamodel; sourceTree = "<group>"; };
 		1E12F6CC1A4555EF00331827 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1E12F6CD1A4555EF00331827 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayoutHelpers.h"; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */,
 				1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */,
 				1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */,
+				1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */,
 				1E3FD0E51A3EC330000C7E58 /* Images.xcassets */,
 				1E3FD0DA1A3EC32F000C7E58 /* Supporting Files */,
 			);
@@ -318,9 +321,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1E3FD0CF1A3EC32F000C7E58 /* Mobility1 */ = {
+		1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility1" */;
+			buildConfigurationList = 1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility2" */;
 			buildPhases = (
 				1E3FD0CC1A3EC32F000C7E58 /* Sources */,
 				1E3FD0CD1A3EC32F000C7E58 /* Frameworks */,
@@ -330,7 +333,7 @@
 			);
 			dependencies = (
 			);
-			name = Mobility1;
+			name = Mobility2;
 			productName = Mobility;
 			productReference = 1E3FD0D01A3EC32F000C7E58 /* Mobility.app */;
 			productType = "com.apple.product-type.application";
@@ -382,7 +385,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1E3FD0CF1A3EC32F000C7E58 /* Mobility1 */,
+				1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */,
 				1E3FD0EA1A3EC330000C7E58 /* MobilityTests */,
 			);
 		};
@@ -418,6 +421,7 @@
 				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
 				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
 				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
+				1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */,
 				1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */,
 				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
@@ -452,7 +456,7 @@
 /* Begin PBXTargetDependency section */
 		1E3FD0F11A3EC330000C7E58 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1E3FD0CF1A3EC32F000C7E58 /* Mobility1 */;
+			target = 1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */;
 			targetProxy = 1E3FD0F01A3EC330000C7E58 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -641,7 +645,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility1" */ = {
+		1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E3FD0FD1A3EC330000C7E58 /* Debug */,
@@ -660,6 +664,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				1E0F7BBC1A49A4BB00D1E347 /* Mobility.xcdatamodel */,
+			);
+			currentVersion = 1E0F7BBC1A49A4BB00D1E347 /* Mobility.xcdatamodel */;
+			path = Mobility.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1E3FD0C81A3EC32F000C7E58 /* Project object */;
 }
