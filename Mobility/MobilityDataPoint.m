@@ -9,6 +9,7 @@
 #import "MobilityDataPoint.h"
 
 #import <CoreMotion/CoreMotion.h>
+#import <CoreLocation/CoreLocation.h>
 
 @implementation NSMutableDictionary (MobilityDataPoint)
 
@@ -30,7 +31,7 @@
     if (!sSchemaID) {
         sSchemaID = [[OMHSchemaID alloc] init];
         sSchemaID.schemaNamespace = @"cornell";
-        sSchemaID.name = @"mobility-stream";
+        sSchemaID.name = @"mobility-stream-iOS";
         sSchemaID.version = @"1.0";
     }
     return sSchemaID;
@@ -79,6 +80,9 @@
     self = [self init];
     if (self) {
         [self createMobilityActivitiesFromMotionActivity:motionActivity];
+        if (location != nil) {
+            self.location = [MobilityLocation mobilityLocationWithCLLocation:location];
+        }
     }
     return self;
 }
@@ -89,27 +93,27 @@
     NSString *confidence = [MobilityDataPointBody confidenceForMotionActivity:motionActivity];
     
     if (motionActivity.stationary) {
-        [self.activities addObject:@{@"activity" : @"still",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeStill],
                                      @"confidence" : confidence}];
     }
     if (motionActivity.walking) {
-        [self.activities addObject:@{@"activity" : @"walk",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeWalk],
                                      @"confidence" : confidence}];
     }
     if (motionActivity.running) {
-        [self.activities addObject:@{@"activity" : @"run",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeRun],
                                      @"confidence" : confidence}];
     }
     if (motionActivity.automotive) {
-        [self.activities addObject:@{@"activity" : @"transport",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeTransport],
                                      @"confidence" : confidence}];
     }
     if (motionActivity.cycling) {
-        [self.activities addObject:@{@"activity" : @"cycling",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeCycle],
                                      @"confidence" : confidence}];
     }
     if (motionActivity.unknown) {
-        [self.activities addObject:@{@"activity" : @"unknown",
+        [self.activities addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
                                      @"confidence" : confidence}];
     }
 }
@@ -137,12 +141,49 @@
     return self[@"location"];
 }
 
+- (NSString *)debugActivityString
+{
+    NSMutableString *text = [NSMutableString string];
+    MobilityActivity *activity;
+    for (int i = 0; i < self.activities.count; i++) {
+        if (i > 0) [text appendString:@", "];
+        activity = self.activities[i];
+        [text appendString:activity.activityString];
+    }
+    return text;
+}
+
+- (NSString *)debugActivityConfidence
+{
+    NSMutableString *text = [NSMutableString string];
+    MobilityActivity *activity;
+    for (int i = 0; i < self.activities.count; i++) {
+        if (i > 0) [text appendString:@", "];
+        activity = self.activities[i];
+        [text appendString:activity.confidence];
+    }
+    return text;
+}
+
 @end
 
 
 #pragma mark - MobilityLocation
 
 @implementation NSMutableDictionary (MobilityLocation)
+
++ (instancetype)mobilityLocationWithCLLocation:(CLLocation *)clLocation
+{
+    MobilityLocation *location = [[MobilityLocation alloc] init];
+    location.latitude = @(clLocation.coordinate.latitude);
+    location.longitude = @(clLocation.coordinate.longitude);
+    location.horizontalAccuracy = @(clLocation.horizontalAccuracy);
+    location.verticalAccuracy = @(clLocation.verticalAccuracy);
+    location.altitude = @(clLocation.altitude);
+    location.bearing = @(clLocation.course);
+    location.speed = @(clLocation.speed);
+    return location;
+}
 
 - (void)setLatitude:(NSNumber *)latitude
 {
@@ -164,14 +205,24 @@
     return self[@"longitude"];
 }
 
-- (void)setAccuracy:(NSNumber *)accuracy
+- (void)setHorizontalAccuracy:(NSNumber *)accuracy
 {
-    self[@"accuracy"] = accuracy;
+    self[@"horizontal_accuracy"] = accuracy;
 }
 
-- (NSNumber *)accuracy
+- (NSNumber *)horizontalAccuracy
 {
-    return self[@"accuracy"];
+    return self[@"horizontal_accuracy"];
+}
+
+- (void)setVerticalAccuracy:(NSNumber *)accuracy
+{
+    self[@"vertical_accuracy"] = accuracy;
+}
+
+- (NSNumber *)verticalAccuracy
+{
+    return self[@"vertical_accuracy"];
 }
 
 - (void)setAltitude:(NSNumber *)altitude
@@ -211,21 +262,55 @@
 
 @implementation NSDictionary (MobilityActivity)
 
++ (NSString *)stringForActivityType:(MobilityActivityType)activityType
+{
+    switch (activityType) {
+        case MobilityActivityTypeStill:
+            return @"still";
+        case MobilityActivityTypeWalk:
+            return @"walk";
+        case MobilityActivityTypeRun:
+            return @"run";
+        case MobilityActivityTypeTransport:
+            return @"transport";
+        case MobilityActivityTypeCycle:
+            return @"cycle";
+        default:
+            return @"unknown";
+    }
+}
 
-//- (void)setActivity:(NSString *)activity
-//{
-//    self[@"activity"] = activity;
-//}
++ (MobilityActivityType)typeForActivityString:(NSString *)activityString
+{
+    if ([activityString isEqualToString:[self stringForActivityType:MobilityActivityTypeStill]]) {
+        return MobilityActivityTypeStill;
+    }
+    else if ([activityString isEqualToString:[self stringForActivityType:MobilityActivityTypeWalk]]) {
+        return MobilityActivityTypeWalk;
+    }
+    else if ([activityString isEqualToString:[self stringForActivityType:MobilityActivityTypeRun]]) {
+        return MobilityActivityTypeRun;
+    }
+    else if ([activityString isEqualToString:[self stringForActivityType:MobilityActivityTypeTransport]]) {
+        return MobilityActivityTypeTransport;
+    }
+    else if ([activityString isEqualToString:[self stringForActivityType:MobilityActivityTypeCycle]]) {
+        return MobilityActivityTypeCycle;
+    }
+    else {
+        return MobilityActivityTypeUnknown;
+    }
+}
 
-- (NSString *)activity
+- (MobilityActivityType)activityType
+{
+    return [MobilityActivity typeForActivityString:self.activityString];
+}
+
+- (NSString *)activityString
 {
     return self[@"activity"];
 }
-
-//- (void)setConfidence:(NSString *)confidence
-//{
-//    self[@"confidence"] = confidence;
-//}
 
 - (NSString *)confidence
 {

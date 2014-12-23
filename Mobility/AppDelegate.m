@@ -10,6 +10,7 @@
 #import "MobilityViewController.h"
 #import "LoginViewController.h"
 #import "OMHClient.h"
+#import "ActivityLogger.h"
 
 
 NSString * const kMobilityGoogleClientID = @"48636836762-ba1jcrir6sft063gkvpav0e3o9p4mtb5.apps.googleusercontent.com";
@@ -89,6 +90,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[ActivityLogger sharedLogger] enterBackgroundMode];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -99,6 +101,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[ActivityLogger sharedLogger] exitBackgroundMode];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
