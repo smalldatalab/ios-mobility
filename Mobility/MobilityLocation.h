@@ -20,6 +20,6 @@
 @property (nonatomic) double bearing;
 @property (nonatomic) double speed;
 @property (nonatomic, retain) NSString * uuid;
-@property (nonatomic) NSTimeInterval timestamp;
+@property (nonatomic) NSDate * timestamp;
 
 @end

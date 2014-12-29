@@ -60,11 +60,11 @@
 
 @implementation NSMutableDictionary (MobilityDataPointBody)
 
-+ (NSMutableDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
-                                         location:(CLLocation *)location
-{
-    return [[MobilityDataPointBody alloc] initWithMotionActivity:motionActivity location:location];
-}
+//+ (NSMutableDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
+//                                         location:(CLLocation *)location
+//{
+//    return [[MobilityDataPointBody alloc] initWithMotionActivity:motionActivity location:location];
+//}
 
 + (NSString *)confidenceForMotionActivity:(CMMotionActivity *)activity
 {
@@ -80,19 +80,19 @@
     }
 }
 
-- (instancetype)initWithMotionActivity:(CMMotionActivity *)motionActivity location:(CLLocation *)location
-{
-    self = [self init];
-    if (self) {
-        if (motionActivity != nil) {
-            [self createMobilityActivitiesFromMotionActivity:motionActivity];
-        }
-        if (location != nil) {
-            self.location = [MobilityLocation mobilityLocationWithCLLocation:location];
-        }
-    }
-    return self;
-}
+//- (instancetype)initWithMotionActivity:(CMMotionActivity *)motionActivity location:(CLLocation *)location
+//{
+//    self = [self init];
+//    if (self) {
+//        if (motionActivity != nil) {
+//            [self createMobilityActivitiesFromMotionActivity:motionActivity];
+//        }
+//        if (location != nil) {
+//            self.location = [MobilityLocation mobilityLocationWithCLLocation:location];
+//        }
+//    }
+//    return self;
+//}
 
 
 - (void)createMobilityActivitiesFromMotionActivity:(CMMotionActivity *)motionActivity
@@ -148,29 +148,17 @@
     return self[@"location"];
 }
 
-- (NSString *)debugActivityString
-{
-    NSMutableString *text = [NSMutableString string];
-    MobilityActivity *activity;
-    for (int i = 0; i < self.activities.count; i++) {
-        if (i > 0) [text appendString:@", "];
-        activity = self.activities[i];
-        [text appendString:activity.activityString];
-    }
-    return text;
-}
-
-- (NSString *)debugActivityConfidence
-{
-    NSMutableString *text = [NSMutableString string];
-    MobilityActivity *activity;
-    for (int i = 0; i < self.activities.count; i++) {
-        if (i > 0) [text appendString:@", "];
-        activity = self.activities[i];
-        [text appendString:activity.confidence];
-    }
-    return text;
-}
+//- (NSString *)debugActivityConfidence
+//{
+//    NSMutableString *text = [NSMutableString string];
+//    MobilityActivity *activity;
+//    for (int i = 0; i < self.activities.count; i++) {
+//        if (i > 0) [text appendString:@", "];
+//        activity = self.activities[i];
+//        [text appendString:activity.confidence];
+//    }
+//    return text;
+//}
 
 @end
 
@@ -179,18 +167,18 @@
 
 @implementation NSMutableDictionary (MobilityLocation)
 
-+ (instancetype)mobilityLocationWithCLLocation:(CLLocation *)clLocation
-{
-    MobilityLocation *location = [[MobilityLocation alloc] init];
-    location.latitude = @(clLocation.coordinate.latitude);
-    location.longitude = @(clLocation.coordinate.longitude);
-    location.horizontalAccuracy = @(clLocation.horizontalAccuracy);
-    location.verticalAccuracy = @(clLocation.verticalAccuracy);
-    location.altitude = @(clLocation.altitude);
-    location.bearing = @(clLocation.course);
-    location.speed = @(clLocation.speed);
-    return location;
-}
+//+ (instancetype)mobilityLocationWithCLLocation:(CLLocation *)clLocation
+//{
+//    MobilityLocation *location = [[MobilityLocation alloc] init];
+//    location.latitude = @(clLocation.coordinate.latitude);
+//    location.longitude = @(clLocation.coordinate.longitude);
+//    location.horizontalAccuracy = @(clLocation.horizontalAccuracy);
+//    location.verticalAccuracy = @(clLocation.verticalAccuracy);
+//    location.altitude = @(clLocation.altitude);
+//    location.bearing = @(clLocation.course);
+//    location.speed = @(clLocation.speed);
+//    return location;
+//}
 
 - (void)setLatitude:(NSNumber *)latitude
 {
@@ -307,21 +295,6 @@
     else {
         return MobilityActivityTypeUnknown;
     }
-}
-
-- (MobilityActivityType)activityType
-{
-    return [MobilityActivity typeForActivityString:self.activityString];
-}
-
-- (NSString *)activityString
-{
-    return self[@"activity"];
-}
-
-- (NSString *)confidence
-{
-    return self[@"confidence"];
 }
 
 @end

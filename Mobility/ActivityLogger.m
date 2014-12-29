@@ -8,7 +8,7 @@
 
 #import "ActivityLogger.h"
 #import "OMHClient.h"
-//#import "LocationManager.h"
+#import "MobilityModel.h"
 
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
@@ -33,6 +33,8 @@
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTask;
 @property (nonatomic, strong) NSTimer *backgroundTimer;
 
+@property (nonatomic, weak) MobilityModel *model;
+
 
 @end
 
@@ -45,7 +47,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSData *encodedClient = [defaults objectForKey:@"MobilityActivityLogger2"];
+        NSData *encodedClient = [defaults objectForKey:@"MobilityActivityLogger"];
         if (encodedClient != nil) {
             _sharedLogger = (ActivityLogger *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
         } else {
@@ -80,8 +82,8 @@
 {
     self = [super init];
     if (self != nil) {
-        _privateActivityDataPoints = [decoder decodeObjectForKey:@"logger.activityDataPoints"];
-        _privateLocationDataPoints = [decoder decodeObjectForKey:@"logger.locationDataPoints"];
+//        _privateActivityDataPoints = [decoder decodeObjectForKey:@"logger.activityDataPoints"];
+//        _privateLocationDataPoints = [decoder decodeObjectForKey:@"logger.locationDataPoints"];
         _lastLoggedActivityDate = [decoder decodeObjectForKey:@"logger.lastLoggedActivityDate"];
     }
     
@@ -90,8 +92,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.privateActivityDataPoints forKey:@"logger.activityDataPoints"];
-    [encoder encodeObject:self.privateLocationDataPoints forKey:@"logger.locationDataPoints"];
+//    [encoder encodeObject:self.privateActivityDataPoints forKey:@"logger.activityDataPoints"];
+//    [encoder encodeObject:self.privateLocationDataPoints forKey:@"logger.locationDataPoints"];
     [encoder encodeObject:self.lastLoggedActivityDate forKey:@"logger.lastLoggedActivityDate"];
 }
 
@@ -110,7 +112,7 @@
     NSLog(@"archiving data points, activites: %d, locations: %d", (int)self.privateActivityDataPoints.count, (int)self.privateLocationDataPoints.count);
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger2"];
+    [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger"];
     [userDefaults synchronize];
 }
 
@@ -119,6 +121,14 @@
     NSLog(@"enter background mode");
     self.backgroundMode = YES;
 //    [self stopLogging];
+}
+
+- (MobilityModel *)model
+{
+    if (_model == nil) {
+        _model = [MobilityModel sharedModel];
+    }
+    return _model;
 }
 
 - (void)exitBackgroundMode
@@ -168,30 +178,48 @@
             || activity.unknown);
 }
 
-- (void)logActivity:(CMMotionActivity *)activity
+
+// debug
+- (NSString *)formattedDate:(NSDate *)date
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
+                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:formatString];
+    }
+    
+    return [dateFormatter stringFromDate:date];
+}
+
+- (void)logActivity:(CMMotionActivity *)cmActivity
 {
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
 //    if (![self motionActivityHasActivity:activity]) return;
     
-    
-    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:nil];
-    
-    NSLog(@"log activity: %@ (%@)", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence);
-    
-    if (dataPoint.body.activities.count == 0) {
-        NSLog(@"no activities for motion activity: %@", activity);
-    }
-    [self.privateActivityDataPoints insertObject:dataPoint atIndex:0];
-    
-    if (self.newActivityDataPointBlock != nil) {
-        self.newActivityDataPointBlock(dataPoint);
-    }
-    
-    [self archiveDataPoints];
+    MobilityActivity * activity = [self.model uniqueActivityWithMotionActivity:cmActivity];
+    NSLog(@"logging activity: %@, %@", activity.debugActivityString, [self formattedDate:activity.timestamp]);
     
     
-    self.lastLoggedActivityDate = activity.startDate;
-    self.lastLoggedActivityDataPoint = dataPoint;
+//    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:nil];
+//    
+//    NSLog(@"log activity: %@ (%@)", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence);
+//    
+//    if (dataPoint.body.activities.count == 0) {
+//        NSLog(@"no activities for motion activity: %@", activity);
+//    }
+//    [self.privateActivityDataPoints insertObject:dataPoint atIndex:0];
+//    
+//    if (self.newActivityDataPointBlock != nil) {
+//        self.newActivityDataPointBlock(dataPoint);
+//    }
+//    
+//    [self archiveDataPoints];
+//    
+//    
+//    self.lastLoggedActivityDate = activity.startDate;
+//    self.lastLoggedActivityDataPoint = dataPoint;
     
 //    [[OMHClient sharedClient] submitDataPoint:dataPoint];
 }
@@ -208,17 +236,17 @@
 //    }
     
     for (CMMotionActivity *activity in activities) {
-        if (self.lastLoggedActivityDate) {
-            NSComparisonResult comp = [activity.startDate compare:self.lastLoggedActivityDate];
-            if (comp == NSOrderedAscending || comp == NSOrderedSame) continue;
-        }
+//        if (self.lastLoggedActivityDate) {
+//            NSComparisonResult comp = [activity.startDate compare:self.lastLoggedActivityDate];
+//            if (comp == NSOrderedAscending || comp == NSOrderedSame) continue;
+//        }
         
         [self logActivity:activity];
     }
     
-    if ([self shouldScheduleNextUpdate]) {
-        [self scheduleNextLocationUpdate];
-    }
+//    if ([self shouldScheduleNextUpdate]) {
+//        [self scheduleNextLocationUpdate];
+//    }
 }
 
 
@@ -327,38 +355,38 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 
 - (void)scheduleNextLocationUpdate
 {
-    MobilityDataPoint *dataPoint = self.lastLoggedActivityDataPoint;
-    NSLog(@"schedule next update for activity: %@", dataPoint.body.debugActivityString);
-    
-    [self.locationManager stopUpdatingLocation];
-    [self stopLogging];
-    self.bestAccuracy = 0;
-    self.locationTrackingStartDate = nil;
-    
-    NSTimeInterval interval = MOVING_TIMER_INTERVAL;
-    
-    // use still interval if still is the only activity type
-    if (dataPoint.body.activities.count == 1) {
-        MobilityActivity *activity = dataPoint.body.activities.firstObject;
-        if (activity.activityType == MobilityActivityTypeStill) {
-            interval = STILL_TIMER_INTERVAL;
-        }
-    }
-    
-    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        [self resumeLocationTracking];
-        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
-        self.backgroundTask = UIBackgroundTaskInvalid;
-    }];
-    if (self.backgroundTask == UIBackgroundTaskInvalid) {
-        
-    }
-    
-    self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:interval
-                                                            target:self
-                                                          selector:@selector(resumeLocationTracking)
-                                                          userInfo:nil
-                                                           repeats:NO];
+//    MobilityDataPoint *dataPoint = self.lastLoggedActivityDataPoint;
+//    NSLog(@"schedule next update for activity: %@", dataPoint.body.debugActivityString);
+//    
+//    [self.locationManager stopUpdatingLocation];
+//    [self stopLogging];
+//    self.bestAccuracy = 0;
+//    self.locationTrackingStartDate = nil;
+//    
+//    NSTimeInterval interval = MOVING_TIMER_INTERVAL;
+//    
+//    // use still interval if still is the only activity type
+//    if (dataPoint.body.activities.count == 1) {
+//        MobilityActivity *activity = dataPoint.body.activities.firstObject;
+//        if (activity.activityType == MobilityActivityTypeStill) {
+//            interval = STILL_TIMER_INTERVAL;
+//        }
+//    }
+//    
+//    self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+//        [self resumeLocationTracking];
+//        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+//        self.backgroundTask = UIBackgroundTaskInvalid;
+//    }];
+//    if (self.backgroundTask == UIBackgroundTaskInvalid) {
+//        
+//    }
+//    
+//    self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:interval
+//                                                            target:self
+//                                                          selector:@selector(resumeLocationTracking)
+//                                                          userInfo:nil
+//                                                           repeats:NO];
 }
 
 - (void)logLocations:(NSArray *)locations
@@ -375,13 +403,16 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
             self.bestAccuracy = location.horizontalAccuracy;
         }
         
-        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:nil location:location];
-
-        [self.privateLocationDataPoints insertObject:dataPoint atIndex:0];
+        MobilityLocation *mobilityLocation = [self.model uniqueLocationWithCLLocation:location];
+        NSLog(@"logging location: %@", mobilityLocation);
         
-        if (self.newLocationDataPointBlock != nil) {
-            self.newLocationDataPointBlock(dataPoint);
-        }
+//        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:nil location:location];
+//
+//        [self.privateLocationDataPoints insertObject:dataPoint atIndex:0];
+//        
+//        if (self.newLocationDataPointBlock != nil) {
+//            self.newLocationDataPointBlock(dataPoint);
+//        }
     }
     
     [self archiveDataPoints];

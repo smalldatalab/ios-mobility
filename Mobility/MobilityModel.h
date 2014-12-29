@@ -17,8 +17,8 @@
 
 + (instancetype)sharedModel;
 
-- (MobilityActivity *)createUniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
-- (MobilityLocation *)createUniqueLocationWithCLLocation:(CLLocation *)clLocation;
+- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
+- (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
 

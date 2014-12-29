@@ -8,14 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "OMHDataPoint.h"
+#import "MobilityActivity.h"
 
 @class CMMotionActivity;
 @class CLLocation;
 
 typedef NSMutableDictionary MobilityDataPoint;
 typedef NSMutableDictionary MobilityDataPointBody;
-typedef NSMutableDictionary MobilityActivity;
-typedef NSMutableDictionary MobilityLocation;
 
 
 @interface NSMutableDictionary (MobilityDataPoint)
@@ -30,7 +29,7 @@ typedef NSMutableDictionary MobilityLocation;
 + (NSMutableDictionary *)dataPointBodyWithMotionActivity:(CMMotionActivity *)motionActivity
                                          location:(CLLocation *)location;
 
-@property (nonatomic, strong) MobilityLocation *location;
+@property (nonatomic, strong) NSMutableDictionary *location;
 @property (nonatomic, strong) NSMutableArray *activities;
 @property (nonatomic, readonly) NSString *debugActivityString;
 @property (nonatomic, readonly) NSString *debugActivityConfidence;
@@ -49,27 +48,6 @@ typedef NSMutableDictionary MobilityLocation;
 @property (nonatomic, strong) NSNumber *altitude;
 @property (nonatomic, strong) NSNumber *bearing;
 @property (nonatomic, strong) NSNumber *speed;
-
-@end
-
-
-typedef enum {
-    MobilityActivityTypeStill,
-    MobilityActivityTypeWalk,
-    MobilityActivityTypeRun,
-    MobilityActivityTypeTransport,
-    MobilityActivityTypeCycle,
-    MobilityActivityTypeUnknown
-} MobilityActivityType;
-
-@interface NSDictionary (MobilityActivity)
-
-+ (NSString *)stringForActivityType:(MobilityActivityType)activityType;
-+ (MobilityActivityType)typeForActivityString:(NSString *)activityString;
-
-@property (nonatomic, readonly) MobilityActivityType activityType;
-@property (nonatomic, readonly) NSString *activityString;
-@property (nonatomic, readonly) NSString *confidence;
 
 @end
 

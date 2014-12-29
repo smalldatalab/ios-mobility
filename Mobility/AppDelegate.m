@@ -39,10 +39,10 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
         root = self.loginViewController;
     }
     else {
-        MobilityViewController *mvc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
+        MobilityViewController *mvc = [[MobilityViewController alloc] init];
         UINavigationController *navconM = [[UINavigationController alloc] initWithRootViewController:mvc];
         
-        LocationTableViewController *lvc = [[LocationTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
         UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
         
         UITabBarController *tbc = [[UITabBarController alloc] init];

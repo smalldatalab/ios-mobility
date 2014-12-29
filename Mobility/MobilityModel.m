@@ -144,17 +144,39 @@
 
 #pragma mark - Model
 
-- (MobilityActivity *)createUniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity
+- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity
 {
-    // if activity already exists, return nil
-    if ([self hasObjectWithEntityName:@"MobilityActivity" timestamp:motionActivity.startDate]) return nil;
+    MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate];
+    if (existingActivity) return existingActivity;
     
     MobilityActivity *newActivity = (MobilityActivity *)[self insertNewObjectForEntityForName:@"MobilityActivity"];
-    newActivity.timestamp = motionActivity.timestamp;
+    newActivity.timestamp = motionActivity.startDate;
     newActivity.confidence = motionActivity.confidence;
-    newActivity.activityType = [
+    newActivity.stationary = motionActivity.stationary;
+    newActivity.walking = motionActivity.walking;
+    newActivity.running = motionActivity.running;
+    newActivity.cycling = motionActivity.cycling;
+    newActivity.unknown = motionActivity.unknown;
     
-    return nil;
+    return newActivity;
+}
+
+- (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation
+{
+    MobilityLocation *existingLocation = (MobilityLocation *)[self fetchObjectWithEntityName:@"MobilityLocation" uniqueTimestamp:clLocation.timestamp];
+    if (existingLocation) return existingLocation;
+    
+    MobilityLocation *newLocation = (MobilityLocation *)[self insertNewObjectForEntityForName:@"MobilityLocation"];
+    newLocation.timestamp = clLocation.timestamp;
+    newLocation.latitude = clLocation.coordinate.latitude;
+    newLocation.longitude = clLocation.coordinate.longitude;
+    newLocation.altitude = clLocation.altitude;
+    newLocation.bearing = clLocation.course;
+    newLocation.speed = clLocation.speed;
+    newLocation.horizontalAccuracy = clLocation.horizontalAccuracy;
+    newLocation.verticalAccuracy = clLocation.verticalAccuracy;
+    
+    return newLocation;
 }
 
 - (BOOL)hasObjectWithEntityName:(NSString *)entityName timestamp:(NSDate *)timestamp

@@ -12,7 +12,6 @@
 		1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */; };
 		1E0F7BC61A4A5EAB00D1E347 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */; };
 		1E0F7BC91A4A5F0E00D1E347 /* MobilityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BC81A4A5F0E00D1E347 /* MobilityModel.m */; };
-		1E0F7BCC1A4A8C7100D1E347 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BCB1A4A8C7100D1E347 /* MobilityActivity.m */; };
 		1E0F7BCF1A4A8C7200D1E347 /* MobilityLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BCE1A4A8C7200D1E347 /* MobilityLocation.m */; };
 		1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6CD1A4555EF00331827 /* LoginViewController.m */; };
 		1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */; };
@@ -54,6 +53,7 @@
 		1E5BB3A61A441636008B6B95 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A51A441636008B6B95 /* CoreText.framework */; };
 		1E5BB3A81A441643008B6B95 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A71A441643008B6B95 /* AssetsLibrary.framework */; };
 		1E5BB3AA1A441647008B6B95 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A91A441647008B6B95 /* AddressBook.framework */; };
+		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,8 +76,6 @@
 		1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1E0F7BC71A4A5F0E00D1E347 /* MobilityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityModel.h; sourceTree = "<group>"; };
 		1E0F7BC81A4A5F0E00D1E347 /* MobilityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityModel.m; sourceTree = "<group>"; };
-		1E0F7BCA1A4A8C7100D1E347 /* MobilityActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityActivity.h; sourceTree = "<group>"; };
-		1E0F7BCB1A4A8C7100D1E347 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1E0F7BCD1A4A8C7200D1E347 /* MobilityLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityLocation.h; sourceTree = "<group>"; };
 		1E0F7BCE1A4A8C7200D1E347 /* MobilityLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityLocation.m; sourceTree = "<group>"; };
 		1E12F6CC1A4555EF00331827 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -144,6 +142,8 @@
 		1E5BB3A51A441636008B6B95 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		1E5BB3A71A441643008B6B95 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		1E5BB3A91A441647008B6B95 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		1E9ED5821A515468003CBB77 /* MobilityActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityActivity.h; sourceTree = "<group>"; };
+		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -188,10 +188,10 @@
 				1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */,
 				1E0F7BC71A4A5F0E00D1E347 /* MobilityModel.h */,
 				1E0F7BC81A4A5F0E00D1E347 /* MobilityModel.m */,
+				1E9ED5821A515468003CBB77 /* MobilityActivity.h */,
+				1E9ED5831A515468003CBB77 /* MobilityActivity.m */,
 				1E0F7BCD1A4A8C7200D1E347 /* MobilityLocation.h */,
 				1E0F7BCE1A4A8C7200D1E347 /* MobilityLocation.m */,
-				1E0F7BCA1A4A8C7100D1E347 /* MobilityActivity.h */,
-				1E0F7BCB1A4A8C7100D1E347 /* MobilityActivity.m */,
 				1E3FD10A1A3ECA45000C7E58 /* MobilityDataPoint.h */,
 				1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */,
 			);
@@ -453,6 +453,7 @@
 				1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */,
 				1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */,
+				1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */,
 				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
 				1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */,
 				1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */,
@@ -465,7 +466,6 @@
 				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
 				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,
 				1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */,
-				1E0F7BCC1A4A8C7100D1E347 /* MobilityActivity.m in Sources */,
 				1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */,
 				1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */,
 				1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */,

@@ -7,38 +7,58 @@
 //
 
 #import "MobilityViewController.h"
-#import "ActivityLogger.h"
+#import "MobilityModel.h"
+//#import "ActivityLogger.h"
 
-@interface MobilityViewController ()
+@interface MobilityViewController () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) ActivityLogger *logger;
+//@property (nonatomic, strong) ActivityLogger *logger;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
 @implementation MobilityViewController
 
+- (instancetype)init
+{
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        self.title = @"Activities";
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Mobility";
     
-    self.logger = [ActivityLogger sharedLogger];
+    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
+    self.fetchedResultsController.delegate = self;
     
-    __weak typeof(self) weakSelf = self;
-    self.logger.newActivityDataPointBlock = ^(MobilityDataPoint *dataPoint) {
-//        NSLog(@"new log entry: %@", dataPoint);
-//        [weakSelf.tableView reloadData];
-        [weakSelf insertRowForDataPoint:dataPoint];
-    };
+//    self.logger = [ActivityLogger sharedLogger];
+//    
+//    __weak typeof(self) weakSelf = self;
+//    self.logger.newActivityDataPointBlock = ^(MobilityDataPoint *dataPoint) {
+////        NSLog(@"new log entry: %@", dataPoint);
+////        [weakSelf.tableView reloadData];
+//        [weakSelf insertRowForDataPoint:dataPoint];
+//    };
 }
 
-- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
+
+- (void)viewDidAppear:(BOOL)animated
 {
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationTop];
-    [self.tableView endUpdates];
+    [super viewDidAppear:animated];
+    [self.fetchedResultsController performFetch:nil];
 }
+
+//- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
+//{
+//    [self.tableView beginUpdates];
+//    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+//                          withRowAnimation:UITableViewRowAnimationTop];
+//    [self.tableView endUpdates];
+//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -47,24 +67,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.logger.activityDataPoints.count;
+    return self.fetchedResultsController.fetchedObjects.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"mobilityCell";
+    static NSString *cellIdentifier = @"activityCell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
-    MobilityDataPoint *dataPoint = self.logger.activityDataPoints[indexPath.row];
-    if (dataPoint.body.activities.count == 0) {
-        NSLog(@"no activities in data point: %@", dataPoint);
-    }
+    MobilityActivity *activity = self.fetchedResultsController.fetchedObjects[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence];
-    cell.detailTextLabel.text = [self formattedDate:dataPoint.header.creationDateTime];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", activity.debugActivityString, activity.confidenceString];
+    cell.detailTextLabel.text = [self formattedDate:activity.timestamp];
     
     return cell;
 }
@@ -80,6 +97,15 @@
     }
     
     return [dateFormatter stringFromDate:date];
+}
+
+
+#pragma mark - NSFetchedResultsController Delegate
+
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView reloadData];
 }
 
 @end

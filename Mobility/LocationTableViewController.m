@@ -7,37 +7,56 @@
 //
 
 #import "LocationTableViewController.h"
-#import "ActivityLogger.h"
+//#import "ActivityLogger.h"
+#import "MobilityModel.h"
 
-@interface LocationTableViewController ()
+@interface LocationTableViewController () <NSFetchedResultsControllerDelegate>
 
-@property (nonatomic, strong) ActivityLogger *logger;
+//@property (nonatomic, strong) ActivityLogger *logger;
+@property (nonatomic, weak) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
 @implementation LocationTableViewController
 
+- (instancetype)init
+{
+    self = [super initWithStyle:UITableViewStylePlain];
+    if (self) {
+        self.title = @"Locations";
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Locations";
     
-    self.logger = [ActivityLogger sharedLogger];
-    
-    __weak typeof(self) weakSelf = self;
-    self.logger.newLocationDataPointBlock = ^(MobilityDataPoint *dataPoint) {
-        //        NSLog(@"new log entry: %@", dataPoint);
-        //        [weakSelf.tableView reloadData];
-        [weakSelf insertRowForDataPoint:dataPoint];
-    };
+    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
+    self.fetchedResultsController.delegate = self;
+//
+//    self.logger = [ActivityLogger sharedLogger];
+//    
+//    __weak typeof(self) weakSelf = self;
+//    self.logger.newLocationDataPointBlock = ^(MobilityDataPoint *dataPoint) {
+//        //        NSLog(@"new log entry: %@", dataPoint);
+//        //        [weakSelf.tableView reloadData];
+//        [weakSelf insertRowForDataPoint:dataPoint];
+//    };
 }
 
-- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
+//- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
+//{
+//    [self.tableView beginUpdates];
+//    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+//                          withRowAnimation:UITableViewRowAnimationTop];
+//    [self.tableView endUpdates];
+//}
+
+- (void)viewDidAppear:(BOOL)animated
 {
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationTop];
-    [self.tableView endUpdates];
+    [super viewDidAppear:animated];
+    [self.fetchedResultsController performFetch:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -47,21 +66,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.logger.locationDataPoints.count;
+    return self.fetchedResultsController.fetchedObjects.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"mobilityCell";
+    static NSString *cellIdentifier = @"locationCell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
     }
     
-    MobilityDataPoint *dataPoint = self.logger.locationDataPoints[indexPath.row];
+    MobilityLocation *location = self.fetchedResultsController.fetchedObjects[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@m)", [self formattedDate:dataPoint.header.creationDateTime], dataPoint.body.location.horizontalAccuracy];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %@, long: %@", dataPoint.body.location.latitude, dataPoint.body.location.longitude];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%f)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
     
     return cell;
 }
@@ -77,6 +96,15 @@
     }
     
     return [dateFormatter stringFromDate:date];
+}
+
+
+#pragma mark - NSFetchedResultsController Delegate
+
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView reloadData];
 }
 
 @end
