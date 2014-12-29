@@ -13,7 +13,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define STILL_TIMER_INTERVAL (7*60)
+#define STILL_TIMER_INTERVAL (2*60)
 #define MOVING_TIMER_INTERVAL 60
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
@@ -347,7 +347,12 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     
     self.backgroundTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
         [self resumeLocationTracking];
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
     }];
+    if (self.backgroundTask == UIBackgroundTaskInvalid) {
+        
+    }
     
     self.backgroundTimer = [NSTimer scheduledTimerWithTimeInterval:interval
                                                             target:self
