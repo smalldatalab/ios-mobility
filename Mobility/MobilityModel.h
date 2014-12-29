@@ -17,6 +17,8 @@
 
 + (instancetype)sharedModel;
 
+- (void)saveManagedContext;
+
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
 - (NSFetchedResultsController *)fetchedActivitesController;

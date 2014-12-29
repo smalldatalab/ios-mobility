@@ -114,6 +114,8 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger"];
     [userDefaults synchronize];
+    
+    [self.model saveManagedContext];
 }
 
 - (void)enterBackgroundMode
@@ -196,10 +198,10 @@
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
 //    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
-//    if (![self motionActivityHasActivity:activity]) return;
+    if (![self motionActivityHasActivity:cmActivity]) return;
     
     MobilityActivity * activity = [self.model uniqueActivityWithMotionActivity:cmActivity];
-    NSLog(@"logging activity: %@, %@", activity.debugActivityString, [self formattedDate:activity.timestamp]);
+//    NSLog(@"logging activity: %@, %@", activity.debugActivityString, [self formattedDate:activity.timestamp]);
     
     
 //    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithMotionActivity:activity location:nil];
@@ -256,8 +258,8 @@
 {
     if (_locationManager == nil) {
         _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-        [_locationManager setDistanceFilter:kCLDistanceFilterNone];
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest]; //kCLLocationAccuracyNearestTenMeters
+        [_locationManager setDistanceFilter:1.0];
         [_locationManager setDelegate:self];
         
         if ( [CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined){

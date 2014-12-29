@@ -114,9 +114,20 @@
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeCycle],
                                          @"confidence" : self.confidenceString}];
         }
-        if (self.unknown || array.count == 0) {
+//        if (self.unknown || array.count == 0) {
+//            [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
+//                                         @"confidence" : self.confidenceString}];
+//        }
+        
+        
+        if (self.unknown) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
+        }
+        
+        if (array.count == 0) {
+            [array addObject:@{@"activity" : @"\"unknown\"",
+                               @"confidence" : self.confidenceString}];
         }
         
         _activitiesArray = array;

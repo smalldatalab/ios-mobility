@@ -13,7 +13,7 @@
 @interface LocationTableViewController () <NSFetchedResultsControllerDelegate>
 
 //@property (nonatomic, strong) ActivityLogger *logger;
-@property (nonatomic, weak) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -34,6 +34,9 @@
     
     self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
     self.fetchedResultsController.delegate = self;
+    
+    UIBarButtonItem *refetch = [[UIBarButtonItem alloc] initWithTitle:@"Fetch" style:UIBarButtonItemStylePlain target:self action:@selector(fetch)];
+    self.navigationItem.rightBarButtonItem = refetch;
 //
 //    self.logger = [ActivityLogger sharedLogger];
 //    
@@ -53,10 +56,18 @@
 //    [self.tableView endUpdates];
 //}
 
+- (void)fetch
+{
+    NSError *error = nil;
+    [self.fetchedResultsController performFetch:&error];
+    NSLog(@"performed fetch. error: %@, count: %d", error, (int)self.fetchedResultsController.fetchedObjects.count);
+    [self.tableView reloadData];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.fetchedResultsController performFetch:nil];
+    [self fetch];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -78,6 +89,9 @@
     }
     
     MobilityLocation *location = self.fetchedResultsController.fetchedObjects[indexPath.row];
+    if (location.timestamp == nil) {
+        NSLog(@"nil location: %@", location);
+    }
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%f)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
