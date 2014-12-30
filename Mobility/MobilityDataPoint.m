@@ -13,28 +13,25 @@
 
 @implementation NSMutableDictionary (MobilityDataPoint)
 
-+ (instancetype)baseMobilityDataPoint
++ (instancetype)mobilityDataPointWithHeaderID:(NSString *)headerID timestamp:(NSDate *)timestamp body:(NSMutableDictionary *)body
 {
     OMHDataPoint *dataPoint = [OMHDataPoint templateDataPoint];
     dataPoint.header.schemaID = [self schemaID];
     dataPoint.header.acquisitionProvenance = [self acquisitionProvenance];
+    dataPoint.header.headerID = headerID;
+    dataPoint.header.creationDateTime = timestamp;
+    dataPoint.body = body;
     return dataPoint;
 }
 
 + (instancetype)dataPointWithActivity:(MobilityActivity *)activity
 {
-    OMHDataPoint *dataPoint = [self baseMobilityDataPoint];
-    dataPoint.header.creationDateTime = activity.timestamp;
-    dataPoint.body = activity.jsonDictionary;
-    return dataPoint;
+    return [self mobilityDataPointWithHeaderID:activity.uuid timestamp:activity.timestamp body:activity.jsonDictionary];
 }
 
 + (instancetype)dataPointWithLocation:(MobilityLocation *)location
 {
-    OMHDataPoint *dataPoint = [self baseMobilityDataPoint];
-    dataPoint.header.creationDateTime = location.timestamp;
-    dataPoint.body = location.jsonDictionary;
-    return dataPoint;
+    return [self mobilityDataPointWithHeaderID:location.uuid timestamp:location.timestamp body:location.jsonDictionary];
 }
 
 + (OMHSchemaID *)schemaID

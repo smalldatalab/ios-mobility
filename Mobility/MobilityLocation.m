@@ -27,18 +27,6 @@
     self.uuid = [[[NSUUID alloc] init] UUIDString];
 }
 
-//- (void)awakeFromFetch
-//{
-//    [super awakeFromFetch];
-//    NSLog(@"location awake, timestamp: %@", self.timestamp);
-//}
-//
-//- (void)willSave
-//{
-//    [super willSave];
-//    NSLog(@"location will save, timestamp: %@", self.timestamp);
-//}
-
 - (MobilityLocationDictionary *)jsonDictionary
 {
     MobilityLocationDictionary *location = [[MobilityLocationDictionary alloc] init];

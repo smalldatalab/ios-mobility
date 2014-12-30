@@ -203,34 +203,15 @@
 
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
-//    NSLog(@"%s %@", __PRETTY_FUNCTION__, activity);
     if (![self motionActivityHasActivity:cmActivity]) return;
     
     MobilityActivity * activity = [self.model uniqueActivityWithMotionActivity:cmActivity];
-//    NSLog(@"logging activity: %@, %@", activity.debugActivityString, [self formattedDate:activity.timestamp]);
-    
-    
     MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
-    [[OMHClient sharedClient] submitDataPoint:dataPoint];
-//
-//    NSLog(@"log activity: %@ (%@)", dataPoint.body.debugActivityString, dataPoint.body.debugActivityConfidence);
-//    
-//    if (dataPoint.body.activities.count == 0) {
-//        NSLog(@"no activities for motion activity: %@", activity);
-//    }
-//    [self.privateActivityDataPoints insertObject:dataPoint atIndex:0];
-//    
-//    if (self.newActivityDataPointBlock != nil) {
-//        self.newActivityDataPointBlock(dataPoint);
-//    }
-//    
-//    [self archiveDataPoints];
-//    
-//    
-//    self.lastLoggedActivityDate = activity.startDate;
-//    self.lastLoggedActivityDataPoint = dataPoint;
     
-//    [[OMHClient sharedClient] submitDataPoint:dataPoint];
+    [[OMHClient sharedClient] submitDataPoint:dataPoint];
+    [self archiveDataPoints];
+    
+    [self updateLocationManagerForActivity:activity];
 }
 
 
@@ -240,11 +221,26 @@
 {
     if (_locationManager == nil) {
         _locationManager = [[CLLocationManager alloc] init];
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest]; //kCLLocationAccuracyNearestTenMeters
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters]; //kCLLocationAccuracyNearestTenMeters
         [_locationManager setDistanceFilter:1.0];
         [_locationManager setDelegate:self];
     }
     return _locationManager;
+}
+
+- (void)updateLocationManagerForActivity:(MobilityActivity *)activity
+{
+    // if activity is only stationary, turn down location accuracy
+    if (activity.activitiesArray.count == 1 && activity.stationary) {
+        NSLog(@"turning down location accuracy");
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyHundredMeters];
+        [self.locationManager setDistanceFilter:10.0];
+    }
+    else {
+        NSLog(@"turning up location accuracy");
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [self.locationManager setDistanceFilter:1.0];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -282,29 +278,23 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 
 - (void)logLocations:(NSArray *)locations
 {
-    NSLog(@"LOG LOCATIONS: %d", (int)locations.count);
+//    NSLog(@"LOG LOCATIONS: %d", (int)locations.count);
     for (CLLocation *location in locations) {
         
         if ([self isDuplicateLocation:location]) continue;
         
         self.lastLocation = location;
         
-        NSLog(@"log location with accuracy: %f", location.horizontalAccuracy);
+//        NSLog(@"log location with accuracy: %f", location.horizontalAccuracy);
         if ((self.bestAccuracy == 0) || location.horizontalAccuracy < self.bestAccuracy) {
             self.bestAccuracy = location.horizontalAccuracy;
         }
         
         MobilityLocation *mobilityLocation = [self.model uniqueLocationWithCLLocation:location];
-//        NSLog(@"logging location: %@", mobilityLocation);
-        
         MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithLocation:mobilityLocation];
+        
         [[OMHClient sharedClient] submitDataPoint:dataPoint];
-//
-//        [self.privateLocationDataPoints insertObject:dataPoint atIndex:0];
-//        
-//        if (self.newLocationDataPointBlock != nil) {
-//            self.newLocationDataPointBlock(dataPoint);
-//        }
+        [self archiveDataPoints];
     }
     
     [self archiveDataPoints];
