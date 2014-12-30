@@ -169,6 +169,13 @@
         [self.locationManager requestAlwaysAuthorization];
     }
     [self.locationManager startUpdatingLocation];
+    
+//    if ([CLLocationManager headingAvailable]) {
+//        [self.locationManager startUpdatingHeading];
+//    }
+//    else {
+//        NSLog(@"heading data not available on this device");
+//    }
 }
 
 - (void)stopLogging
@@ -221,6 +228,7 @@
 {
     if (_locationManager == nil) {
         _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.pausesLocationUpdatesAutomatically = NO;
         [_locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters]; //kCLLocationAccuracyNearestTenMeters
         [_locationManager setDistanceFilter:1.0];
         [_locationManager setDelegate:self];
@@ -246,6 +254,7 @@
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations
 {
+    NSLog(@"heading: %@", self.locationManager.heading);
     [self logLocations:locations];
 }
 
@@ -285,7 +294,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         
         self.lastLocation = location;
         
-//        NSLog(@"log location with accuracy: %f", location.horizontalAccuracy);
+        NSLog(@"log location with heading: %@", self.locationManager.heading);
         if ((self.bestAccuracy == 0) || location.horizontalAccuracy < self.bestAccuracy) {
             self.bestAccuracy = location.horizontalAccuracy;
         }

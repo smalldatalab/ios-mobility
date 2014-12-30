@@ -8,7 +8,8 @@
 
 #import "MobilityViewController.h"
 #import "MobilityModel.h"
-//#import "ActivityLogger.h"
+#import "OMHClient.h"
+#import "LoginViewController.h"
 
 @interface MobilityViewController () <NSFetchedResultsControllerDelegate>
 
@@ -32,6 +33,13 @@
 {
     [super viewDidLoad];
     
+    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout"
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(logout)];
+    
+    self.navigationItem.leftBarButtonItem = logoutButton;
+    
     self.fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
     self.fetchedResultsController.delegate = self;
     
@@ -50,6 +58,12 @@
 {
     [super viewDidAppear:animated];
     [self.fetchedResultsController performFetch:nil];
+}
+
+- (void)logout
+{
+    [[OMHClient sharedClient] signOut];
+    [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:nil];
 }
 
 //- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint

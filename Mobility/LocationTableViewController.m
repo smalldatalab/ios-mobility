@@ -92,7 +92,7 @@
     }
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (%f)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f, course: %f", location.latitude, location.longitude, location.bearing];
     
     return cell;
 }

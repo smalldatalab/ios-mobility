@@ -230,8 +230,8 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)refreshAuthentication
 {
-    NSLog(@"refresh authentication, isAuthenticating: %d", self.isAuthenticating);
-    if (self.isAuthenticating) return;
+    NSLog(@"refresh authentication, isAuthenticating: %d, refreshToken: %d", self.isAuthenticating, (self.dsuRefreshToken != nil));
+    if (self.isAuthenticating || self.dsuRefreshToken == nil) return;
     
     self.isAuthenticating = YES;
     [self setDSUSignInHeader];

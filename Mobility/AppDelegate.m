@@ -22,6 +22,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 @interface AppDelegate ()
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
+@property (nonatomic, strong) UITabBarController *tabBarController;
 
 @end
 
@@ -33,25 +34,12 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
     
     [self setupOMHClient];
     
-    UIViewController *root = nil;
     if (![OMHClient sharedClient].isSignedIn) {
-        self.loginViewController = [[LoginViewController alloc] init];
-        root = self.loginViewController;
+        self.window.rootViewController = self.loginViewController;
     }
     else {
-        MobilityViewController *mvc = [[MobilityViewController alloc] init];
-        UINavigationController *navconM = [[UINavigationController alloc] initWithRootViewController:mvc];
-        
-        LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
-        UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
-        
-        UITabBarController *tbc = [[UITabBarController alloc] init];
-        tbc.viewControllers = @[navconM, navconL];
-        
-        root = tbc;
+        self.window.rootViewController = self.tabBarController;
     }
-    
-    self.window.rootViewController = root;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -70,12 +58,36 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 
 - (void)userDidLogin
 {
-    MobilityViewController *vc = [[MobilityViewController alloc] initWithStyle:UITableViewStylePlain];
-    UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:vc];
-    [UIView transitionFromView:self.loginViewController.view toView:navcon.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-        self.window.rootViewController = navcon;
+    UITabBarController *newRoot = self.tabBarController;
+    [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+        self.window.rootViewController = newRoot;
         self.loginViewController = nil;
     }];
+}
+
+- (LoginViewController *)loginViewController
+{
+    if (_loginViewController == nil) {
+        _loginViewController = [[LoginViewController alloc] init];
+    }
+    return _loginViewController;
+}
+
+- (UITabBarController *)tabBarController
+{
+    if (_tabBarController == nil) {
+        MobilityViewController *mvc = [[MobilityViewController alloc] init];
+        UINavigationController *navconM = [[UINavigationController alloc] initWithRootViewController:mvc];
+        
+        LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
+        UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
+        
+        UITabBarController *tbc = [[UITabBarController alloc] init];
+        tbc.viewControllers = @[navconM, navconL];
+        
+        _tabBarController = tbc;
+    }
+    return _tabBarController;
 }
 
 - (BOOL)application: (UIApplication *)application
