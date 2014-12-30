@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef NSMutableDictionary MobilityLocationDictionary;
+
 
 @interface MobilityLocation : NSManagedObject
 
@@ -21,5 +23,20 @@
 @property (nonatomic) double speed;
 @property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, strong) NSDate * timestamp;
+
+@property (nonatomic, readonly) MobilityLocationDictionary *jsonDictionary;
+
+@end
+
+
+@interface NSMutableDictionary (MobilityLocationDictionary)
+
+@property (nonatomic, strong) NSNumber *latitude;
+@property (nonatomic, strong) NSNumber *longitude;
+@property (nonatomic, strong) NSNumber *horizontalAccuracy;
+@property (nonatomic, strong) NSNumber *verticalAccuracy;
+@property (nonatomic, strong) NSNumber *altitude;
+@property (nonatomic, strong) NSNumber *bearing;
+@property (nonatomic, strong) NSNumber *speed;
 
 @end

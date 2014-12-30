@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1E3FD0CF1A3EC32F000C7E58"
-               BuildableName = "Mobility2.app"
-               BlueprintName = "Mobility2"
+               BuildableName = "Mobility.app"
+               BlueprintName = "Mobility"
                ReferencedContainer = "container:Mobility.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -43,8 +43,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E3FD0CF1A3EC32F000C7E58"
-            BuildableName = "Mobility2.app"
-            BlueprintName = "Mobility2"
+            BuildableName = "Mobility.app"
+            BlueprintName = "Mobility"
             ReferencedContainer = "container:Mobility.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E3FD0CF1A3EC32F000C7E58"
-            BuildableName = "Mobility2.app"
-            BlueprintName = "Mobility2"
+            BuildableName = "Mobility.app"
+            BlueprintName = "Mobility"
             ReferencedContainer = "container:Mobility.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -80,8 +80,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1E3FD0CF1A3EC32F000C7E58"
-            BuildableName = "Mobility2.app"
-            BlueprintName = "Mobility2"
+            BuildableName = "Mobility.app"
+            BlueprintName = "Mobility"
             ReferencedContainer = "container:Mobility.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

@@ -34,7 +34,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
     [self setupOMHClient];
     
     UIViewController *root = nil;
-    if (0 && ![OMHClient sharedClient].isSignedIn) {
+    if (![OMHClient sharedClient].isSignedIn) {
         self.loginViewController = [[LoginViewController alloc] init];
         root = self.loginViewController;
     }
@@ -98,7 +98,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-    [[ActivityLogger sharedLogger] enterBackgroundMode];
+//    [[ActivityLogger sharedLogger] enterBackgroundMode];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -109,7 +109,8 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    [[ActivityLogger sharedLogger] exitBackgroundMode];
+//    [[ActivityLogger sharedLogger] exitBackgroundMode];
+    [[ActivityLogger sharedLogger] startLogging];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Mobility/MobilityDataPoint.m"
-            timestampString = "441541879.337793"
+            filePath = "Mobility/LocationTableViewController.m"
+            timestampString = "441618532.186207"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "-setLatitude:"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Mobility/LocationTableViewController.m"
-            timestampString = "441545309.663363"
+            filePath = "Mobility/ActivityLogger.m"
+            timestampString = "441548425.804774"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
+            landmarkName = "-startLogging"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

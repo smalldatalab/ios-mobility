@@ -46,7 +46,6 @@
 		1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */; };
 		1E3FD1091A3EC596000C7E58 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */; };
 		1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */; };
-		1E4000F11A431F350007C2D4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E4000F01A431F350007C2D4 /* LocationManager.m */; };
 		1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */; };
 		1E5BB3A21A44162B008B6B95 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A11A44162A008B6B95 /* SystemConfiguration.framework */; };
 		1E5BB3A41A441631008B6B95 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A31A441631008B6B95 /* Security.framework */; };
@@ -134,8 +133,6 @@
 		1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1E3FD10A1A3ECA45000C7E58 /* MobilityDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityDataPoint.h; sourceTree = "<group>"; };
 		1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityDataPoint.m; sourceTree = "<group>"; };
-		1E4000EF1A431F350007C2D4 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
-		1E4000F01A431F350007C2D4 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1E5BB3A11A44162A008B6B95 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		1E5BB3A31A441631008B6B95 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -302,8 +299,6 @@
 				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
 				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
-				1E4000EF1A431F350007C2D4 /* LocationManager.h */,
-				1E4000F01A431F350007C2D4 /* LocationManager.m */,
 				1E12F6CC1A4555EF00331827 /* LoginViewController.h */,
 				1E12F6CD1A4555EF00331827 /* LoginViewController.m */,
 				1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */,
@@ -348,9 +343,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */ = {
+		1E3FD0CF1A3EC32F000C7E58 /* Mobility */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility2" */;
+			buildConfigurationList = 1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility" */;
 			buildPhases = (
 				1E3FD0CC1A3EC32F000C7E58 /* Sources */,
 				1E3FD0CD1A3EC32F000C7E58 /* Frameworks */,
@@ -360,7 +355,7 @@
 			);
 			dependencies = (
 			);
-			name = Mobility2;
+			name = Mobility;
 			productName = Mobility;
 			productReference = 1E3FD0D01A3EC32F000C7E58 /* Mobility2.app */;
 			productType = "com.apple.product-type.application";
@@ -412,7 +407,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */,
+				1E3FD0CF1A3EC32F000C7E58 /* Mobility */,
 				1E3FD0EA1A3EC330000C7E58 /* MobilityTests */,
 			);
 		};
@@ -460,7 +455,6 @@
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
 				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
-				1E4000F11A431F350007C2D4 /* LocationManager.m in Sources */,
 				1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
 				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
@@ -486,7 +480,7 @@
 /* Begin PBXTargetDependency section */
 		1E3FD0F11A3EC330000C7E58 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 1E3FD0CF1A3EC32F000C7E58 /* Mobility2 */;
+			target = 1E3FD0CF1A3EC32F000C7E58 /* Mobility */;
 			targetProxy = 1E3FD0F01A3EC330000C7E58 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -675,7 +669,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility2" */ = {
+		1E3FD0FC1A3EC330000C7E58 /* Build configuration list for PBXNativeTarget "Mobility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1E3FD0FD1A3EC330000C7E58 /* Debug */,

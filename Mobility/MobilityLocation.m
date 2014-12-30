@@ -27,16 +27,106 @@
     self.uuid = [[[NSUUID alloc] init] UUIDString];
 }
 
-- (void)awakeFromFetch
+//- (void)awakeFromFetch
+//{
+//    [super awakeFromFetch];
+//    NSLog(@"location awake, timestamp: %@", self.timestamp);
+//}
+//
+//- (void)willSave
+//{
+//    [super willSave];
+//    NSLog(@"location will save, timestamp: %@", self.timestamp);
+//}
+
+- (MobilityLocationDictionary *)jsonDictionary
 {
-    [super awakeFromFetch];
-    NSLog(@"location awake, timestamp: %@", self.timestamp);
+    MobilityLocationDictionary *location = [[MobilityLocationDictionary alloc] init];
+    location.latitude = @(self.latitude);
+    location.longitude = @(self.longitude);
+    location.horizontalAccuracy = @(self.horizontalAccuracy);
+    location.verticalAccuracy = @(self.verticalAccuracy);
+    location.altitude = @(self.altitude);
+    location.bearing = @(self.bearing);
+    location.speed = @(self.speed);
+    return [NSMutableDictionary dictionaryWithObject:location forKey:@"location"];
 }
 
-- (void)willSave
+@end
+
+
+#pragma mark - MobilityLocationDictionary
+
+@implementation NSMutableDictionary (MobilityLocationDictionary)
+
+- (void)setLatitude:(NSNumber *)latitude
 {
-    [super willSave];
-    NSLog(@"location will save, timestamp: %@", self.timestamp);
+    self[@"latitude"] = latitude;
+}
+
+- (NSNumber *)latitude
+{
+    return self[@"latitude"];
+}
+
+- (void)setLongitude:(NSNumber *)longitude
+{
+    self[@"longitude"] = longitude;
+}
+
+- (NSNumber *)longitude
+{
+    return self[@"longitude"];
+}
+
+- (void)setHorizontalAccuracy:(NSNumber *)accuracy
+{
+    self[@"horizontal_accuracy"] = accuracy;
+}
+
+- (NSNumber *)horizontalAccuracy
+{
+    return self[@"horizontal_accuracy"];
+}
+
+- (void)setVerticalAccuracy:(NSNumber *)accuracy
+{
+    self[@"vertical_accuracy"] = accuracy;
+}
+
+- (NSNumber *)verticalAccuracy
+{
+    return self[@"vertical_accuracy"];
+}
+
+- (void)setAltitude:(NSNumber *)altitude
+{
+    self[@"altitude"] = altitude;
+}
+
+- (NSNumber *)altitude
+{
+    return self[@"altitude"];
+}
+
+- (void)setBearing:(NSNumber *)bearing
+{
+    self[@"bearing"] = bearing;
+}
+
+- (NSNumber *)bearing
+{
+    return self[@"bearing"];
+}
+
+- (void)setSpeed:(NSNumber *)speed
+{
+    self[@"speed"] = speed;
+}
+
+- (NSNumber *)speed
+{
+    return self[@"speed"];
 }
 
 @end

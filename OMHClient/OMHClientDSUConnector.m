@@ -288,7 +288,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     __block NSDictionary *blockDataPoint = dataPoint;
     [self.httpSessionManager POST:request parameters:dataPoint
                           success:^(NSURLSessionDataTask *task, id responseObject) {
-//                              NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
+                              NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
 //                              NSLog(@"array contains data point: %d", [self.pendingDataPoints containsObject:blockDataPoint]);
                               [self.pendingDataPoints removeObject:blockDataPoint];
                               [self saveClientState];

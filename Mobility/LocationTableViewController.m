@@ -7,12 +7,10 @@
 //
 
 #import "LocationTableViewController.h"
-//#import "ActivityLogger.h"
 #import "MobilityModel.h"
 
 @interface LocationTableViewController () <NSFetchedResultsControllerDelegate>
 
-//@property (nonatomic, strong) ActivityLogger *logger;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
@@ -35,8 +33,8 @@
     self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
     self.fetchedResultsController.delegate = self;
     
-    UIBarButtonItem *refetch = [[UIBarButtonItem alloc] initWithTitle:@"Fetch" style:UIBarButtonItemStylePlain target:self action:@selector(fetch)];
-    self.navigationItem.rightBarButtonItem = refetch;
+//    UIBarButtonItem *refetch = [[UIBarButtonItem alloc] initWithTitle:@"Fetch" style:UIBarButtonItemStylePlain target:self action:@selector(fetch)];
+//    self.navigationItem.rightBarButtonItem = refetch;
 //
 //    self.logger = [ActivityLogger sharedLogger];
 //    
