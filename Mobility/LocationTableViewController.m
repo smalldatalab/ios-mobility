@@ -32,40 +32,7 @@
     
     self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
     self.fetchedResultsController.delegate = self;
-    
-//    UIBarButtonItem *refetch = [[UIBarButtonItem alloc] initWithTitle:@"Fetch" style:UIBarButtonItemStylePlain target:self action:@selector(fetch)];
-//    self.navigationItem.rightBarButtonItem = refetch;
-//
-//    self.logger = [ActivityLogger sharedLogger];
-//    
-//    __weak typeof(self) weakSelf = self;
-//    self.logger.newLocationDataPointBlock = ^(MobilityDataPoint *dataPoint) {
-//        //        NSLog(@"new log entry: %@", dataPoint);
-//        //        [weakSelf.tableView reloadData];
-//        [weakSelf insertRowForDataPoint:dataPoint];
-//    };
-}
-
-//- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
-//{
-//    [self.tableView beginUpdates];
-//    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-//                          withRowAnimation:UITableViewRowAnimationTop];
-//    [self.tableView endUpdates];
-//}
-
-- (void)fetch
-{
-    NSError *error = nil;
-    [self.fetchedResultsController performFetch:&error];
-    NSLog(@"performed fetch. error: %@, count: %d", error, (int)self.fetchedResultsController.fetchedObjects.count);
-    [self.tableView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self fetch];
+    [self.fetchedResultsController performFetch:nil];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -91,8 +58,8 @@
         NSLog(@"nil location: %@", location);
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%f)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f, course: %f", location.latitude, location.longitude, location.bearing];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (accuracy: %gm)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
     
     return cell;
 }
@@ -113,10 +80,24 @@
 
 #pragma mark - NSFetchedResultsController Delegate
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    if (type == NSFetchedResultsChangeInsert) {
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                              withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView reloadData];
+    [self.tableView endUpdates];
 }
 
 @end

@@ -43,15 +43,7 @@
     
     self.fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
     self.fetchedResultsController.delegate = self;
-    
-//    self.logger = [ActivityLogger sharedLogger];
-//    
-//    __weak typeof(self) weakSelf = self;
-//    self.logger.newActivityDataPointBlock = ^(MobilityDataPoint *dataPoint) {
-////        NSLog(@"new log entry: %@", dataPoint);
-////        [weakSelf.tableView reloadData];
-//        [weakSelf insertRowForDataPoint:dataPoint];
-//    };
+    [self.fetchedResultsController performFetch:nil];
 }
 
 
@@ -67,14 +59,6 @@
     [[OMHClient sharedClient] signOut];
     [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:nil];
 }
-
-//- (void)insertRowForDataPoint:(MobilityDataPoint *)dataPoint
-//{
-//    [self.tableView beginUpdates];
-//    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-//                          withRowAnimation:UITableViewRowAnimationTop];
-//    [self.tableView endUpdates];
-//}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -96,7 +80,7 @@
     
     MobilityActivity *activity = self.fetchedResultsController.fetchedObjects[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", activity.debugActivityString, activity.confidenceString];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
     cell.detailTextLabel.text = [self formattedDate:activity.timestamp];
     
     return cell;
@@ -118,10 +102,24 @@
 
 #pragma mark - NSFetchedResultsController Delegate
 
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    if (type == NSFetchedResultsChangeInsert) {
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                              withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView reloadData];
+    [self.tableView endUpdates];
 }
 
 @end

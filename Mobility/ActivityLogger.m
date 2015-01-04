@@ -177,19 +177,19 @@
     [self.locationManager stopUpdatingLocation];
 }
 
-- (BOOL)motionActivityHasActivity:(CMMotionActivity *)activity
-{
-    if ([activity respondsToSelector:@selector(cycling)]) {
-        BOOL hasCycling = [activity performSelector:@selector(cycling)];
-        if (hasCycling) return YES;
-    }
-    
-    return (activity.stationary
-            || activity.walking
-            || activity.running
-            || activity.automotive
-            || activity.unknown);
-}
+//- (BOOL)motionActivityHasActivity:(CMMotionActivity *)activity
+//{
+//    if ([activity respondsToSelector:@selector(cycling)]) {
+//        BOOL hasCycling = [activity performSelector:@selector(cycling)];
+//        if (hasCycling) return YES;
+//    }
+//    
+//    return (activity.stationary
+//            || activity.walking
+//            || activity.running
+//            || activity.automotive
+//            || activity.unknown);
+//}
 
 
 // debug
@@ -208,7 +208,7 @@
 
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
-    if (![self motionActivityHasActivity:cmActivity]) return;
+//    if (![self motionActivityHasActivity:cmActivity]) return;
     
     MobilityActivity * activity = [self.model uniqueActivityWithMotionActivity:cmActivity];
     MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
@@ -252,7 +252,6 @@
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations
 {
-    NSLog(@"heading: %@", self.locationManager.heading);
     [self logLocations:locations];
     
     if (self.backgroundTask != UIBackgroundTaskInvalid) {

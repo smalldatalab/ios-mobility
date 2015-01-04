@@ -39,6 +39,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
     }
     else {
         self.window.rootViewController = self.tabBarController;
+        [[ActivityLogger sharedLogger] startLogging];
     }
     
     self.window.backgroundColor = [UIColor whiteColor];
