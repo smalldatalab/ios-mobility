@@ -58,6 +58,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 
 - (void)userDidLogin
 {
+    [[ActivityLogger sharedLogger] startLogging];
     UITabBarController *newRoot = self.tabBarController;
     [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
         self.window.rootViewController = newRoot;
@@ -122,7 +123,6 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //    [[ActivityLogger sharedLogger] exitBackgroundMode];
-    [[ActivityLogger sharedLogger] startLogging];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

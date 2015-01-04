@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.openmhealth.ios.mobility</string>
+	<string>org.openmhealth.ios.mobility</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -26,15 +26,15 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.openmhealth.ios.mobility</string>
+			<string>org.openmhealth.ios.mobility</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.openmhealth.ios.mobility</string>
+				<string>org.openmhealth.ios.mobility</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>

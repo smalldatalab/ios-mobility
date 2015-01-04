@@ -14,7 +14,7 @@
 {
     OMHDataPoint *template = [[OMHDataPoint alloc] init];
     template.header = [OMHHeader templateHeader];
-    template.body = [NSMutableDictionary dictionary];
+    template.body = @{};
     return template;
 }
 

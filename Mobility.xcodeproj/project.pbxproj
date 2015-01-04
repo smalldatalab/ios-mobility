@@ -110,7 +110,7 @@
 		1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHClientDSUConnector.m; sourceTree = "<group>"; };
 		1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHDataPoint.h; sourceTree = "<group>"; };
 		1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
-		1E3FD0D01A3EC32F000C7E58 /* Mobility2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobility2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E3FD0D01A3EC32F000C7E58 /* Mobility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobility.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -260,7 +260,7 @@
 		1E3FD0D11A3EC32F000C7E58 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1E3FD0D01A3EC32F000C7E58 /* Mobility2.app */,
+				1E3FD0D01A3EC32F000C7E58 /* Mobility.app */,
 				1E3FD0EB1A3EC330000C7E58 /* MobilityTests.xctest */,
 			);
 			name = Products;
@@ -357,7 +357,7 @@
 			);
 			name = Mobility;
 			productName = Mobility;
-			productReference = 1E3FD0D01A3EC32F000C7E58 /* Mobility2.app */;
+			productReference = 1E3FD0D01A3EC32F000C7E58 /* Mobility.app */;
 			productType = "com.apple.product-type.application";
 		};
 		1E3FD0EA1A3EC330000C7E58 /* MobilityTests */ = {

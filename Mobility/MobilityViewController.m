@@ -10,6 +10,7 @@
 #import "MobilityModel.h"
 #import "OMHClient.h"
 #import "LoginViewController.h"
+#import "ActivityLogger.h"
 
 @interface MobilityViewController () <NSFetchedResultsControllerDelegate>
 
@@ -62,6 +63,7 @@
 
 - (void)logout
 {
+    [[ActivityLogger sharedLogger] stopLogging];
     [[OMHClient sharedClient] signOut];
     [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:nil];
 }

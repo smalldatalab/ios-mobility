@@ -29,9 +29,9 @@
 @property (nonatomic, strong) CLLocation *lastLocation;
 @property (nonatomic, strong) NSDate *locationTrackingStartDate;
 
-//@property (nonatomic, assign) BOOL backgroundMode;
-//@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTask;
-//@property (nonatomic, strong) NSTimer *backgroundTimer;
+@property (nonatomic, assign) BOOL backgroundMode;
+@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTask;
+@property (nonatomic, strong) NSTimer *backgroundTimer;
 
 @property (nonatomic, weak) MobilityModel *model;
 
@@ -53,8 +53,6 @@
         } else {
             _sharedLogger = [[self alloc] initPrivate];
         }
-        
-//        [_sharedLogger startLogging];
     });
     
     return _sharedLogger;
@@ -118,12 +116,12 @@
     [self.model saveManagedContext];
 }
 
-//- (void)enterBackgroundMode
-//{
-//    NSLog(@"enter background mode");
-//    self.backgroundMode = YES;
-////    [self stopLogging];
-//}
+- (void)enterBackgroundMode
+{
+    NSLog(@"enter background mode");
+    self.backgroundMode = YES;
+//    [self stopLogging];
+}
 
 - (MobilityModel *)model
 {
@@ -133,13 +131,13 @@
     return _model;
 }
 
-//- (void)exitBackgroundMode
-//{
-//    NSLog(@"exit background mode");
-//    self.backgroundMode = NO;
-//    [self.locationManager disallowDeferredLocationUpdates];
-////    [self startLogging];
-//}
+- (void)exitBackgroundMode
+{
+    NSLog(@"exit background mode");
+    self.backgroundMode = NO;
+    [self.locationManager disallowDeferredLocationUpdates];
+//    [self startLogging];
+}
 
 #pragma mark - Motion Activity
 
@@ -166,30 +164,30 @@
     
     
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
-        [self.locationManager requestAlwaysAuthorization];
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
+        }
     }
     [self.locationManager startUpdatingLocation];
-    
-//    if ([CLLocationManager headingAvailable]) {
-//        [self.locationManager startUpdatingHeading];
-//    }
-//    else {
-//        NSLog(@"heading data not available on this device");
-//    }
 }
 
 - (void)stopLogging
 {
     [self.motionActivitiyManager stopActivityUpdates];
+    [self.locationManager stopUpdatingLocation];
 }
 
 - (BOOL)motionActivityHasActivity:(CMMotionActivity *)activity
 {
+    if ([activity respondsToSelector:@selector(cycling)]) {
+        BOOL hasCycling = [activity performSelector:@selector(cycling)];
+        if (hasCycling) return YES;
+    }
+    
     return (activity.stationary
             || activity.walking
             || activity.running
             || activity.automotive
-            || activity.cycling
             || activity.unknown);
 }
 
@@ -256,6 +254,12 @@
 {
     NSLog(@"heading: %@", self.locationManager.heading);
     [self logLocations:locations];
+    
+    if (self.backgroundTask != UIBackgroundTaskInvalid) {
+        
+        [[UIApplication sharedApplication] endBackgroundTask:self.backgroundTask];
+        self.backgroundTask = UIBackgroundTaskInvalid;
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -281,7 +285,9 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (status == kCLAuthorizationStatusAuthorized)
     {
         // Location services have just been authorized on the device, start updating now.
-        [self.locationManager startUpdatingLocation];
+        if ([OMHClient sharedClient].isSignedIn) {
+            [self.locationManager startUpdatingLocation];
+        }
     }
 }
 
@@ -294,7 +300,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         
         self.lastLocation = location;
         
-        NSLog(@"log location with heading: %@", self.locationManager.heading);
+        NSLog(@"log location: %@", location);
         if ((self.bestAccuracy == 0) || location.horizontalAccuracy < self.bestAccuracy) {
             self.bestAccuracy = location.horizontalAccuracy;
         }

@@ -19,6 +19,7 @@
 @property (copy) void (^newLocationDataPointBlock)(MobilityDataPoint *dataPoint);
 
 - (void)startLogging;
+- (void)stopLogging;
 //
 //- (void)enterBackgroundMode;
 //- (void)exitBackgroundMode;

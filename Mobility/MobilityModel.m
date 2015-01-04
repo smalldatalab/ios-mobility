@@ -155,7 +155,9 @@
     newActivity.stationary = motionActivity.stationary;
     newActivity.walking = motionActivity.walking;
     newActivity.running = motionActivity.running;
-    newActivity.cycling = motionActivity.cycling;
+    if ([motionActivity respondsToSelector:@selector(cycling)]) {
+        newActivity.cycling = [motionActivity performSelector:@selector(cycling)];
+    }
     newActivity.unknown = motionActivity.unknown;
     
     return newActivity;
