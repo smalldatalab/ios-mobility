@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString *appDSUClientID;
 @property (nonatomic, strong) NSString *appDSUClientSecret;
 
+@property (nonatomic, readonly) NSString *signedInUserEmail;
 @property (nonatomic, readonly) BOOL isSignedIn;
 
 
@@ -30,6 +31,19 @@
 sourceApplication:(NSString *)sourceApplication
        annotation:(id)annotation;
 
+- (void)getRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+   completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+
+- (void)postRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+    completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+
+//- (void)authenticatedGetRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+//                completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+//
+//- (void)authenticatedPostRequest:(NSString *)request withParameters:(NSDictionary *)parameters
+//                 completionBlock:(void (^)(id responseObject, NSError *error, NSInteger statusCode))block;
+
+- (void)refreshAuthenticationWithCompletionBlock:(void (^)(BOOL success))block;
 - (void)signOut;
 
 - (void)submitDataPoint:(NSDictionary *)dataPoint;
@@ -38,5 +52,5 @@ sourceApplication:(NSString *)sourceApplication
 
 
 @protocol OMHSignInDelegate
-- (void)OMHClientSignInFinishedWithError:(NSError *)error;
+- (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error;
 @end

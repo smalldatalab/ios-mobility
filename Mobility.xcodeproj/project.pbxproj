@@ -30,6 +30,7 @@
 		1E1C76001A42AB2A004AA4EA /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1C75ED1A42AB2A004AA4EA /* GooglePlus.framework */; };
 		1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */; };
 		1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */; };
+		1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */; };
 		1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */; };
 		1E3FD0D61A3EC32F000C7E58 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */; };
 		1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */; };
@@ -110,6 +111,8 @@
 		1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHClientDSUConnector.m; sourceTree = "<group>"; };
 		1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHDataPoint.h; sourceTree = "<group>"; };
 		1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
+		1E2F41B71A5D7B0E00532559 /* LogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableViewController.h; sourceTree = "<group>"; };
+		1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableViewController.m; sourceTree = "<group>"; };
 		1E3FD0D01A3EC32F000C7E58 /* Mobility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobility.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -296,6 +299,8 @@
 				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
 				1E0F7BB81A495C9C00D1E347 /* LocationTableViewController.h */,
 				1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */,
+				1E2F41B71A5D7B0E00532559 /* LogTableViewController.h */,
+				1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */,
 				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
 				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
@@ -443,6 +448,7 @@
 				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
 				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
 				1E0F7BC91A4A5F0E00D1E347 /* MobilityModel.m in Sources */,
+				1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */,
 				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
 				1E0F7BCF1A4A8C7200D1E347 /* MobilityLocation.m in Sources */,
 				1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */,
