@@ -173,6 +173,12 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     return (self.dsuAccessToken != nil && self.dsuRefreshToken != nil);
 }
 
+- (BOOL)isReachable
+{
+    if (!self.isSignedIn) return NO;
+    return self.httpSessionManager.reachabilityManager.isReachable;
+}
+
 
 #pragma mark - HTTP Session Manager
 
@@ -359,7 +365,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
     __block NSDictionary *blockDataPoint = dataPoint;
     [self postRequest:request withParameters:dataPoint completionBlock:^(id responseObject, NSError *error, NSInteger statusCode) {
         if (error == nil) {
-//            NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
+            NSLog(@"upload data point succeeded: %@", blockDataPoint[@"header"][@"id"]);
             [self.pendingDataPoints removeObject:dataPoint];
             [self saveClientState];
         }

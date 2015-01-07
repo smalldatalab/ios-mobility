@@ -23,6 +23,7 @@ typedef NSMutableDictionary MobilityLocationDictionary;
 @property (nonatomic) double speed;
 @property (nonatomic, retain) NSString * uuid;
 @property (nonatomic, strong) NSDate * timestamp;
+@property (nonatomic) BOOL submitted;
 
 @property (nonatomic, readonly) MobilityLocationDictionary *jsonDictionary;
 

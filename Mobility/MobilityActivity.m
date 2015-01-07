@@ -20,6 +20,7 @@
 @dynamic automotive;
 @dynamic cycling;
 @dynamic unknown;
+@dynamic submitted;
 
 @synthesize activitiesArray=_activitiesArray;
 

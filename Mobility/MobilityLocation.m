@@ -20,6 +20,7 @@
 @dynamic speed;
 @dynamic uuid;
 @dynamic timestamp;
+@dynamic submitted;
 
 - (void)awakeFromInsert
 {

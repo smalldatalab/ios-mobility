@@ -21,6 +21,8 @@
 
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
+- (NSArray *)pendingActivities;
+- (NSArray *)pendingLocations;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
 

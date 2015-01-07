@@ -13,23 +13,23 @@
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define STILL_TIMER_INTERVAL (2*60)
-#define MOVING_TIMER_INTERVAL 60
+#define STILL_TIMER_INTERVAL (60*2)
+#define DATA_UPLOAD_INTERVAL (60*60)
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) NSMutableArray *logEntries;
-//@property (nonatomic, strong) NSMutableArray *privateLocationDataPoints;
 @property (nonatomic, strong) NSDate *lastLoggedActivityDate;
 @property (nonatomic, strong) CMMotionActivity *lastKnownActivity;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) CLLocationAccuracy bestAccuracy;
 @property (nonatomic, strong) CLLocation *lastLocation;
-@property (nonatomic, strong) NSDate *locationTrackingStartDate;
 @property (nonatomic, strong) NSDate *stillMotionStartDate;
 @property (nonatomic, strong) NSTimer *stillTimer;
+
+@property (nonatomic, strong) NSDate *lastUploadDate;
 
 @property (nonatomic, weak) MobilityModel *model;
 
@@ -78,6 +78,7 @@
     if (self != nil) {
         _logEntries = [decoder decodeObjectForKey:@"logger.logEntries"];
         _lastLoggedActivityDate = [decoder decodeObjectForKey:@"logger.lastLoggedActivityDate"];
+        _lastUploadDate = [decoder decodeObjectForKey:@"logger.lastUploadDate"];
     }
     
     return self;
@@ -87,6 +88,7 @@
 {
     [encoder encodeObject:self.logEntries forKey:@"logger.logEntries"];
     [encoder encodeObject:self.lastLoggedActivityDate forKey:@"logger.lastLoggedActivityDate"];
+    [encoder encodeObject:self.lastUploadDate forKey:@"logger.lastUploadDate"];
 }
 
 - (void)logMessage:(NSString *)message
@@ -124,6 +126,44 @@
         _logEntries = [NSMutableArray array];
     }
     return _logEntries;
+}
+
+- (BOOL)shouldUpload
+{
+    if (self.lastUploadDate == nil) return YES;
+    else {
+        return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > DATA_UPLOAD_INTERVAL);
+    }
+}
+
+- (void)deferredDataUpload
+{
+    NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
+    if ([self shouldUpload] && [OMHClient sharedClient].isReachable) {
+        [self uploadPendingData];
+    }
+}
+
+- (void)uploadPendingData
+{
+    NSLog(@"uploading pending data");
+    self.lastUploadDate = [NSDate date];
+    
+    NSArray *pendingActivities = [[MobilityModel sharedModel] pendingActivities];
+    for (MobilityActivity *activity in pendingActivities) {
+        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
+        [[OMHClient sharedClient] submitDataPoint:dataPoint];
+        activity.submitted = YES;
+    }
+    
+    NSArray *pendingLocations = [[MobilityModel sharedModel] pendingLocations];
+    for (MobilityLocation *location in pendingLocations) {
+        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithLocation:location];
+        [[OMHClient sharedClient] submitDataPoint:dataPoint];
+        location.submitted = YES;
+    }
+    
+    [self logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
 }
 
 #pragma mark - Motion Activity
@@ -214,11 +254,9 @@
 
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
-    MobilityActivity * activity = [self.model uniqueActivityWithMotionActivity:cmActivity];
-    MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
-    
-    [[OMHClient sharedClient] submitDataPoint:dataPoint];
+    [self.model uniqueActivityWithMotionActivity:cmActivity];
     [self archiveDataPoints];
+    [self deferredDataUpload];
     
     self.lastLoggedActivityDate = cmActivity.startDate;
     if ([self motionActivityHasKnownActivity:cmActivity]) {
@@ -314,15 +352,11 @@
         if ([self isDuplicateLocation:location]) continue;
         
         self.lastLocation = location;
-        
-        MobilityLocation *mobilityLocation = [self.model uniqueLocationWithCLLocation:location];
-        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithLocation:mobilityLocation];
-        
-        [[OMHClient sharedClient] submitDataPoint:dataPoint];
-        [self archiveDataPoints];
+        [self.model uniqueLocationWithCLLocation:location];
     }
     
     [self archiveDataPoints];
+    [self deferredDataUpload];
 }
 
 - (BOOL)isDuplicateLocation:(CLLocation *)location
@@ -344,7 +378,7 @@
 {
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.stillMotionStartDate];
     NSLog(@"should reduce, interval: %f, accuracy: %f", interval, self.bestAccuracy);
-    [self logMessage:[NSString stringWithFormat:@"reduce? acc:%g, int:%.1f", self.bestAccuracy, interval]];
+//    [self logMessage:[NSString stringWithFormat:@"reduce? acc:%g, int:%.1f", self.bestAccuracy, interval]];
     if (self.bestAccuracy <= 5) return YES;
     else if (self.bestAccuracy <= 10 && interval > 10) return YES;
     else if (self.bestAccuracy <= 100 && interval > 30) return YES;

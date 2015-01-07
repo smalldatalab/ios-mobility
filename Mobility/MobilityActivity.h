@@ -33,6 +33,7 @@ typedef enum {
 @property (nonatomic) BOOL automotive;
 @property (nonatomic) BOOL cycling;
 @property (nonatomic) BOOL unknown;
+@property (nonatomic) BOOL submitted;
 
 @property (nonatomic, readonly) NSArray *activitiesArray;
 @property (nonatomic, readonly) NSString *debugActivityString;

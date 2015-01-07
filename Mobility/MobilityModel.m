@@ -156,7 +156,7 @@
     newActivity.walking = motionActivity.walking;
     newActivity.running = motionActivity.running;
     if ([motionActivity respondsToSelector:@selector(cycling)]) {
-        newActivity.cycling = [motionActivity performSelector:@selector(cycling)];
+        newActivity.cycling = (BOOL)[motionActivity performSelector:@selector(cycling)];
     }
     newActivity.unknown = motionActivity.unknown;
     
@@ -179,6 +179,33 @@
     newLocation.verticalAccuracy = clLocation.verticalAccuracy;
     
     return newLocation;
+}
+
+- (NSArray *)pendingActivities
+{
+    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity"];
+}
+
+- (NSArray *)pendingLocations
+{
+    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation"];
+}
+
+- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO"];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        NSLog(@"error fetching pending objects for entity: %@", entityName);
+    }
+    
+    return fetchedObjects;
 }
 
 - (BOOL)hasObjectWithEntityName:(NSString *)entityName timestamp:(NSDate *)timestamp
