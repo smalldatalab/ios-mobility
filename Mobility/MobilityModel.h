@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MobilityActivity.h"
 #import "MobilityLocation.h"
+#import "DebugLogEntry.h"
 
 @class CLLocation;
 @class CMMotionActivity;
@@ -19,11 +20,14 @@
 
 - (void)saveManagedContext;
 
+- (void)logMessage:(NSString *)message;
+
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
 - (NSArray *)pendingActivities;
 - (NSArray *)pendingLocations;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
+- (NSFetchedResultsController *)fetchedLogEntriesController;
 
 @end

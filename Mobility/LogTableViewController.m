@@ -7,9 +7,11 @@
 //
 
 #import "LogTableViewController.h"
-#import "ActivityLogger.h"
+#import "MobilityModel.h"
 
-@interface LogTableViewController ()
+@interface LogTableViewController () <NSFetchedResultsControllerDelegate>
+
+@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
@@ -27,14 +29,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [ActivityLogger sharedLogger].newLogEntryBlock = ^(NSDictionary *logEntry) {
-        [self addLogEntry];
-    };
+    
+    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLogEntriesController];
+    self.fetchedResultsController.delegate = self;
+    [self.fetchedResultsController performFetch:nil];
 }
 
-- (void)addLogEntry
+- (void)didReceiveMemoryWarning
 {
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+    [super didReceiveMemoryWarning];
+    [[MobilityModel sharedModel] logMessage:@"Log VC Memory Warning"];
 }
 
 #pragma mark - Table view data source
@@ -43,8 +47,9 @@
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [ActivityLogger sharedLogger].logEntries.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.fetchedResultsController.fetchedObjects.count;
 }
 
 
@@ -55,11 +60,48 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:sCellIdentifier];
     }
-    NSDictionary *logEntry = [ActivityLogger sharedLogger].logEntries[indexPath.row];
-    cell.textLabel.text = logEntry[@"message"];
-    cell.detailTextLabel.text = logEntry[@"time"];
+    
+    DebugLogEntry *logEntry = self.fetchedResultsController.fetchedObjects[indexPath.row];
+    cell.textLabel.text = logEntry.text;
+    cell.detailTextLabel.text = [self formattedDate:logEntry.timestamp];
     
     return cell;
+}
+
+- (NSString *)formattedDate:(NSDate *)date
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
+                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:formatString];
+    }
+    
+    return [dateFormatter stringFromDate:date];
+}
+
+
+#pragma mark - NSFetchedResultsController Delegate
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView beginUpdates];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    if (type == NSFetchedResultsChangeInsert) {
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
+                              withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    [self.tableView endUpdates];
 }
 
 

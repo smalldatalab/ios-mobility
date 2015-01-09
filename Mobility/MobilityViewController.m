@@ -46,6 +46,12 @@
     [self.fetchedResultsController performFetch:nil];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [[MobilityModel sharedModel] logMessage:@"Activity VC Memory Warning"];
+}
+
 
 - (void)viewDidAppear:(BOOL)animated
 {

@@ -436,6 +436,7 @@ NSString * const kDSUBaseURL = @"https://lifestreams.smalldata.io/dsu/";
 
 - (void)signInToDSUWithServerCode:(NSString *)serverCode
 {
+    if (serverCode == nil || self.appDSUClientID == nil) return;
     [self setDSUSignInHeader];
     
     NSString *request =  @"google-signin";

@@ -13,9 +13,6 @@
 
 + (instancetype)sharedLogger;
 
-@property (nonatomic, readonly) NSMutableArray *logEntries;
-@property (copy) void (^newLogEntryBlock)(NSDictionary *logEntry);
-
 - (void)startLogging;
 - (void)stopLogging;
 //

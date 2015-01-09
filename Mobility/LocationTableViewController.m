@@ -35,6 +35,12 @@
     [self.fetchedResultsController performFetch:nil];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [[MobilityModel sharedModel] logMessage:@"Location VC Memory Warning"];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;

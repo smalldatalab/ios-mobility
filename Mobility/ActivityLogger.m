@@ -19,9 +19,8 @@
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
-@property (nonatomic, strong) NSMutableArray *logEntries;
 @property (nonatomic, strong) NSDate *lastLoggedActivityDate;
-@property (nonatomic, strong) CMMotionActivity *lastKnownActivity;
+@property (nonatomic, strong) CMMotionActivity *lastLoggedActivity;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) CLLocationAccuracy bestAccuracy;
@@ -76,7 +75,6 @@
 {
     self = [super init];
     if (self != nil) {
-        _logEntries = [decoder decodeObjectForKey:@"logger.logEntries"];
         _lastLoggedActivityDate = [decoder decodeObjectForKey:@"logger.lastLoggedActivityDate"];
         _lastUploadDate = [decoder decodeObjectForKey:@"logger.lastUploadDate"];
     }
@@ -86,20 +84,10 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.logEntries forKey:@"logger.logEntries"];
     [encoder encodeObject:self.lastLoggedActivityDate forKey:@"logger.lastLoggedActivityDate"];
     [encoder encodeObject:self.lastUploadDate forKey:@"logger.lastUploadDate"];
 }
 
-- (void)logMessage:(NSString *)message
-{
-    NSDictionary *logEntry = @{@"time" : [self formattedDate:[NSDate date]],
-                               @"message" : message};
-    [self.logEntries insertObject:logEntry atIndex:0];
-    if (self.newLogEntryBlock) {
-        self.newLogEntryBlock(logEntry);
-    }
-}
 
 - (void)archiveDataPoints
 {
@@ -120,16 +108,9 @@
     return _model;
 }
 
-- (NSMutableArray *)logEntries
-{
-    if (_logEntries == nil) {
-        _logEntries = [NSMutableArray array];
-    }
-    return _logEntries;
-}
-
 - (BOOL)shouldUpload
 {
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
     if (self.lastUploadDate == nil) return YES;
     else {
         return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > DATA_UPLOAD_INTERVAL);
@@ -163,7 +144,7 @@
         location.submitted = YES;
     }
     
-    [self logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
+    [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
 }
 
 #pragma mark - Motion Activity
@@ -258,11 +239,9 @@
     [self archiveDataPoints];
     [self deferredDataUpload];
     
+    self.lastLoggedActivity = cmActivity;
     self.lastLoggedActivityDate = cmActivity.startDate;
-    if ([self motionActivityHasKnownActivity:cmActivity]) {
-        self.lastKnownActivity = cmActivity;
-        [self updateLocationManagerAccuracy];
-    }
+    [self updateLocationManagerAccuracy];
     
 }
 
@@ -283,7 +262,9 @@
 
 - (void)updateLocationManagerAccuracy
 {
-    if ([self motionActivityIsStationary:self.lastKnownActivity]) {
+    if (![self motionActivityHasKnownActivity:self.lastLoggedActivity]) return;
+    
+    if ([self motionActivityIsStationary:self.lastLoggedActivity]) {
         if (self.stillMotionStartDate == nil) {
             self.stillMotionStartDate = [NSDate date];
             [self startStillTimer];
@@ -313,8 +294,10 @@
 
 - (void)resumeLocationTracking
 {
+    if (self.locationManager.desiredAccuracy == kCLLocationAccuracyNearestTenMeters) return;
+    
     NSLog(@"turning up location accuracy");
-    [self logMessage:@"increasing accuracy"];
+    [self.model logMessage:@"increasing accuracy"];
     self.stillMotionStartDate = nil;
     [self stopStillTimer];
     self.bestAccuracy = CLLocationDistanceMax;
@@ -324,8 +307,10 @@
 
 - (void)reduceLocationTracking
 {
+    if (self.locationManager.desiredAccuracy == kCLLocationAccuracyThreeKilometers) return;
+    
     NSLog(@"turning down location accuracy");
-    [self logMessage:@"reducing accuracy"];
+    [self.model logMessage:@"reducing accuracy"];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers];
     [self.locationManager setDistanceFilter:CLLocationDistanceMax];
 }

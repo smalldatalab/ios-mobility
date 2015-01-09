@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/LocationTableViewController.m"
-            timestampString = "442080183.068741"
+            timestampString = "442498470.762242"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/ActivityLogger.m"
-            timestampString = "442346778.94729"
+            timestampString = "442499344.727963"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "164"
+            endingLineNumber = "164"
             landmarkName = "-startLogging"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/ActivityLogger.m"
-            timestampString = "442346778.94729"
+            timestampString = "442499344.727963"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "351"
-            endingLineNumber = "351"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
             landmarkName = "-logLocations:"
             landmarkType = "5">
          </BreakpointContent>

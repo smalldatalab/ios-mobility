@@ -13,6 +13,7 @@
 #import "LoginViewController.h"
 #import "OMHClient.h"
 #import "ActivityLogger.h"
+#import "MobilityModel.h"
 
 
 NSString * const kMobilityGoogleClientID = @"48636836762-ba1jcrir6sft063gkvpav0e3o9p4mtb5.apps.googleusercontent.com";
@@ -133,6 +134,7 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[MobilityModel sharedModel] logMessage:@"WILL TERMINATE"];
 }
 
 @end

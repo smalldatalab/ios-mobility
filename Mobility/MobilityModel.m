@@ -72,6 +72,13 @@
 {
 }
 
+- (void)logMessage:(NSString *)message
+{
+    DebugLogEntry *entry = (DebugLogEntry *)[self insertNewObjectForEntityForName:@"DebugLogEntry"];
+    entry.timestamp = [NSDate date];
+    entry.text = message;
+}
+
 - (void)saveState
 {
     NSLog(@"saving model state");
@@ -253,6 +260,11 @@
 - (NSFetchedResultsController *)fetchedLocationsController
 {
     return [self fetchedResultsControllerWithEntityName:@"MobilityLocation"];
+}
+
+- (NSFetchedResultsController *)fetchedLogEntriesController
+{
+    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry"];
 }
 
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
