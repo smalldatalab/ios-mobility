@@ -14,7 +14,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define STILL_TIMER_INTERVAL (60*2)
-#define DATA_UPLOAD_INTERVAL (60*60)
+#define DATA_UPLOAD_INTERVAL (60*15)
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
@@ -110,16 +110,16 @@
 
 - (BOOL)shouldUpload
 {
+    NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]);
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
-    if (self.lastUploadDate == nil) return YES;
-    else {
-        return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > DATA_UPLOAD_INTERVAL);
-    }
+    else if ([OMHClient sharedClient].pendingDataPointCount > 20) return NO;
+    else if (self.lastUploadDate == nil) return YES;
+    else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > DATA_UPLOAD_INTERVAL);
 }
 
 - (void)deferredDataUpload
 {
-    NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
+//    NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
     if ([self shouldUpload] && [OMHClient sharedClient].isReachable) {
         [self uploadPendingData];
     }
@@ -127,24 +127,38 @@
 
 - (void)uploadPendingData
 {
-    NSLog(@"uploading pending data");
-    self.lastUploadDate = [NSDate date];
     
-    NSArray *pendingActivities = [[MobilityModel sharedModel] pendingActivities];
+    NSArray *pendingActivities = [[MobilityModel sharedModel] oldestPendingActivitiesWithLimit:10];
+    NSArray *pendingLocations = [[MobilityModel sharedModel] oldestPendingLocationsWithLimit:10];
+    NSLog(@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count);
+    
+    
     for (MobilityActivity *activity in pendingActivities) {
+//        NSLog(@"submitting activity with timestamp: %@", activity.timestamp);
         MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
         [[OMHClient sharedClient] submitDataPoint:dataPoint];
         activity.submitted = YES;
     }
     
-    NSArray *pendingLocations = [[MobilityModel sharedModel] pendingLocations];
     for (MobilityLocation *location in pendingLocations) {
+//        NSLog(@"submitting location with timestamp: %@", location.timestamp);
         MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithLocation:location];
         [[OMHClient sharedClient] submitDataPoint:dataPoint];
         location.submitted = YES;
     }
     
+    NSLog(@"done uploading");
+    
     [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
+    
+    if (pendingActivities.count == 10 || pendingLocations.count == 10) {
+        NSLog(@"starting timer for next batch");
+        [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(deferredDataUpload) userInfo:nil repeats:NO];
+    }
+    else {
+        // only update upload date if we're done uploading all batches
+        self.lastUploadDate = [NSDate date];
+    }
 }
 
 #pragma mark - Motion Activity
@@ -178,14 +192,14 @@
             [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
         }
     }
-    [self.locationManager startUpdatingLocation];
+    [self startTrackingLocation];
 }
 
 - (void)stopLogging
 {
     NSLog(@"stop logging");
     [self.motionActivitiyManager stopActivityUpdates];
-    [self.locationManager stopUpdatingLocation];
+    [self stopTrackingLocation];
 }
 
 
@@ -260,8 +274,23 @@
     return _locationManager;
 }
 
+- (void)startTrackingLocation
+{
+    [self.model logMessage:@"start tracking location"];
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)stopTrackingLocation
+{
+    [self.model logMessage:@"stop tracking location!!"];
+    [self.locationManager stopUpdatingLocation];
+}
+
 - (void)updateLocationManagerAccuracy
 {
+    NSLog(@"update accuracy, hasKnown: %d, isStationary: %d",
+          [self motionActivityHasKnownActivity:self.lastLoggedActivity],
+          [self motionActivityIsStationary:self.lastLoggedActivity]);
     if (![self motionActivityHasKnownActivity:self.lastLoggedActivity]) return;
     
     if ([self motionActivityIsStationary:self.lastLoggedActivity]) {
@@ -378,8 +407,9 @@
        didFailWithError:(NSError *)error
 {
     NSLog(@"location manager did fail with error: %@", error);
+    [self.model logMessage:[NSString stringWithFormat:@"location failed with error: %ld", (long)error.code]];
     if (error.code == kCLErrorDenied) {
-        [self.locationManager stopUpdatingLocation];
+        [self stopTrackingLocation];
     }
 }
 
@@ -387,18 +417,19 @@
 didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     NSLog(@"location manager did change auth status: %d", status);
+    [self.model logMessage:[NSString stringWithFormat:@"location auth changed: %d", status]];
     
     if (status == kCLAuthorizationStatusDenied)
     {
         // Location services are disabled on the device.
-        [self.locationManager stopUpdatingLocation];
+        [self stopTrackingLocation];
         
     }
     if (status == kCLAuthorizationStatusAuthorized)
     {
         // Location services have just been authorized on the device, start updating now.
         if ([OMHClient sharedClient].isSignedIn) {
-            [self.locationManager startUpdatingLocation];
+            [self startTrackingLocation];
         }
     }
 }

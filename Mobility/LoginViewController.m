@@ -10,6 +10,7 @@
 #import "UIView+AutoLayoutHelpers.h"
 #import "AppDelegate.h"
 #import "OMHClient.h"
+#import "ActivityLogger.h"
 
 @interface LoginViewController () <OMHSignInDelegate>
 
@@ -89,6 +90,7 @@
     }
     
     if (self.presentingViewController != nil) {
+        [[ActivityLogger sharedLogger] startLogging]; // TODO: consolidate didLogin into app delegate
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
     else {

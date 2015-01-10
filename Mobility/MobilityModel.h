@@ -18,14 +18,15 @@
 
 + (instancetype)sharedModel;
 
+- (void)setUserEmail:(NSString *)userEmail;
 - (void)saveManagedContext;
 
 - (void)logMessage:(NSString *)message;
 
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
-- (NSArray *)pendingActivities;
-- (NSArray *)pendingLocations;
+- (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
+- (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
 - (NSFetchedResultsController *)fetchedLogEntriesController;

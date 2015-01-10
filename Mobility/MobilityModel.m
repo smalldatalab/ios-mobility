@@ -188,23 +188,26 @@
     return newLocation;
 }
 
-- (NSArray *)pendingActivities
+- (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
 {
-    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity"];
+    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" fetchLimit:fetchLimit];
 }
 
-- (NSArray *)pendingLocations
+- (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit
 {
-    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation"];
+    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" fetchLimit:fetchLimit];
 }
 
-- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName
+- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName fetchLimit:(NSInteger)limit
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO"];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
     [fetchRequest setPredicate:predicate];
+    [fetchRequest setSortDescriptors:@[sort]];
+    [fetchRequest setFetchLimit:limit];
     
     NSError *error = nil;
     NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
