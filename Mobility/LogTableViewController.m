@@ -22,40 +22,41 @@
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         self.title = @"Log";
-//        [self registerForNotifications];
+        [self registerForNotifications];
     }
     return self;
 }
 
-//- (void)dealloc
-//{
-//    [self unregisterForNotifications];
-//}
-//
-//- (void)registerForNotifications
-//{
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-//}
-//
-//- (void)unregisterForNotifications
-//{
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-//}
-//
-//- (void)enteredBackground
-//{
-//    NSLog(@"log table entered background");
-//    self.fetchedResultsController.delegate = nil;
-//}
-//
-//- (void)enteredForeground
-//{
-//    NSLog(@"log table entered foreground");
-//    self.fetchedResultsController.delegate = self;
-//    [self.fetchedResultsController performFetch:nil];
-//}
+- (void)dealloc
+{
+    [self unregisterForNotifications];
+}
+
+- (void)registerForNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)unregisterForNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)enteredBackground
+{
+    NSLog(@"log table entered background");
+    self.fetchedResultsController.delegate = nil;
+}
+
+- (void)enteredForeground
+{
+    NSLog(@"log table entered foreground");
+    [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
+    self.fetchedResultsController.delegate = self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

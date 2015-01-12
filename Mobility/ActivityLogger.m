@@ -13,14 +13,33 @@
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define LOCATION_STILL_TIMER_INTERVAL (60*5)
+#define LOCATION_MOVING_TIMER_INTERVAL (60)
+#define ACTIVITY_UPDATE_STALE_INTERVAL 30
 #define STILL_TIMER_INTERVAL (60*2)
 #define DATA_UPLOAD_INTERVAL (60*15)
+
+
+/*
+ sequence of events:
+ 
+ * get location update
+ * check if timer is running
+    - if not
+        * start updating activities
+        * get activity update and start timer based on activity
+    - if yes
+        * just log location
+ 
+ 
+ */
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
-@property (nonatomic, strong) NSDate *lastLoggedActivityDate;
-@property (nonatomic, strong) CMMotionActivity *lastLoggedActivity;
+@property (nonatomic, strong) CMMotionActivity *lastActivityUpdate;
+@property (nonatomic, strong) CMMotionActivity *lastQueriedActivity;
+@property (nonatomic, strong) NSDate *lastQueriedActivityDate;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, assign) CLLocationAccuracy bestAccuracy;
@@ -28,7 +47,10 @@
 @property (nonatomic, strong) NSDate *stillMotionStartDate;
 @property (nonatomic, strong) NSTimer *stillTimer;
 
+@property (nonatomic, strong) NSTimer *locationSampleTimer;
+
 @property (nonatomic, strong) NSDate *lastUploadDate;
+@property (nonatomic, assign) BOOL isQueryingActivities;
 
 @property (nonatomic, weak) MobilityModel *model;
 
@@ -75,7 +97,7 @@
 {
     self = [super init];
     if (self != nil) {
-        _lastLoggedActivityDate = [decoder decodeObjectForKey:@"logger.lastLoggedActivityDate"];
+        _lastQueriedActivityDate = [decoder decodeObjectForKey:@"logger.lastQueriedActivityDate"];
         _lastUploadDate = [decoder decodeObjectForKey:@"logger.lastUploadDate"];
     }
     
@@ -84,7 +106,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.lastLoggedActivityDate forKey:@"logger.lastLoggedActivityDate"];
+    [encoder encodeObject:self.lastQueriedActivity forKey:@"logger.lastQueriedActivityDate"];
     [encoder encodeObject:self.lastUploadDate forKey:@"logger.lastUploadDate"];
 }
 
@@ -107,6 +129,17 @@
     }
     return _model;
 }
+
+- (void)startLogging
+{
+    [self startTrackingLocation];
+}
+
+- (void)stopLogging
+{
+    [self stopTrackingLocation];
+}
+
 
 - (BOOL)shouldUpload
 {
@@ -155,7 +188,7 @@
         NSLog(@"starting timer for next batch");
         [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(deferredDataUpload) userInfo:nil repeats:NO];
     }
-    else {
+    else if (!self.isQueryingActivities) {
         // only update upload date if we're done uploading all batches
         self.lastUploadDate = [NSDate date];
     }
@@ -171,35 +204,26 @@
     return _motionActivitiyManager;
 }
 
-- (void)startLogging
+- (void)startUpdatingActivities
 {
-    NSLog(@"start logging");
+    NSLog(@"start updating activities");
     self.bestAccuracy = CLLocationDistanceMax;
     if ([CMMotionActivityManager isActivityAvailable]) {
         __weak typeof(self) weakSelf = self;
         [self.motionActivitiyManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
                                                      withHandler:^(CMMotionActivity *activity) {
-                                                         [weakSelf logActivity:activity];
+                                                         [weakSelf activityUpdateHandler:activity];
                                                      }];
     }
     else {
         NSLog(@"motion data not available on this device");
     }
-    
-    
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
-        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
-        }
-    }
-    [self startTrackingLocation];
 }
 
-- (void)stopLogging
+- (void)stopUpdatingActivities
 {
-    NSLog(@"stop logging");
+    NSLog(@"stop updating activities");
     [self.motionActivitiyManager stopActivityUpdates];
-    [self stopTrackingLocation];
 }
 
 
@@ -247,16 +271,53 @@
     return activity.stationary;
 }
 
+- (void)activityUpdateHandler:(CMMotionActivity *)cmActivity
+{
+    if ([self motionActivityHasKnownActivity:cmActivity]) {
+        
+        self.lastActivityUpdate = cmActivity;
+        [self stopUpdatingActivities];
+        [self endLocationSample];
+    }
+    [self logActivity:cmActivity];
+}
+
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
     [self.model uniqueActivityWithMotionActivity:cmActivity];
     [self archiveDataPoints];
-    [self deferredDataUpload];
+//    [self deferredDataUpload];
+//    
+//    self.lastLoggedActivity = cmActivity;
+//    self.lastLoggedActivityDate = cmActivity.startDate;
+//    [self updateLocationManagerAccuracy];
     
-    self.lastLoggedActivity = cmActivity;
-    self.lastLoggedActivityDate = cmActivity.startDate;
-    [self updateLocationManagerAccuracy];
-    
+}
+
+- (void)queryActivities
+{
+    [self.model logMessage:@"query activities"];
+    self.isQueryingActivities = YES;
+    __weak typeof(self) weakSelf = self;
+    [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
+                                                        toDate:[NSDate date]
+                                                       toQueue:[NSOperationQueue mainQueue]
+                                                   withHandler:^(NSArray *activities, NSError *error)
+     {
+         if (error) {
+             NSLog(@"activity fetch error: %@", error);
+         }
+         else {
+             for (CMMotionActivity *activity in activities) {
+                 [weakSelf logActivity:activity];
+             }
+             self.lastQueriedActivity = activities.lastObject;
+             self.lastQueriedActivityDate = self.lastQueriedActivity.startDate;
+         }
+         self.isQueryingActivities = NO;
+         [self deferredDataUpload];
+         
+     }];
 }
 
 
@@ -277,6 +338,13 @@
 - (void)startTrackingLocation
 {
     [self.model logMessage:@"start tracking location"];
+    
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
+        }
+    }
+    
     [self.locationManager startUpdatingLocation];
 }
 
@@ -284,64 +352,43 @@
 {
     [self.model logMessage:@"stop tracking location!!"];
     [self.locationManager stopUpdatingLocation];
+    [self stopLocationSampleTimer];
 }
 
-- (void)updateLocationManagerAccuracy
+- (void)startLocationSample
 {
-    NSLog(@"update accuracy, hasKnown: %d, isStationary: %d",
-          [self motionActivityHasKnownActivity:self.lastLoggedActivity],
-          [self motionActivityIsStationary:self.lastLoggedActivity]);
-    if (![self motionActivityHasKnownActivity:self.lastLoggedActivity]) return;
-    
-    if ([self motionActivityIsStationary:self.lastLoggedActivity]) {
-        if (self.stillMotionStartDate == nil) {
-            self.stillMotionStartDate = [NSDate date];
-            [self startStillTimer];
-        }
-        if (self.lastLocation != nil && self.lastLocation.horizontalAccuracy < self.bestAccuracy) {
-            self.bestAccuracy = self.lastLocation.horizontalAccuracy;
-        }
-        if ([self shouldReduceAccuracy]) {
-            [self reduceLocationTracking];
-        }
-    }
-    else {
-        [self resumeLocationTracking];
-    }
-}
-
-- (void)startStillTimer
-{
-    self.stillTimer = [NSTimer scheduledTimerWithTimeInterval:120 target:self selector:@selector(reduceLocationTracking) userInfo:nil repeats:NO];
-}
-
-- (void)stopStillTimer
-{
-    [self.stillTimer invalidate];
-    self.stillTimer = nil;
-}
-
-- (void)resumeLocationTracking
-{
-    if (self.locationManager.desiredAccuracy == kCLLocationAccuracyNearestTenMeters) return;
-    
-    NSLog(@"turning up location accuracy");
-    [self.model logMessage:@"increasing accuracy"];
-    self.stillMotionStartDate = nil;
-    [self stopStillTimer];
+    [self stopLocationSampleTimer];
+    [self.model logMessage:@"starting location sample"];
     self.bestAccuracy = CLLocationDistanceMax;
-    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
-    [self.locationManager setDistanceFilter:5.0];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
 }
 
-- (void)reduceLocationTracking
+- (void)endLocationSample
 {
-    if (self.locationManager.desiredAccuracy == kCLLocationAccuracyThreeKilometers) return;
-    
-    NSLog(@"turning down location accuracy");
-    [self.model logMessage:@"reducing accuracy"];
+    [self.model logMessage:[NSString stringWithFormat:@"ending location sample, still: %d", [self motionActivityIsStationary:self.lastActivityUpdate]]];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers];
     [self.locationManager setDistanceFilter:CLLocationDistanceMax];
+    [self startLocationSampleTimer];
+}
+
+- (void)startLocationSampleTimer
+{
+    if (self.locationSampleTimer != nil) {
+        [self stopLocationSampleTimer];
+    }
+    
+    NSTimeInterval interval = [self motionActivityIsStationary:self.lastActivityUpdate]
+    ? LOCATION_STILL_TIMER_INTERVAL
+    : LOCATION_MOVING_TIMER_INTERVAL;
+    
+    self.locationSampleTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(startLocationSample) userInfo:nil repeats:NO];
+}
+
+- (void)stopLocationSampleTimer
+{
+    [self.locationSampleTimer invalidate];
+    self.locationSampleTimer = nil;
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -349,11 +396,9 @@
 {
     NSLog(@"did update locations");
     [self logLocations:locations];
-    [self updateLocationManagerAccuracy];
     
-    if (!self.lastLoggedActivityDate) {
-        CLLocation *firstLocation = locations.firstObject;
-        self.lastLoggedActivityDate = firstLocation.timestamp;
+    if (self.locationSampleTimer == nil) {
+        [self startUpdatingActivities];
     }
 
 }
@@ -391,7 +436,7 @@
 - (BOOL)shouldReduceAccuracy
 {
     NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.stillMotionStartDate];
-    NSLog(@"should reduce, interval: %f, accuracy: %f", interval, self.bestAccuracy);
+//    NSLog(@"should reduce, interval: %f, accuracy: %f", interval, self.bestAccuracy);
 //    [self logMessage:[NSString stringWithFormat:@"reduce? acc:%g, int:%.1f", self.bestAccuracy, interval]];
     if (self.bestAccuracy <= 5) return YES;
     else if (self.bestAccuracy <= 10 && interval > 10) return YES;
