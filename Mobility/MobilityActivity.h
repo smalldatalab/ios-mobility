@@ -27,6 +27,7 @@ typedef enum {
 @property (nonatomic) int16_t confidence;
 @property (nonatomic, strong) NSDate * timestamp;
 @property (nonatomic, strong) NSString * uuid;
+@property (nonatomic, strong) NSString * userEmail;
 @property (nonatomic) BOOL stationary;
 @property (nonatomic) BOOL walking;
 @property (nonatomic) BOOL running;

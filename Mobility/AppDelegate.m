@@ -60,7 +60,6 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 
 - (void)userDidLogin
 {
-    [[ActivityLogger sharedLogger] startLogging];
     UITabBarController *newRoot = self.tabBarController;
     [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
         self.window.rootViewController = newRoot;

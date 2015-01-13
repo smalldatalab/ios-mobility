@@ -21,7 +21,8 @@ typedef NSMutableDictionary MobilityLocationDictionary;
 @property (nonatomic) double altitude;
 @property (nonatomic) double bearing;
 @property (nonatomic) double speed;
-@property (nonatomic, retain) NSString * uuid;
+@property (nonatomic, strong) NSString * uuid;
+@property (nonatomic, strong) NSString * userEmail;
 @property (nonatomic, strong) NSDate * timestamp;
 @property (nonatomic) BOOL submitted;
 

@@ -14,6 +14,7 @@
 @dynamic confidence;
 @dynamic timestamp;
 @dynamic uuid;
+@dynamic userEmail;
 @dynamic stationary;
 @dynamic walking;
 @dynamic running;

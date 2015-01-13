@@ -97,6 +97,7 @@
 {
     [[ActivityLogger sharedLogger] stopLogging];
     [[OMHClient sharedClient] signOut];
+    [[MobilityModel sharedModel] setUserEmail:nil];
     [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:nil];
 }
 

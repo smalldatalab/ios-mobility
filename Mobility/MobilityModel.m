@@ -18,6 +18,8 @@
 @property(nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @property(nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, copy) NSString *userEmail;
+
 @end
 
 @implementation MobilityModel
@@ -28,13 +30,7 @@
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        NSData *encodedModel = [defaults objectForKey:@"MobilityModel"];
-        if (encodedModel != nil) {
-            _sharedModel = (MobilityModel *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedModel];
-        } else {
-            _sharedModel = [[self alloc] initPrivate];
-        }
+        _sharedModel = [[self alloc] initPrivate];
     });
     
     return _sharedModel;
@@ -53,23 +49,14 @@
     self = [super init];
     if (self) {
         
+        // fetch logged-in user
+        NSString *userEmail = [self persistentStoreMetadataTextForKey:@"userEmail"];
+        NSLog(@"model setup with userEmail: %@", userEmail);
+        if (userEmail != nil) {
+            _userEmail = [userEmail copy];
+        }
     }
     return self;
-}
-
-
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-    self = [super init];
-    if (self != nil) {
-    }
-    
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
 }
 
 - (void)logMessage:(NSString *)message
@@ -89,6 +76,12 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"MobilityModel"];
     [userDefaults synchronize];
+}
+
+- (void)setUserEmail:(NSString *)userEmail
+{
+    _userEmail = [userEmail copy];
+    [self setPersistentStoreMetadataText:userEmail forKey:@"userEmail"];
 }
 
 
@@ -141,12 +134,38 @@
         _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
         if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
             // Replace this implementation with code to handle the error appropriately.
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            abort();
+            NSLog(@"Error opening persistent store, deleting persistent store\n%@\n%@", error, [error userInfo]);
+            [self deletePersistentStore];
+            _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+            if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
+                NSLog(@"Error opening persistent store after reset. abort.");
+                abort();
+            }
+            
         }
     }
     
     return _persistentStoreCoordinator;
+}
+
+- (NSString *)persistentStoreMetadataTextForKey:(NSString *)key
+{
+    NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
+    NSDictionary *metadata = [self.persistentStoreCoordinator metadataForPersistentStore:store];
+    return metadata[key];
+}
+
+- (void)setPersistentStoreMetadataText:(NSString *)text forKey:(NSString *)key
+{
+    NSPersistentStore *store = [self.persistentStoreCoordinator persistentStoreForURL:self.persistentStoreURL];
+    NSMutableDictionary *metadata = [[self.persistentStoreCoordinator metadataForPersistentStore:store] mutableCopy];
+    if (text) {
+        metadata[key] = text;
+    }
+    else {
+        [metadata removeObjectForKey:key];
+    }
+    [self.persistentStoreCoordinator setMetadata:metadata forPersistentStore:store];
 }
 
 
@@ -158,6 +177,7 @@
     if (existingActivity) return existingActivity;
     
     MobilityActivity *newActivity = (MobilityActivity *)[self insertNewObjectForEntityForName:@"MobilityActivity"];
+    newActivity.userEmail = self.userEmail;
     newActivity.timestamp = motionActivity.startDate;
     newActivity.confidence = motionActivity.confidence;
     newActivity.stationary = motionActivity.stationary;
@@ -177,6 +197,7 @@
     if (existingLocation) return existingLocation;
     
     MobilityLocation *newLocation = (MobilityLocation *)[self insertNewObjectForEntityForName:@"MobilityLocation"];
+    newLocation.userEmail = self.userEmail;
     newLocation.timestamp = clLocation.timestamp;
     newLocation.latitude = clLocation.coordinate.latitude;
     newLocation.longitude = clLocation.coordinate.longitude;
@@ -201,7 +222,7 @@
 
 - (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName fetchLimit:(NSInteger)limit
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO && userEmail == %@", self.userEmail];
     NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -258,20 +279,22 @@
 
 - (NSFetchedResultsController *)fetchedActivitesController
 {
-    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate];
 }
 
 - (NSFetchedResultsController *)fetchedLocationsController
 {
-    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation"];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate];
 }
 
 - (NSFetchedResultsController *)fetchedLogEntriesController
 {
-    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry"];
+    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil];
 }
 
-- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate
 {
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
@@ -279,7 +302,7 @@
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entity];
     [fetchRequest setSortDescriptors:@[descriptor]];
-//    [fetchRequest setPredicate:predicate];
+    [fetchRequest setPredicate:predicate];
     [fetchRequest setFetchBatchSize:100];
     
     // Build a fetch results controller based on the above fetch request.
@@ -312,6 +335,22 @@
     if (error) {
         NSLog(@"Error saving context: %@", [error localizedDescription]);
     }
+}
+
+/**
+ *  deletePersistentStore
+ */
+- (void)deletePersistentStore
+{
+    NSLog(@"Deleting persistent store.");
+    self.managedObjectContext = nil;
+    self.managedObjectModel = nil;
+    self.persistentStoreCoordinator = nil;
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
+    
+    self.persistentStoreURL = nil;
 }
 
 @end

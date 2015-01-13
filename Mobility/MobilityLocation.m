@@ -19,6 +19,7 @@
 @dynamic bearing;
 @dynamic speed;
 @dynamic uuid;
+@dynamic userEmail;
 @dynamic timestamp;
 @dynamic submitted;
 

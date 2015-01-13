@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "OMHClient.h"
 #import "ActivityLogger.h"
+#import "MobilityModel.h"
 
 @interface LoginViewController () <OMHSignInDelegate>
 
@@ -89,8 +90,10 @@
         return;
     }
     
+    [[ActivityLogger sharedLogger] startLogging];
+    [[MobilityModel sharedModel] setUserEmail:[OMHClient signedInUserEmail]];
+    
     if (self.presentingViewController != nil) {
-        [[ActivityLogger sharedLogger] startLogging]; // TODO: consolidate didLogin into app delegate
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
     else {
