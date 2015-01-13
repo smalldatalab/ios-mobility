@@ -9,30 +9,11 @@
 #import "ActivityLogger.h"
 #import "OMHClient.h"
 #import "MobilityModel.h"
+#import "AppConstants.h"
 
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define LOCATION_STILL_TIMER_INTERVAL (60*5)
-#define LOCATION_MOVING_TIMER_INTERVAL (60)
-//#define ACTIVITY_UPDATE_STALE_INTERVAL 30
-//#define STILL_TIMER_INTERVAL (60*2)
-#define DATA_UPLOAD_INTERVAL (60*60)
-
-
-/*
- sequence of events:
- 
- * get location update
- * check if timer is running
-    - if not
-        * start updating activities
-        * get activity update and start timer based on activity
-    - if yes
-        * just log location
- 
- 
- */
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
@@ -113,7 +94,6 @@
 
 - (void)archiveDataPoints
 {
-//    NSLog(@"archiving data points, activites: %d, locations: %d", (int)self.privateActivityDataPoints.count, (int)self.privateLocationDataPoints.count);
     NSData *encodedClient = [NSKeyedArchiver archivedDataWithRootObject:self];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:encodedClient forKey:@"MobilityActivityLogger"];
@@ -145,9 +125,9 @@
 {
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]);
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
-    else if ([OMHClient sharedClient].pendingDataPointCount > 20) return NO;
+    else if ([OMHClient sharedClient].pendingDataPointCount > kDataUploadMaxBatchSize) return NO;
     else if (self.lastUploadDate == nil) return YES;
-    else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > DATA_UPLOAD_INTERVAL);
+    else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > kDataUploadInterval);
 }
 
 - (void)deferredDataUpload
@@ -161,8 +141,8 @@
 - (void)uploadPendingData
 {
     
-    NSArray *pendingActivities = [[MobilityModel sharedModel] oldestPendingActivitiesWithLimit:10];
-    NSArray *pendingLocations = [[MobilityModel sharedModel] oldestPendingLocationsWithLimit:10];
+    NSArray *pendingActivities = [[MobilityModel sharedModel] oldestPendingActivitiesWithLimit:kDataUploadMaxBatchSize / 2];
+    NSArray *pendingLocations = [[MobilityModel sharedModel] oldestPendingLocationsWithLimit:kDataUploadMaxBatchSize / 2];
     NSLog(@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count);
     
     
@@ -184,7 +164,8 @@
     
     [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
     
-    if (pendingActivities.count == 10 || pendingLocations.count == 10) {
+    if (pendingActivities.count == kDataUploadMaxBatchSize / 2
+        || pendingLocations.count == kDataUploadMaxBatchSize / 2) {
         NSLog(@"starting timer for next batch");
         [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(deferredDataUpload) userInfo:nil repeats:NO];
     }
@@ -286,12 +267,6 @@
 {
     [self.model uniqueActivityWithMotionActivity:cmActivity];
     [self archiveDataPoints];
-//    [self deferredDataUpload];
-//    
-//    self.lastLoggedActivity = cmActivity;
-//    self.lastLoggedActivityDate = cmActivity.startDate;
-//    [self updateLocationManagerAccuracy];
-    
 }
 
 - (void)queryActivities
@@ -328,7 +303,7 @@
     if (_locationManager == nil) {
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.pausesLocationUpdatesAutomatically = NO;
-        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest]; //kCLLocationAccuracyNearestTenMeters
+        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [_locationManager setDistanceFilter:kCLDistanceFilterNone];
         [_locationManager setDelegate:self];
     }
@@ -379,8 +354,8 @@
     }
     
     NSTimeInterval interval = [self motionActivityIsStationary:self.lastActivityUpdate]
-    ? LOCATION_STILL_TIMER_INTERVAL
-    : LOCATION_MOVING_TIMER_INTERVAL;
+    ? kLocationSamplingIntervalStationary
+    : kLocationSamplingIntervalMoving;
     
     self.locationSampleTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(startLocationSample) userInfo:nil repeats:NO];
 }

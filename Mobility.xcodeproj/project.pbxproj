@@ -31,6 +31,7 @@
 		1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */; };
 		1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */; };
 		1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */; };
+		1E3D87291A652FE50049F0CD /* AppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D87281A652FE50049F0CD /* AppConstants.m */; };
 		1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */; };
 		1E3FD0D61A3EC32F000C7E58 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */; };
 		1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */; };
@@ -114,6 +115,8 @@
 		1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
 		1E2F41B71A5D7B0E00532559 /* LogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableViewController.h; sourceTree = "<group>"; };
 		1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableViewController.m; sourceTree = "<group>"; };
+		1E3D87271A652AC50049F0CD /* AppConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
+		1E3D87281A652FE50049F0CD /* AppConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppConstants.m; sourceTree = "<group>"; };
 		1E3FD0D01A3EC32F000C7E58 /* Mobility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mobility.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1E3FD0D51A3EC32F000C7E58 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -298,6 +301,8 @@
 			isa = PBXGroup;
 			children = (
 				1E1C75D21A42AB2A004AA4EA /* OMHClient */,
+				1E3D87271A652AC50049F0CD /* AppConstants.h */,
+				1E3D87281A652FE50049F0CD /* AppConstants.m */,
 				1E3FD0E21A3EC330000C7E58 /* AppDelegate.h */,
 				1E3FD0E31A3EC330000C7E58 /* AppDelegate.m */,
 				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
@@ -472,6 +477,7 @@
 				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,
 				1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */,
 				1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */,
+				1E3D87291A652FE50049F0CD /* AppConstants.m in Sources */,
 				1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */,
 				1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */,
 				1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */,

@@ -15,8 +15,5 @@
 
 - (void)startLogging;
 - (void)stopLogging;
-//
-//- (void)enterBackgroundMode;
-//- (void)exitBackgroundMode;
 
 @end

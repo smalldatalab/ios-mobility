@@ -14,12 +14,8 @@
 #import "OMHClient.h"
 #import "ActivityLogger.h"
 #import "MobilityModel.h"
+#import "AppConstants.h"
 
-
-NSString * const kMobilityGoogleClientID = @"48636836762-ba1jcrir6sft063gkvpav0e3o9p4mtb5.apps.googleusercontent.com";
-NSString * const kOMHServerGoogleClientID = @"48636836762-mulldgpmet2r4s3f16s931ea9crcc64m.apps.googleusercontent.com";
-NSString * const kMobilityDSUClientID = @"com.openmhealth.ios.mobility";
-NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 
 @interface AppDelegate ()
 
@@ -34,7 +30,10 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    [self setupOMHClient];
+    [OMHClient setupClientWithAppGoogleClientID:kMobilityGoogleClientID
+                           serverGoogleClientID:kOMHServerGoogleClientID
+                                 appDSUClientID:kMobilityDSUClientID
+                             appDSUClientSecret:kMobilityDSUClientSecret];
     
     if (![OMHClient sharedClient].isSignedIn) {
         self.window.rootViewController = self.loginViewController;
@@ -48,14 +47,6 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
     [self.window makeKeyAndVisible];
     
     return YES;
-}
-
-- (void)setupOMHClient
-{
-    [OMHClient setAppGoogleClientID:kMobilityGoogleClientID];
-    [OMHClient setServerGoogleClientID:kOMHServerGoogleClientID];
-    [OMHClient setAppDSUClientID:kMobilityDSUClientID];
-    [OMHClient setAppDSUClientSecret:kMobilityDSUClientSecret];
 }
 
 - (void)userDidLogin
