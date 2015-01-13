@@ -61,10 +61,12 @@
 
 - (void)logMessage:(NSString *)message
 {
+#ifdef DEBUG
     NSLog(@"logging message: %@", message);
     DebugLogEntry *entry = (DebugLogEntry *)[self insertNewObjectForEntityForName:@"DebugLogEntry"];
     entry.timestamp = [NSDate date];
     entry.text = message;
+#endif
 }
 
 - (void)saveState
@@ -82,6 +84,7 @@
 {
     _userEmail = [userEmail copy];
     [self setPersistentStoreMetadataText:userEmail forKey:@"userEmail"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kMobilityModelUserChangedNotification object:self];
 }
 
 

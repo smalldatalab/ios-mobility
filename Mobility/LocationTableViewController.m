@@ -36,18 +36,20 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userChanged) name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)unregisterForNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)enteredBackground
 {
     NSLog(@"location table entered background");
-    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
 }
 
 - (void)enteredForeground
@@ -55,16 +57,22 @@
     NSLog(@"location table entered foreground");
     [self.fetchedResultsController performFetch:nil];
     [self.tableView reloadData];
-    self.fetchedResultsController.delegate = self;
 }
 
-- (void)viewDidLoad
+- (void)userChanged
 {
-    [super viewDidLoad];
-    
-    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
-    self.fetchedResultsController.delegate = self;
+    self.fetchedResultsController = nil;
     [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
+}
+
+- (NSFetchedResultsController *)fetchedResultsController
+{
+    if (_fetchedResultsController == nil) {
+        _fetchedResultsController = [[MobilityModel sharedModel] fetchedLocationsController];
+        _fetchedResultsController.delegate = self;
+    }
+    return _fetchedResultsController;
 }
 
 - (void)didReceiveMemoryWarning

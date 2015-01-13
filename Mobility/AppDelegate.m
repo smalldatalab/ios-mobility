@@ -84,11 +84,14 @@ NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
         LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
         UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
         
+        UITabBarController *tbc = [[UITabBarController alloc] init];
+        tbc.viewControllers = @[navconM, navconL];
+        
+#ifdef DEBUG
         LogTableViewController *logvc = [[LogTableViewController alloc] init];
         UINavigationController *navconLog = [[UINavigationController alloc] initWithRootViewController:logvc];
-        
-        UITabBarController *tbc = [[UITabBarController alloc] init];
-        tbc.viewControllers = @[navconM, navconL, navconLog];
+        tbc.viewControllers = [tbc.viewControllers arrayByAddingObject:navconLog];
+#endif
         
         _tabBarController = tbc;
     }

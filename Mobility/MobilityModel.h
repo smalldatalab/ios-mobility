@@ -11,6 +11,8 @@
 #import "MobilityLocation.h"
 #import "DebugLogEntry.h"
 
+static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelUserChanged";
+
 @class CLLocation;
 @class CMMotionActivity;
 

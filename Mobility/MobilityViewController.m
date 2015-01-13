@@ -40,18 +40,20 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userChanged) name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)unregisterForNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)enteredBackground
 {
     NSLog(@"activity table entered background");
-    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
 }
 
 - (void)enteredForeground
@@ -59,7 +61,13 @@
     NSLog(@"activity table entered foreground");
     [self.fetchedResultsController performFetch:nil];
     [self.tableView reloadData];
-    self.fetchedResultsController.delegate = self;
+}
+
+- (void)userChanged
+{
+    self.fetchedResultsController = nil;
+    [self.fetchedResultsController performFetch:nil];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad
@@ -73,9 +81,7 @@
     
     self.navigationItem.leftBarButtonItem = logoutButton;
     
-    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
-    self.fetchedResultsController.delegate = self;
-    [self.fetchedResultsController performFetch:nil];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,14 +90,14 @@
     [[MobilityModel sharedModel] logMessage:@"Activity VC Memory Warning"];
 }
 
-
-- (void)viewDidAppear:(BOOL)animated
+- (NSFetchedResultsController *)fetchedResultsController
 {
-    [super viewDidAppear:animated];
-    [self.fetchedResultsController performFetch:nil];
+    if (_fetchedResultsController == nil) {
+        _fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
+        _fetchedResultsController.delegate = self;
+    }
+    return _fetchedResultsController;
 }
-
-
 
 - (void)logout
 {
