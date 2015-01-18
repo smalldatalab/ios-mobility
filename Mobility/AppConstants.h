@@ -34,7 +34,7 @@ extern int const kLocationSamplingIntervalMoving;
 /**
  *  kDataUploadInterval
  *  Minimum interval between successful data uploads
- *  - One hour
+ *  - 20 minutes
  */
 extern int const kDataUploadInterval;
 

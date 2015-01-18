@@ -186,6 +186,7 @@
     newActivity.stationary = motionActivity.stationary;
     newActivity.walking = motionActivity.walking;
     newActivity.running = motionActivity.running;
+    newActivity.automotive = motionActivity.automotive;
     if ([motionActivity respondsToSelector:@selector(cycling)]) {
         newActivity.cycling = (BOOL)[motionActivity performSelector:@selector(cycling)];
     }
@@ -283,21 +284,21 @@
 - (NSFetchedResultsController *)fetchedActivitesController
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate cacheName:@"MobilityActivities"];
 }
 
 - (NSFetchedResultsController *)fetchedLocationsController
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate cacheName:@"MobilityLocations"];
 }
 
 - (NSFetchedResultsController *)fetchedLogEntriesController
 {
-    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil];
+    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil cacheName:@"DebugLogEntries"];
 }
 
-- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate cacheName:(NSString *)cacheName
 {
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
@@ -312,7 +313,7 @@
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
                                                                                                managedObjectContext:self.managedObjectContext
                                                                                                  sectionNameKeyPath:nil
-                                                                                                          cacheName:nil];
+                                                                                                          cacheName:cacheName];
     
     
     NSError *error = nil;

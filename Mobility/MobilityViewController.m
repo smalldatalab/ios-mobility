@@ -11,11 +11,13 @@
 #import "OMHClient.h"
 #import "LoginViewController.h"
 #import "ActivityLogger.h"
+#import <CoreMotion/CoreMotion.h>
 
 @interface MobilityViewController () <NSFetchedResultsControllerDelegate>
 
 //@property (nonatomic, strong) ActivityLogger *logger;
 @property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
+@property (nonatomic, assign) BOOL isActivityAvailable;
 
 @end
 
@@ -81,7 +83,8 @@
     
     self.navigationItem.leftBarButtonItem = logoutButton;
     
-
+    self.isActivityAvailable = [CMMotionActivityManager isActivityAvailable];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -92,6 +95,8 @@
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
+    if (!self.isActivityAvailable) return nil;
+    
     if (_fetchedResultsController == nil) {
         _fetchedResultsController = [[MobilityModel sharedModel] fetchedActivitesController];
         _fetchedResultsController.delegate = self;
@@ -114,11 +119,20 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.fetchedResultsController.fetchedObjects.count;
+    if (self.isActivityAvailable) {
+        return self.fetchedResultsController.fetchedObjects.count;
+    }
+    else {
+        return 1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (!self.isActivityAvailable) {
+        return [self noActivityCell];
+    }
+    
     static NSString *cellIdentifier = @"activityCell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
@@ -130,6 +144,13 @@
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
     cell.detailTextLabel.text = [self formattedDate:activity.timestamp];
     
+    return cell;
+}
+
+- (UITableViewCell *)noActivityCell
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    cell.textLabel.text = @"Activity tracking not supported";
     return cell;
 }
 
