@@ -46,6 +46,8 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
+    [[MobilityModel sharedModel] logMessage:@"APP DID LAUNCH"];
+    
     return YES;
 }
 
