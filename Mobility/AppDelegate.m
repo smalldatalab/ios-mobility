@@ -80,7 +80,7 @@
         UITabBarController *tbc = [[UITabBarController alloc] init];
         tbc.viewControllers = @[navconM, navconL];
         
-#ifdef DEBUG
+#ifdef LOG_TABLE
         LogTableViewController *logvc = [[LogTableViewController alloc] init];
         UINavigationController *navconLog = [[UINavigationController alloc] initWithRootViewController:logvc];
         tbc.viewControllers = [tbc.viewControllers arrayByAddingObject:navconLog];

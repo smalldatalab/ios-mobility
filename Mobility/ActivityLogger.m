@@ -123,7 +123,7 @@
 
 - (BOOL)shouldUpload
 {
-    NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]);
+    NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
     else if ([OMHClient sharedClient].pendingDataPointCount > kDataUploadMaxBatchSize) return NO;
     else if (self.lastUploadDate == nil) return YES;
@@ -132,7 +132,7 @@
 
 - (void)deferredDataUpload
 {
-//    NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
+    NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
     if ([self shouldUpload] && [OMHClient sharedClient].isReachable) {
         [self uploadPendingData];
     }

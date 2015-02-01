@@ -61,7 +61,7 @@
 
 - (void)logMessage:(NSString *)message
 {
-#ifdef DEBUG
+#ifdef LOG_TABLE
     NSLog(@"logging message: %@", message);
     DebugLogEntry *entry = (DebugLogEntry *)[self insertNewObjectForEntityForName:@"DebugLogEntry"];
     entry.timestamp = [NSDate date];

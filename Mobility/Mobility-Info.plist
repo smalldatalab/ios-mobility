@@ -41,6 +41,7 @@
 	<string>Mobility needs permission to always use your location in order to track your activity.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>location</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>

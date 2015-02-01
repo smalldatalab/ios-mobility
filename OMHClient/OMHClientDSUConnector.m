@@ -159,7 +159,6 @@ static OMHClient *_sharedClient = nil;
         OMHClient *archivedClient = (OMHClient *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedClient];
         if (archivedClient != nil) {
             self.pendingDataPoints = archivedClient.pendingDataPoints;
-            [self uploadPendingDataPoints];
         }
     }
 }
@@ -477,6 +476,11 @@ static OMHClient *_sharedClient = nil;
         else {
             OMHLog(@"refresh authentiation failed: %@", error);
             self.isAuthenticated = NO;
+            NSString *serverCode = [OMHClient homeServerAuthorizationCode];
+            OMHLog(@"sign in with server code: %@", serverCode);
+            if (serverCode) {
+                [self signInToDSUWithServerCode:serverCode];
+            }
         }
         
         self.isAuthenticating = NO;
@@ -618,6 +622,7 @@ static OMHClient *_sharedClient = nil;
             [self setDSUUploadHeader];
             self.isAuthenticated = YES;
             self.isAuthenticating = NO;
+            [self uploadPendingDataPoints];
             
             if (self.signInDelegate != nil) {
                 [self.signInDelegate OMHClient:self signInFinishedWithError:nil];
