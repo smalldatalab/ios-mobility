@@ -56,6 +56,7 @@
 		1E5BB3AA1A441647008B6B95 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A91A441647008B6B95 /* AddressBook.framework */; };
 		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */; };
+		1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737F21A8530E9008913E0 /* OMHApplication.m */; };
 		1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -150,6 +151,8 @@
 		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EA7C67C1A5FFA7F009CABAA /* DebugLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogEntry.h; sourceTree = "<group>"; };
 		1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugLogEntry.m; sourceTree = "<group>"; };
+		1EE737F11A8530E9008913E0 /* OMHApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHApplication.h; sourceTree = "<group>"; };
+		1EE737F21A8530E9008913E0 /* OMHApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHApplication.m; sourceTree = "<group>"; };
 		1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -216,6 +219,8 @@
 				1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */,
 				1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */,
 				1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */,
+				1EE737F11A8530E9008913E0 /* OMHApplication.h */,
+				1EE737F21A8530E9008913E0 /* OMHApplication.m */,
 			);
 			path = OMHClient;
 			sourceTree = SOURCE_ROOT;
@@ -469,6 +474,7 @@
 				1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */,
 				1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */,
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
+				1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */,
 				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
 				1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */,
