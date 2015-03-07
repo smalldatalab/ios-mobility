@@ -30,6 +30,7 @@
 		1E1C76001A42AB2A004AA4EA /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1C75ED1A42AB2A004AA4EA /* GooglePlus.framework */; };
 		1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */; };
 		1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */; };
+		1E2DEF861AAAE1CC006A9E4C /* DSUURLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2DEF851AAAE1CC006A9E4C /* DSUURLViewController.m */; };
 		1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */; };
 		1E3D87291A652FE50049F0CD /* AppConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3D87281A652FE50049F0CD /* AppConstants.m */; };
 		1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D31A3EC32F000C7E58 /* Foundation.framework */; };
@@ -114,6 +115,8 @@
 		1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHClientDSUConnector.m; sourceTree = "<group>"; };
 		1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHDataPoint.h; sourceTree = "<group>"; };
 		1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHDataPoint.m; sourceTree = "<group>"; };
+		1E2DEF841AAAE1CC006A9E4C /* DSUURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSUURLViewController.h; sourceTree = "<group>"; };
+		1E2DEF851AAAE1CC006A9E4C /* DSUURLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSUURLViewController.m; sourceTree = "<group>"; };
 		1E2F41B71A5D7B0E00532559 /* LogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogTableViewController.h; sourceTree = "<group>"; };
 		1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogTableViewController.m; sourceTree = "<group>"; };
 		1E3D87271A652AC50049F0CD /* AppConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppConstants.h; sourceTree = "<group>"; };
@@ -321,6 +324,8 @@
 				1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */,
 				1E12F6CC1A4555EF00331827 /* LoginViewController.h */,
 				1E12F6CD1A4555EF00331827 /* LoginViewController.m */,
+				1E2DEF841AAAE1CC006A9E4C /* DSUURLViewController.h */,
+				1E2DEF851AAAE1CC006A9E4C /* DSUURLViewController.m */,
 				1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */,
 				1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */,
 				1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */,
@@ -476,6 +481,7 @@
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
 				1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */,
 				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
+				1E2DEF861AAAE1CC006A9E4C /* DSUURLViewController.m in Sources */,
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
 				1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
