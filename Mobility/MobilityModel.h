@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "MobilityActivity.h"
 #import "MobilityLocation.h"
+#import "MobilityPedometerData.h"
 #import "DebugLogEntry.h"
 
 static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelUserChanged";
 
 @class CLLocation;
 @class CMMotionActivity;
+@class CMPedometerData;
 
 @interface MobilityModel : NSObject
 
@@ -27,10 +29,13 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
+- (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData;
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
+- (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
+- (NSFetchedResultsController *)fetchedPedometerDataController;
 - (NSFetchedResultsController *)fetchedLogEntriesController;
 
 @end

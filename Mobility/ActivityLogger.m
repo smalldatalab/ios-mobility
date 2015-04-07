@@ -10,16 +10,16 @@
 #import "OMHClient.h"
 #import "MobilityModel.h"
 #import "AppConstants.h"
+#import "PedometerManager.h"
 
-#import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
+@import CoreMotion;
 
 
 @interface ActivityLogger () <CLLocationManagerDelegate>
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) CMMotionActivity *lastActivityUpdate;
-@property (nonatomic, strong) CMMotionActivity *lastQueriedActivity;
 @property (nonatomic, strong) NSDate *lastQueriedActivityDate;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
@@ -70,6 +70,7 @@
 {
     self = [super init];
     if (self) {
+        self.lastQueriedActivityDate = self.lastUploadDate = [NSDate date];
     }
     return self;
 }
@@ -87,7 +88,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:self.lastQueriedActivity forKey:@"logger.lastQueriedActivityDate"];
+    [encoder encodeObject:self.lastQueriedActivityDate forKey:@"logger.lastQueriedActivityDate"];
     [encoder encodeObject:self.lastUploadDate forKey:@"logger.lastUploadDate"];
 }
 
@@ -113,6 +114,9 @@
 - (void)startLogging
 {
     [self startTrackingLocation];
+    
+    //test
+    [[PedometerManager sharedManager] queryPedometer];
 }
 
 - (void)stopLogging
@@ -286,14 +290,15 @@
              for (CMMotionActivity *activity in activities) {
                  [weakSelf logActivity:activity];
              }
-             self.lastQueriedActivity = activities.lastObject;
-             self.lastQueriedActivityDate = self.lastQueriedActivity.startDate;
+             CMMotionActivity *lastQueriedActivity = activities.lastObject;
+             self.lastQueriedActivityDate = lastQueriedActivity.startDate;
          }
          self.isQueryingActivities = NO;
          [self deferredDataUpload];
          
      }];
 }
+
 
 
 #pragma mark - Location
@@ -400,27 +405,6 @@
     if (location.horizontalAccuracy < self.lastLocation.horizontalAccuracy) return NO;
     return YES;
 }
-
-// conditions:
-// * accuracy <= 5m -> YES
-// * accuracy <= 10m && elapsed time > 10s -> YES
-// * accuracy <= 100m && elapsed time > 30s -> YES
-// * accuracy <= 500m && elapsed time > 60s -> YES
-// * elapsed time > 120s -> YES
-// otherwise NO
-- (BOOL)shouldReduceAccuracy
-{
-    NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.stillMotionStartDate];
-//    NSLog(@"should reduce, interval: %f, accuracy: %f", interval, self.bestAccuracy);
-//    [self logMessage:[NSString stringWithFormat:@"reduce? acc:%g, int:%.1f", self.bestAccuracy, interval]];
-    if (self.bestAccuracy <= 5) return YES;
-    else if (self.bestAccuracy <= 10 && interval > 10) return YES;
-    else if (self.bestAccuracy <= 100 && interval > 30) return YES;
-    else if (self.bestAccuracy <= 500 && interval > 60) return YES;
-    else if (interval > 120) return YES;
-    else return NO;
-}
-
 
 
 - (void)locationManager:(CLLocationManager *)manager

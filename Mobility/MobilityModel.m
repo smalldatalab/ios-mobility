@@ -214,6 +214,30 @@
     return newLocation;
 }
 
+- (MobilityPedometerData *)uniquePedometerDataWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"startDate == %@ && endDate == %@ && userEmail == %@",
+                              startDate, endDate, self.userEmail];
+    MobilityPedometerData *existingPD = (MobilityPedometerData *)[self fetchObjectWithEntityName:@"MobilityPedometerData" uniquePredicate:predicate];
+    if (existingPD) return existingPD;
+    
+    MobilityPedometerData *newPD = (MobilityPedometerData *)[self insertNewObjectForEntityForName:@"MobilityPedometerData"];
+    newPD.userEmail = self.userEmail;
+    
+    return newPD;
+}
+
+- (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData
+{
+    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:cmPedometerData.startDate endDate:cmPedometerData.endDate];
+    pd.stepCount = cmPedometerData.numberOfSteps;
+    pd.distance = cmPedometerData.distance;
+    pd.floorsAscended = cmPedometerData.floorsAscended;
+    pd.floorsDescended = cmPedometerData.floorsDescended;
+    
+    return pd;
+}
+
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
 {
     return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" fetchLimit:fetchLimit];
@@ -222,6 +246,11 @@
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit
 {
     return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" fetchLimit:fetchLimit];
+}
+
+- (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit
+{
+    return [self fetchPendingObjectsWithEntityName:@"MobilityPedometerData" fetchLimit:fetchLimit];
 }
 
 - (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName fetchLimit:(NSInteger)limit
@@ -252,8 +281,12 @@
 
 - (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp
 {
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp == %@", timestamp];
-    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp == %@ && userEmail == %@ ", timestamp, self.userEmail];
+    return [self fetchObjectWithEntityName:entityName uniquePredicate:predicate];
+}
+
+- (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniquePredicate:(NSPredicate *)predicate
+{
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
     [fetchRequest setPredicate:predicate];
@@ -261,12 +294,12 @@
     NSError *error = nil;
     NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        NSLog(@"error fetching entity: %@, timestamp: %@", entityName, timestamp);
+        NSLog(@"error fetching entity: %@, predicate: %@", entityName, predicate);
     }
     
     if (fetchedObjects.count > 0) {
         if (fetchedObjects.count > 1) {
-            NSLog(@"found more than one %@ with timestamp %@", entityName, timestamp);
+            NSLog(@"found more than one %@ with predicate %@", entityName, predicate);
         }
         return fetchedObjects.firstObject;
     }
@@ -291,6 +324,12 @@
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
     return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate cacheName:@"MobilityLocations"];
+}
+
+- (NSFetchedResultsController *)fetchedPedometerDataController
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate cacheName:@"MobilityPedometerData"];
 }
 
 - (NSFetchedResultsController *)fetchedLogEntriesController
