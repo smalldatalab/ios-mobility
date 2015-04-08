@@ -223,6 +223,8 @@
     
     MobilityPedometerData *newPD = (MobilityPedometerData *)[self insertNewObjectForEntityForName:@"MobilityPedometerData"];
     newPD.userEmail = self.userEmail;
+    newPD.startDate = startDate;
+    newPD.endDate = endDate;
     
     return newPD;
 }
@@ -316,31 +318,37 @@
 
 - (NSFetchedResultsController *)fetchedActivitesController
 {
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate cacheName:@"MobilityActivities"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityActivities"];
 }
 
 - (NSFetchedResultsController *)fetchedLocationsController
 {
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate cacheName:@"MobilityLocations"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityLocations"];
 }
 
 - (NSFetchedResultsController *)fetchedPedometerDataController
 {
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate cacheName:@"MobilityPedometerData"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityPedometerData"];
 }
 
 - (NSFetchedResultsController *)fetchedLogEntriesController
 {
-    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil cacheName:@"DebugLogEntries"];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
+    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil sortDescriptor:descriptor cacheName:@"DebugLogEntries"];
 }
 
-- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate cacheName:(NSString *)cacheName
+- (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
+                                                             predicate:(NSPredicate *)predicate
+                                                        sortDescriptor:(NSSortDescriptor *)descriptor
+                                                             cacheName:(NSString *)cacheName
 {
     NSEntityDescription *entity = [NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext];
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:entity];

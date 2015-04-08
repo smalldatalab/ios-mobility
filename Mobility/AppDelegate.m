@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "MobilityViewController.h"
 #import "LocationTableViewController.h"
+#import "PedometerTableViewController.h"
 #import "LogTableViewController.h"
 #import "LoginViewController.h"
 #import "OMHClient.h"
@@ -77,8 +78,11 @@
         LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
         UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
         
+        PedometerTableViewController *pvc = [[PedometerTableViewController alloc] init];
+        UINavigationController *navconP = [[UINavigationController alloc] initWithRootViewController:pvc];
+        
         UITabBarController *tbc = [[UITabBarController alloc] init];
-        tbc.viewControllers = @[navconM, navconL];
+        tbc.viewControllers = @[navconM, navconL, navconP];
         
 #ifdef LOG_TABLE
         LogTableViewController *logvc = [[LogTableViewController alloc] init];
@@ -111,6 +115,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [[MobilityModel sharedModel] logMessage:@"APP ENTERED BACKGROUND"];
+    [[ActivityLogger sharedLogger] enteredBackground];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 //    [[ActivityLogger sharedLogger] enterBackgroundMode];
@@ -125,6 +130,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [[MobilityModel sharedModel] logMessage:@"APP BECAME ACTIVE"];
+    [[ActivityLogger sharedLogger] enteredForeground];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //    [[ActivityLogger sharedLogger] exitBackgroundMode];
 }

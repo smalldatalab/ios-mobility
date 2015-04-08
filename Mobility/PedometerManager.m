@@ -7,6 +7,7 @@
 //
 
 #import "PedometerManager.h"
+#import "MobilityModel.h"
 #import "NSDate+Additions.h"
 
 #define QUERY_INTERVAL (5*60)
@@ -18,6 +19,8 @@
 @property (nonatomic, strong) CMPedometer *pedometer;
 @property (nonatomic, strong) NSDate *lastQueryDate;
 @property (atomic, assign) int remainingQueries;
+
+@property (nonatomic, weak) MobilityModel *model;
 
 @end
 
@@ -82,6 +85,14 @@
     [userDefaults synchronize];
 }
 
+- (MobilityModel *)model
+{
+    if (_model == nil) {
+        _model = [MobilityModel sharedModel];
+    }
+    return _model;
+}
+
 - (CMPedometer *)pedometer
 {
     if (_pedometer == nil) {
@@ -105,12 +116,39 @@
         NSDate *endDate = [self.lastQueryDate dateByAddingTimeInterval:(i+1)*QUERY_INTERVAL];
         
         [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
-            NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
             self.remainingQueries--;
+            NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
+            if (error == nil) {
+                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
+            }
+            if (self.remainingQueries == 0) {
+                [self archive];
+                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO]; 
+            }
         }];
     }
     
     self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
+}
+
+- (void)startLogging
+{
+    [self.pedometer startPedometerUpdatesFromDate:[NSDate date] withHandler:^(CMPedometerData *pedometerData, NSError *error) {
+        NSLog(@"log pedData: %@, error: %@", pedometerData, error);
+        if (error == nil) {
+             [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
+        }
+    }];
+}
+
+- (void)stopLogging
+{
+    [self.pedometer stopPedometerUpdates];
+}
+
+- (void)logPedometerData:(CMPedometerData *)pd
+{
+    [self.model uniquePedometerDataWithCMPedometerData:pd];
 }
 
 

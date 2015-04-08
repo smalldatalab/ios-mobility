@@ -34,6 +34,7 @@
 @property (nonatomic, assign) BOOL isQueryingActivities;
 
 @property (nonatomic, weak) MobilityModel *model;
+@property (nonatomic, weak) PedometerManager *pedometerManager;
 
 
 @end
@@ -80,6 +81,7 @@
     self = [super init];
     if (self != nil) {
         _lastQueriedActivityDate = [decoder decodeObjectForKey:@"logger.lastQueriedActivityDate"];
+        if (_lastQueriedActivityDate == nil) _lastQueriedActivityDate = [NSDate date];
         _lastUploadDate = [decoder decodeObjectForKey:@"logger.lastUploadDate"];
     }
     
@@ -111,17 +113,36 @@
     return _model;
 }
 
+- (PedometerManager *)pedometerManager
+{
+    if (_pedometerManager == nil) {
+        _pedometerManager = [PedometerManager sharedManager];
+    }
+    return _pedometerManager;
+}
+
 - (void)startLogging
 {
     [self startTrackingLocation];
     
     //test
-    [[PedometerManager sharedManager] queryPedometer];
+    [self.pedometerManager queryPedometer];
 }
 
 - (void)stopLogging
 {
     [self stopTrackingLocation];
+}
+
+- (void)enteredBackground
+{
+    [self.pedometerManager stopLogging];
+    [self deferredDataUpload];
+}
+
+- (void)enteredForeground
+{
+    [self.pedometerManager startLogging];
 }
 
 
@@ -138,6 +159,8 @@
 {
     NSLog(@"deferred data upload, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
     if ([self shouldUpload] && [OMHClient sharedClient].isReachable) {
+        [self queryActivities];
+        [self.pedometerManager queryPedometer];
         [self uploadPendingData];
     }
 }
@@ -169,11 +192,13 @@
     [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
     
     if (pendingActivities.count == kDataUploadMaxBatchSize / 2
-        || pendingLocations.count == kDataUploadMaxBatchSize / 2) {
+        || pendingLocations.count == kDataUploadMaxBatchSize / 2
+        || self.isQueryingActivities
+        || self.pedometerManager.isQueryingPedometer) {
         NSLog(@"starting timer for next batch");
         [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(deferredDataUpload) userInfo:nil repeats:NO];
     }
-    else if (!self.isQueryingActivities) {
+    else {
         // only update upload date if we're done uploading all batches
         self.lastUploadDate = [NSDate date];
     }
@@ -290,11 +315,12 @@
              for (CMMotionActivity *activity in activities) {
                  [weakSelf logActivity:activity];
              }
-             CMMotionActivity *lastQueriedActivity = activities.lastObject;
-             self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+             if (activities.count > 0 ){
+                 CMMotionActivity *lastQueriedActivity = activities.lastObject;
+                 self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+             }
          }
          self.isQueryingActivities = NO;
-         [self deferredDataUpload];
          
      }];
 }

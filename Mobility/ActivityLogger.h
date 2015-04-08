@@ -15,5 +15,7 @@
 
 - (void)startLogging;
 - (void)stopLogging;
+- (void)enteredBackground;
+- (void)enteredForeground;
 
 @end

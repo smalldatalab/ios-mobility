@@ -56,6 +56,7 @@
 		1E5BB3AA1A441647008B6B95 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A91A441647008B6B95 /* AddressBook.framework */; };
 		1E95D51B1AD3C121008721F4 /* PedometerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D51A1AD3C121008721F4 /* PedometerManager.m */; };
 		1E95D5211AD3D00E008721F4 /* MobilityPedometerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5201AD3D00E008721F4 /* MobilityPedometerData.m */; };
+		1E95D5241AD5032A008721F4 /* PedometerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */; };
 		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */; };
 		1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737F21A8530E9008913E0 /* OMHApplication.m */; };
@@ -155,6 +156,8 @@
 		1E95D51A1AD3C121008721F4 /* PedometerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PedometerManager.m; sourceTree = "<group>"; };
 		1E95D51F1AD3D00E008721F4 /* MobilityPedometerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityPedometerData.h; sourceTree = "<group>"; };
 		1E95D5201AD3D00E008721F4 /* MobilityPedometerData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityPedometerData.m; sourceTree = "<group>"; };
+		1E95D5221AD5032A008721F4 /* PedometerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PedometerTableViewController.h; sourceTree = "<group>"; };
+		1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PedometerTableViewController.m; sourceTree = "<group>"; };
 		1E9ED5821A515468003CBB77 /* MobilityActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityActivity.h; sourceTree = "<group>"; };
 		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EA7C67C1A5FFA7F009CABAA /* DebugLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogEntry.h; sourceTree = "<group>"; };
@@ -328,6 +331,8 @@
 				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
 				1E0F7BB81A495C9C00D1E347 /* LocationTableViewController.h */,
 				1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */,
+				1E95D5221AD5032A008721F4 /* PedometerTableViewController.h */,
+				1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */,
 				1E2F41B71A5D7B0E00532559 /* LogTableViewController.h */,
 				1E2F41B81A5D7B0E00532559 /* LogTableViewController.m */,
 				1E12F6CC1A4555EF00331827 /* LoginViewController.h */,
@@ -475,6 +480,7 @@
 				1E0F7BBA1A495C9C00D1E347 /* LocationTableViewController.m in Sources */,
 				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
 				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
+				1E95D5241AD5032A008721F4 /* PedometerTableViewController.m in Sources */,
 				1E0F7BC91A4A5F0E00D1E347 /* MobilityModel.m in Sources */,
 				1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */,
 				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,

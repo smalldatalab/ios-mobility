@@ -10,6 +10,7 @@
 #import "OMHDataPoint.h"
 #import "MobilityActivity.h"
 #import "MobilityLocation.h"
+#import "MobilityPedometerData.h"
 
 @implementation NSMutableDictionary (MobilityDataPoint)
 
@@ -32,6 +33,11 @@
 + (instancetype)dataPointWithLocation:(MobilityLocation *)location
 {
     return [self mobilityDataPointWithHeaderID:location.uuid timestamp:location.timestamp body:location.jsonDictionary];
+}
+
++ (instancetype)dataPointWithPedometerData:(MobilityPedometerData *)pedometerData
+{
+    return [self mobilityDataPointWithHeaderID:pedometerData.uuid timestamp:[NSDate date] body:pedometerData.jsonDictionary];
 }
 
 + (OMHSchemaID *)schemaID

@@ -10,6 +10,7 @@
 
 @class MobilityActivity;
 @class MobilityLocation;
+@class MobilityPedometerData;
 
 typedef NSMutableDictionary MobilityDataPoint;
 typedef NSMutableDictionary MobilityDataPointBody;
@@ -19,6 +20,7 @@ typedef NSMutableDictionary MobilityDataPointBody;
 
 + (instancetype)dataPointWithActivity:(MobilityActivity *)activity;
 + (instancetype)dataPointWithLocation:(MobilityLocation *)location;
++ (instancetype)dataPointWithPedometerData:(MobilityPedometerData *)pedometerData;
 
 @end
 
