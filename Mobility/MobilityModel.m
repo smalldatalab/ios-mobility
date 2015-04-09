@@ -234,6 +234,7 @@
     return newPD;
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 - (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData
 {
     MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:cmPedometerData.startDate endDate:cmPedometerData.endDate];
@@ -244,31 +245,42 @@
     
     return pd;
 }
+#endif
+
+- (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+{
+    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:startDate endDate:endDate];
+    pd.stepCount = @(stepCount);
+    
+    return pd;
+}
 
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
 {
-    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" fetchLimit:fetchLimit];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
+    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" sortDescriptor:descriptor fetchLimit:fetchLimit];
 }
 
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit
 {
-    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" fetchLimit:fetchLimit];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
+    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" sortDescriptor:descriptor fetchLimit:fetchLimit];
 }
 
 - (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit
 {
-    return [self fetchPendingObjectsWithEntityName:@"MobilityPedometerData" fetchLimit:fetchLimit];
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
+    return [self fetchPendingObjectsWithEntityName:@"MobilityPedometerData" sortDescriptor:descriptor fetchLimit:fetchLimit];
 }
 
-- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName fetchLimit:(NSInteger)limit
+- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName sortDescriptor:(NSSortDescriptor *)descriptor fetchLimit:(NSInteger)limit
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO && userEmail == %@", self.userEmail];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
     [fetchRequest setPredicate:predicate];
-    [fetchRequest setSortDescriptors:@[sort]];
+    [fetchRequest setSortDescriptors:@[descriptor]];
     [fetchRequest setFetchLimit:limit];
     
     NSError *error = nil;
@@ -279,12 +291,6 @@
     
     return fetchedObjects;
 }
-
-//- (BOOL)hasObjectWithEntityName:(NSString *)entityName timestamp:(NSDate *)timestamp
-//{
-//    NSManagedObject *existingObject = [self fetchObjectWithEntityName:entityName uniqueTimestamp:timestamp];
-//    return (existingObject != nil);
-//}
 
 - (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp
 {

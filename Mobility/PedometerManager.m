@@ -16,7 +16,12 @@
 
 @interface PedometerManager ()
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 @property (nonatomic, strong) CMPedometer *pedometer;
+#else
+@property (nonatomic, strong) CMStepCounter *stepCounter;
+#endif
+
 @property (nonatomic, strong) NSDate *lastQueryDate;
 @property (atomic, assign) int remainingQueries;
 
@@ -92,6 +97,10 @@
     return _model;
 }
 
+
+#pragma mark - iOS 8+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+
 - (CMPedometer *)pedometer
 {
     if (_pedometer == nil) {
@@ -130,25 +139,54 @@
     self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
 }
 
-- (void)startLogging
-{
-    [self.pedometer startPedometerUpdatesFromDate:[NSDate date] withHandler:^(CMPedometerData *pedometerData, NSError *error) {
-        NSLog(@"log pedData: %@, error: %@", pedometerData, error);
-        if (error == nil) {
-             [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
-        }
-    }];
-}
-
-- (void)stopLogging
-{
-    [self.pedometer stopPedometerUpdates];
-}
-
 - (void)logPedometerData:(CMPedometerData *)pd
 {
     [self.model uniquePedometerDataWithCMPedometerData:pd];
 }
+
+
+#pragma mark - iOS 7
+#else
+
+- (CMStepCounter *)stepCounter
+{
+    if (_stepCounter == nil) {
+        _stepCounter = [[CMStepCounter alloc] init];
+    }
+    return _stepCounter;
+}
+
+- (void)queryPedometer
+{
+    if (![CMStepCounter isStepCountingAvailable]) return;
+    if (self.remainingQueries > 0) return;
+    
+    NSTimeInterval totalQueryInterval = -[self.lastQueryDate timeIntervalSinceNow];
+    int numQueries = totalQueryInterval / QUERY_INTERVAL;
+    self.remainingQueries = numQueries;
+    NSLog(@"query step counter, count: %d", self.remainingQueries);
+    
+    for (int i = 0; i < numQueries; i++) {
+        __block NSDate *startDate = [self.lastQueryDate dateByAddingTimeInterval:i*QUERY_INTERVAL];
+        __block NSDate *endDate = [self.lastQueryDate dateByAddingTimeInterval:(i+1)*QUERY_INTERVAL];
+        
+        [self.stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:[NSOperationQueue mainQueue] withHandler:^(NSInteger numberOfSteps, NSError *error) {
+            self.remainingQueries--;
+            NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
+            if (error == nil) {
+                [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate];
+            }
+            if (self.remainingQueries == 0) {
+                [self archive];
+                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO];
+            }
+        }];
+    }
+    
+    self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
+}
+
+#endif
 
 
 

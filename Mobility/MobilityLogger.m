@@ -145,14 +145,12 @@
 {
     [self.locationManager stopTrackingLocation];
     [self.activityManager stopLogging];
-    [self.pedometerManager stopLogging];
     [self stopUploadTimer];
     [self stopLocationSampleTimer];
 }
 
 - (void)enteredBackground
 {
-    [self.pedometerManager stopLogging];
     [self.activityManager stopLogging];
     [self archiveDataPoints];
     [self uploadData];
@@ -161,7 +159,6 @@
 - (void)enteredForeground
 {
     if (![OMHClient sharedClient].isSignedIn) return;
-    [self.pedometerManager startLogging];
     [self.activityManager startLogging];
 }
 
@@ -183,6 +180,8 @@
 - (void)startLocationSampleTimerWithCurrentActivity:(CMMotionActivity *)currentActivity
 {
     [self stopLocationSampleTimer];
+    
+    [self.model logMessage:[NSString stringWithFormat:@"starting timer, still: %d", [self motionActivityIsStationary:currentActivity]]];
     
     NSTimeInterval interval = [self motionActivityIsStationary:currentActivity]
     ? kLocationSamplingIntervalStationary
@@ -219,9 +218,10 @@
 
 - (BOOL)shouldUpload
 {
+    return YES; //TODO: REMOVE!
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
-    else if ([OMHClient sharedClient].pendingDataPointCount > kDataUploadMaxBatchSize) return NO;
+    else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
     else if (self.lastUploadDate == nil) return YES;
     else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > kDataUploadInterval);
 }
@@ -258,7 +258,7 @@
     
     NSLog(@"done uploading");
     
-    [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d", (int)pendingActivities.count, (int)pendingLocations.count]];
+    [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d, P=%d", (int)pendingActivities.count, (int)pendingLocations.count, (int)pendingPedometerData.count]];
     
     if (pendingActivities.count == batchSize
         || pendingLocations.count == batchSize

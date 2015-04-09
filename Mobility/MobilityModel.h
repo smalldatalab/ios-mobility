@@ -30,6 +30,7 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
 - (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData;
+- (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit;

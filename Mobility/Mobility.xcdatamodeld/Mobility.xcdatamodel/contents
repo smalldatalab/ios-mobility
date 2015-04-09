@@ -37,7 +37,7 @@
         <attribute name="floorsDescended" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="stepCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="submitted" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="submitted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="userEmail" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -45,6 +45,6 @@
         <element name="DebugLogEntry" positionX="-54" positionY="90" width="128" height="75"/>
         <element name="MobilityActivity" positionX="-54" positionY="45" width="128" height="208"/>
         <element name="MobilityLocation" positionX="-63" positionY="-18" width="128" height="208"/>
-        <element name="MobilityPedometerData" positionX="-54" positionY="99" width="128" height="178"/>
+        <element name="MobilityPedometerData" positionX="-54" positionY="99" width="128" height="28"/>
     </elements>
 </model>

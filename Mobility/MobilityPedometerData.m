@@ -7,6 +7,7 @@
 //
 
 #import "MobilityPedometerData.h"
+#import "OMHDataPoint.h"
 
 
 @implementation MobilityPedometerData
@@ -46,22 +47,22 @@
 
 - (void)setStartDate:(NSDate *)startDate
 {
-    self[@"start_date"] = startDate;
+    self[@"start_date"] = [OMHDataPoint stringFromDate:startDate];
 }
 
 - (NSDate *)startDate
 {
-    return self[@"start_date"];
+    return [OMHDataPoint dateFromString:self[@"start_date"]];
 }
 
 - (void)setEndDate:(NSDate *)endDate
 {
-    self[@"end_date"] = endDate;
+    self[@"end_date"] = [OMHDataPoint stringFromDate:endDate];
 }
 
 - (NSDate *)endDate
 {
-    return self[@"end_date"];
+    return [OMHDataPoint dateFromString:self[@"end_date"]];
 }
 
 - (void)setStepCount:(NSNumber *)stepCount
