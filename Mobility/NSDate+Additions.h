@@ -15,6 +15,7 @@
 + (NSDate *)timeOfDayWithHours:(NSInteger)hours minutes:(NSInteger)minutes;
 
 - (NSString *)ISO8601String;
+- (NSString *)formattedDate;
 
 - (NSDate *)dateByAddingMonths:(NSInteger)months;
 - (NSDate *)dateByAddingWeeks:(NSInteger)weeks;

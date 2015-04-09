@@ -95,22 +95,9 @@
     
     DebugLogEntry *logEntry = self.fetchedResultsController.fetchedObjects[indexPath.row];
     cell.textLabel.text = logEntry.text;
-    cell.detailTextLabel.text = [self formattedDate:logEntry.timestamp];
+    cell.detailTextLabel.text = [logEntry.timestamp formattedDate];
     
     return cell;
-}
-
-- (NSString *)formattedDate:(NSDate *)date
-{
-    static NSDateFormatter *dateFormatter = nil;
-    if (!dateFormatter) {
-        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
-                                                                  locale:[NSLocale currentLocale]];
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:formatString];
-    }
-    
-    return [dateFormatter stringFromDate:date];
 }
 
 

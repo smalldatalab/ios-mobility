@@ -13,7 +13,7 @@
 #import "LogTableViewController.h"
 #import "LoginViewController.h"
 #import "OMHClient.h"
-#import "ActivityLogger.h"
+#import "MobilityLogger.h"
 #import "MobilityModel.h"
 #import "AppConstants.h"
 
@@ -41,7 +41,7 @@
     }
     else {
         self.window.rootViewController = self.tabBarController;
-        [[ActivityLogger sharedLogger] startLogging];
+        [[MobilityLogger sharedLogger] startLogging];
     }
     
     self.window.backgroundColor = [UIColor whiteColor];
@@ -115,7 +115,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [[MobilityModel sharedModel] logMessage:@"APP ENTERED BACKGROUND"];
-    [[ActivityLogger sharedLogger] enteredBackground];
+    [[MobilityLogger sharedLogger] enteredBackground];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 //    [[ActivityLogger sharedLogger] enterBackgroundMode];
@@ -130,7 +130,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [[MobilityModel sharedModel] logMessage:@"APP BECAME ACTIVE"];
-    [[ActivityLogger sharedLogger] enteredForeground];
+    [[MobilityLogger sharedLogger] enteredForeground];
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //    [[ActivityLogger sharedLogger] exitBackgroundMode];
 }

@@ -68,6 +68,19 @@
     return [[NSDate ISO8601Formatter] stringFromDate:self];
 }
 
+- (NSString *)formattedDate
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
+                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:formatString];
+    }
+    
+    return [dateFormatter stringFromDate:self];
+}
+
 
 /**
  *  dateByAddingMonths

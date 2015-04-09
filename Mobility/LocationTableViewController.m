@@ -104,23 +104,10 @@
         NSLog(@"nil location: %@", location);
     }
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (accuracy: %gm)", [self formattedDate:location.timestamp], location.horizontalAccuracy];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (accuracy: %gm)", [location.timestamp formattedDate], location.horizontalAccuracy];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
     
     return cell;
-}
-
-- (NSString *)formattedDate:(NSDate *)date
-{
-    static NSDateFormatter *dateFormatter = nil;
-    if (!dateFormatter) {
-        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
-                                                                  locale:[NSLocale currentLocale]];
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:formatString];
-    }
-    
-    return [dateFormatter stringFromDate:date];
 }
 
 

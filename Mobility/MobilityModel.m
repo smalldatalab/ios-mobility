@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OMHClient.h"
 
 @interface MobilityModel ()
 
@@ -139,6 +140,7 @@
             // Replace this implementation with code to handle the error appropriately.
             NSLog(@"Error opening persistent store, deleting persistent store\n%@\n%@", error, [error userInfo]);
             [self deletePersistentStore];
+            [[OMHClient sharedClient] signOut];
             _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
             if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
                 NSLog(@"Error opening persistent store after reset. abort.");
@@ -176,6 +178,7 @@
 
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity
 {
+    assert(self.userEmail != nil);
     MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate];
     if (existingActivity) return existingActivity;
     
@@ -197,6 +200,7 @@
 
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation
 {
+    assert(self.userEmail != nil);
     MobilityLocation *existingLocation = (MobilityLocation *)[self fetchObjectWithEntityName:@"MobilityLocation" uniqueTimestamp:clLocation.timestamp];
     if (existingLocation) return existingLocation;
     
@@ -216,6 +220,7 @@
 
 - (MobilityPedometerData *)uniquePedometerDataWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
+    assert(self.userEmail != nil);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"startDate == %@ && endDate == %@ && userEmail == %@",
                               startDate, endDate, self.userEmail];
     MobilityPedometerData *existingPD = (MobilityPedometerData *)[self fetchObjectWithEntityName:@"MobilityPedometerData" uniquePredicate:predicate];
@@ -275,11 +280,11 @@
     return fetchedObjects;
 }
 
-- (BOOL)hasObjectWithEntityName:(NSString *)entityName timestamp:(NSDate *)timestamp
-{
-    NSManagedObject *existingObject = [self fetchObjectWithEntityName:entityName uniqueTimestamp:timestamp];
-    return (existingObject != nil);
-}
+//- (BOOL)hasObjectWithEntityName:(NSString *)entityName timestamp:(NSDate *)timestamp
+//{
+//    NSManagedObject *existingObject = [self fetchObjectWithEntityName:entityName uniqueTimestamp:timestamp];
+//    return (existingObject != nil);
+//}
 
 - (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp
 {

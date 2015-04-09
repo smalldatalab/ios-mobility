@@ -19,6 +19,7 @@
 @dynamic floorsDescended;
 @dynamic userEmail;
 @dynamic uuid;
+@dynamic submitted;
 
 - (void)awakeFromInsert
 {

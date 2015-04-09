@@ -10,6 +10,7 @@
 
 @protocol OMHSignInDelegate;
 @protocol OMHUploadDelegate;
+@protocol OMHReachabilityDelegate;
 
 @interface OMHClient : NSObject
 
@@ -40,6 +41,7 @@
 
 @property (nonatomic, weak) id<OMHSignInDelegate> signInDelegate;
 @property (nonatomic, weak) id<OMHUploadDelegate> uploadDelegate;
+@property (nonatomic, weak) id<OMHReachabilityDelegate> reachabilityDelegate;
 @property (nonatomic, readonly) BOOL isSignedIn;
 @property (nonatomic, readonly) BOOL isReachable;
 @property (nonatomic, readonly) int pendingDataPointCount;
@@ -71,6 +73,7 @@ sourceApplication:(NSString *)sourceApplication
 @protocol OMHSignInDelegate
 
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error;
+- (void)OMHClientUserWasSignedOut:(OMHClient *)client;
 
 // we need these for presenting the google+ sign in web view
 - (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion;
@@ -80,4 +83,8 @@ sourceApplication:(NSString *)sourceApplication
 
 @protocol OMHUploadDelegate
 - (void)OMHClient:(OMHClient *)client didUploadDataPoint:(NSDictionary *)dataPoint;
+@end
+
+@protocol OMHReachabilityDelegate
+- (void)OMHClient:(OMHClient *)client reachabilityStatusChanged:(BOOL)isReachable;
 @end

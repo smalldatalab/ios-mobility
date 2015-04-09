@@ -101,23 +101,10 @@
     
     MobilityPedometerData *dp = self.fetchedResultsController.fetchedObjects[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ - %@", [self formattedDate:dp.startDate], [self formattedDate:dp.endDate]];
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ steps", dp.stepCount];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ steps", dp.stepCount];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", [dp.startDate formattedDate], [dp.endDate formattedDate]];
     
     return cell;
-}
-
-- (NSString *)formattedDate:(NSDate *)date
-{
-    static NSDateFormatter *dateFormatter = nil;
-    if (!dateFormatter) {
-        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMMM d h:m:s" options:0
-                                                                  locale:[NSLocale currentLocale]];
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:formatString];
-    }
-    
-    return [dateFormatter stringFromDate:date];
 }
 
 

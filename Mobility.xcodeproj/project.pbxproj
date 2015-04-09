@@ -46,7 +46,7 @@
 		1E3FD0F71A3EC330000C7E58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F51A3EC330000C7E58 /* InfoPlist.strings */; };
 		1E3FD0F91A3EC330000C7E58 /* MobilityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */; };
 		1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */; };
-		1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */; };
+		1E3FD1071A3EC565000C7E58 /* MobilityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* MobilityLogger.m */; };
 		1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */; };
 		1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */; };
 		1E5BB3A21A44162B008B6B95 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB3A11A44162A008B6B95 /* SystemConfiguration.framework */; };
@@ -57,6 +57,8 @@
 		1E95D51B1AD3C121008721F4 /* PedometerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D51A1AD3C121008721F4 /* PedometerManager.m */; };
 		1E95D5211AD3D00E008721F4 /* MobilityPedometerData.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5201AD3D00E008721F4 /* MobilityPedometerData.m */; };
 		1E95D5241AD5032A008721F4 /* PedometerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */; };
+		1E95D5271AD643FD008721F4 /* ActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5261AD643FD008721F4 /* ActivityManager.m */; };
+		1E95D52A1AD6477B008721F4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5291AD6477B008721F4 /* LocationManager.m */; };
 		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */; };
 		1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737F21A8530E9008913E0 /* OMHApplication.m */; };
@@ -141,8 +143,8 @@
 		1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobilityTests.m; sourceTree = "<group>"; };
 		1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityViewController.h; sourceTree = "<group>"; };
 		1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityViewController.m; sourceTree = "<group>"; };
-		1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityLogger.h; sourceTree = "<group>"; };
-		1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityLogger.m; sourceTree = "<group>"; };
+		1E3FD1051A3EC565000C7E58 /* MobilityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityLogger.h; sourceTree = "<group>"; };
+		1E3FD1061A3EC565000C7E58 /* MobilityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityLogger.m; sourceTree = "<group>"; };
 		1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		1E3FD10A1A3ECA45000C7E58 /* MobilityDataPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityDataPoint.h; sourceTree = "<group>"; };
 		1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityDataPoint.m; sourceTree = "<group>"; };
@@ -158,6 +160,10 @@
 		1E95D5201AD3D00E008721F4 /* MobilityPedometerData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityPedometerData.m; sourceTree = "<group>"; };
 		1E95D5221AD5032A008721F4 /* PedometerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PedometerTableViewController.h; sourceTree = "<group>"; };
 		1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PedometerTableViewController.m; sourceTree = "<group>"; };
+		1E95D5251AD643FD008721F4 /* ActivityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityManager.h; sourceTree = "<group>"; };
+		1E95D5261AD643FD008721F4 /* ActivityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityManager.m; sourceTree = "<group>"; };
+		1E95D5281AD6477B008721F4 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationManager.h; sourceTree = "<group>"; };
+		1E95D5291AD6477B008721F4 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationManager.m; sourceTree = "<group>"; };
 		1E9ED5821A515468003CBB77 /* MobilityActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityActivity.h; sourceTree = "<group>"; };
 		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EA7C67C1A5FFA7F009CABAA /* DebugLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogEntry.h; sourceTree = "<group>"; };
@@ -322,10 +328,14 @@
 				1E3D87281A652FE50049F0CD /* AppConstants.m */,
 				1E3FD0E21A3EC330000C7E58 /* AppDelegate.h */,
 				1E3FD0E31A3EC330000C7E58 /* AppDelegate.m */,
-				1E3FD1051A3EC565000C7E58 /* ActivityLogger.h */,
-				1E3FD1061A3EC565000C7E58 /* ActivityLogger.m */,
+				1E3FD1051A3EC565000C7E58 /* MobilityLogger.h */,
+				1E3FD1061A3EC565000C7E58 /* MobilityLogger.m */,
 				1E95D5191AD3C121008721F4 /* PedometerManager.h */,
 				1E95D51A1AD3C121008721F4 /* PedometerManager.m */,
+				1E95D5251AD643FD008721F4 /* ActivityManager.h */,
+				1E95D5261AD643FD008721F4 /* ActivityManager.m */,
+				1E95D5281AD6477B008721F4 /* LocationManager.h */,
+				1E95D5291AD6477B008721F4 /* LocationManager.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
 				1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */,
 				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
@@ -478,12 +488,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0F7BBA1A495C9C00D1E347 /* LocationTableViewController.m in Sources */,
+				1E95D52A1AD6477B008721F4 /* LocationManager.m in Sources */,
 				1E1C75FD1A42AB2A004AA4EA /* AFURLSessionManager.m in Sources */,
 				1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */,
 				1E95D5241AD5032A008721F4 /* PedometerTableViewController.m in Sources */,
 				1E0F7BC91A4A5F0E00D1E347 /* MobilityModel.m in Sources */,
 				1E2F41B91A5D7B0E00532559 /* LogTableViewController.m in Sources */,
-				1E3FD1071A3EC565000C7E58 /* ActivityLogger.m in Sources */,
+				1E95D5271AD643FD008721F4 /* ActivityManager.m in Sources */,
+				1E3FD1071A3EC565000C7E58 /* MobilityLogger.m in Sources */,
 				1E0F7BCF1A4A8C7200D1E347 /* MobilityLocation.m in Sources */,
 				1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */,
 				1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */,

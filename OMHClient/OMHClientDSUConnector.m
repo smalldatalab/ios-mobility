@@ -440,13 +440,17 @@ static GPPSignIn *_gppSignIn = nil;
     OMHLog(@"reachability status changed: %d", (int)status);
     // when network becomes reachable, re-authenticate user
     // and upload any pending survey responses
-    if (status > AFNetworkReachabilityStatusNotReachable) {
+    BOOL reachable = (status > AFNetworkReachabilityStatusNotReachable);
+    if (reachable) {
         if ([self accessTokenHasExpired] || !self.isAuthenticated) {
             [self refreshAuthenticationWithCompletionBlock:nil];
         }
         else {
             [self uploadPendingDataPoints];
         }
+    }
+    if (self.reachabilityDelegate != nil) {
+        [self.reachabilityDelegate OMHClient:self reachabilityStatusChanged:reachable];
     }
 }
 

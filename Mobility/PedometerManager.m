@@ -57,7 +57,6 @@
     self = [super init];
     if (self) {
         self.lastQueryDate = [NSDate timeOfDayWithHours:0 minutes:0];
-        NSLog(@"beginning of today: %@", self.lastQueryDate);
     }
     return self;
 }

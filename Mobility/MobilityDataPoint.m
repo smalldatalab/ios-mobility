@@ -37,7 +37,7 @@
 
 + (instancetype)dataPointWithPedometerData:(MobilityPedometerData *)pedometerData
 {
-    return [self mobilityDataPointWithHeaderID:pedometerData.uuid timestamp:[NSDate date] body:pedometerData.jsonDictionary];
+    return [self mobilityDataPointWithHeaderID:pedometerData.uuid timestamp:pedometerData.startDate body:pedometerData.jsonDictionary];
 }
 
 + (OMHSchemaID *)schemaID
@@ -47,7 +47,7 @@
         sSchemaID = [[OMHSchemaID alloc] init];
         sSchemaID.schemaNamespace = @"cornell";
         sSchemaID.name = @"mobility-stream-iOS";
-        sSchemaID.version = @"1.0";
+        sSchemaID.version = @"1.1";
     }
     return sSchemaID;
 }

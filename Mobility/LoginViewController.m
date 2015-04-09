@@ -10,7 +10,7 @@
 #import "UIView+AutoLayoutHelpers.h"
 #import "AppDelegate.h"
 #import "OMHClient.h"
-#import "ActivityLogger.h"
+#import "MobilityLogger.h"
 #import "MobilityModel.h"
 #import "DSUURLViewController.h"
 
@@ -114,8 +114,9 @@
         return;
     }
     
-    [[ActivityLogger sharedLogger] startLogging];
     [[MobilityModel sharedModel] setUserEmail:[OMHClient signedInUserEmail]];
+    [[MobilityLogger sharedLogger] startLogging];
+    [[MobilityLogger sharedLogger] enteredForeground];
     
     if (self.presentingViewController != nil) {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
