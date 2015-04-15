@@ -29,8 +29,11 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 
 - (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation;
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 - (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData;
+#else
 - (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+#endif
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit;

@@ -245,7 +245,8 @@
     
     return pd;
 }
-#endif
+
+#else
 
 - (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate
 {
@@ -254,6 +255,8 @@
     
     return pd;
 }
+
+#endif
 
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
 {

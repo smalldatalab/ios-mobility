@@ -116,7 +116,7 @@
 
 - (void)queryActivities
 {
-    [self.model logMessage:@"query activities"];
+    [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
     self.isQueryingActivities = YES;
     __weak typeof(self) weakSelf = self;
     [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
@@ -134,6 +134,7 @@
              if (activities.count > 0 ){
                  CMMotionActivity *lastQueriedActivity = activities.lastObject;
                  self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+                 [self archive];
              }
          }
          self.isQueryingActivities = NO;

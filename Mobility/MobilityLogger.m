@@ -218,7 +218,6 @@
 
 - (BOOL)shouldUpload
 {
-    return YES; //TODO: REMOVE!
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
     else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
@@ -272,6 +271,8 @@
         // only update upload date if we're done uploading all batches
         self.lastUploadDate = [NSDate date];
     }
+    
+    [self archiveDataPoints];
 }
 
 - (BOOL)motionActivityIsStationary:(CMMotionActivity *)activity
