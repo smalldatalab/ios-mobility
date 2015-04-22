@@ -23,6 +23,8 @@
 @property (nonatomic, copy) void (^activitySampleCompletionBlock)(CMMotionActivity *currentActivity);
 
 @property (nonatomic, weak) MobilityModel *model;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 
 
@@ -96,6 +98,22 @@
     return _model;
 }
 
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext == nil) {
+        _managedObjectContext = [self.model newChildMOC];
+    }
+    return _managedObjectContext;
+}
+
+- (NSOperationQueue *)operationQueue
+{
+    if (_operationQueue == nil) {
+        _operationQueue = [[NSOperationQueue alloc] init];
+    }
+    return _operationQueue;
+}
+
 - (CMMotionActivityManager *)motionActivitiyManager
 {
     if (_motionActivitiyManager == nil) {
@@ -128,28 +146,33 @@
     [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
     self.isQueryingActivities = YES;
     __weak typeof(self) weakSelf = self;
-    [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
-                                                        toDate:[NSDate date]
-                                                       toQueue:[NSOperationQueue mainQueue]
-                                                   withHandler:^(NSArray *activities, NSError *error)
-     {
-         if (error) {
-             NSLog(@"activity fetch error: %@", error);
-         }
-         else {
-             for (CMMotionActivity *activity in activities) {
-                 [weakSelf logActivity:activity];
+    
+    [self.managedObjectContext performBlock:^{
+        [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
+                                                            toDate:[NSDate date]
+                                                           toQueue:self.operationQueue
+                                                       withHandler:^(NSArray *activities, NSError *error)
+         {
+             if (error) {
+                 NSLog(@"activity fetch error: %@", error);
              }
-             if (activities.count > 0 ){
-                 CMMotionActivity *lastQueriedActivity = activities.lastObject;
-                 self.lastQueriedActivityDate = lastQueriedActivity.startDate;
-                 [self archive];
+             else {
+                 for (CMMotionActivity *activity in activities) {
+                     [weakSelf logActivity:activity];
+                 }
+                 if (activities.count > 0 ){
+                     CMMotionActivity *lastQueriedActivity = activities.lastObject;
+                     self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+                     [self archive];
+                 }
              }
-         }
-         self.isQueryingActivities = NO;
-         NSLog(@"done querying activities, count: %@", [@(activities.count) stringValue]);
-         
-     }];
+             self.isQueryingActivities = NO;
+             [self.managedObjectContext save:nil];
+             [self.model saveManagedContext];
+             NSLog(@"done querying activities, count: %@", [@(activities.count) stringValue]);
+             
+         }];
+    }];
 }
 
 - (void)getCurrentActivityWithCompletionBlock:(void (^)(CMMotionActivity *))completionBlock
@@ -165,10 +188,12 @@
     NSLog(@"start updating activities");
     if ([CMMotionActivityManager isActivityAvailable]) {
         __weak typeof(self) weakSelf = self;
-        [self.motionActivitiyManager startActivityUpdatesToQueue:[NSOperationQueue mainQueue]
-                                                     withHandler:^(CMMotionActivity *activity) {
-                                                         [weakSelf activityUpdateHandler:activity];
-                                                     }];
+        [self.managedObjectContext performBlock:^{
+            [self.motionActivitiyManager startActivityUpdatesToQueue:self.operationQueue
+                                                         withHandler:^(CMMotionActivity *activity) {
+                                                             [weakSelf activityUpdateHandler:activity];
+                                                         }];
+        }];
     }
     else {
         NSLog(@"motion data not available on this device");
@@ -197,7 +222,11 @@
 
 - (void)logActivity:(CMMotionActivity *)cmActivity
 {
-    [self.model uniqueActivityWithMotionActivity:cmActivity];
+    [self.model uniqueActivityWithMotionActivity:cmActivity moc:self.managedObjectContext];
+    if (self.isLoggingActivities) {
+        [self.managedObjectContext save:nil];
+        [self.model saveManagedContext];
+    }
 }
 
 - (BOOL)motionActivityHasKnownActivity:(CMMotionActivity *)activity

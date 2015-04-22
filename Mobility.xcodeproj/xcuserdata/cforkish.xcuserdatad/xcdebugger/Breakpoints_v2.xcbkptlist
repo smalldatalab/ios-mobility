@@ -50,11 +50,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/PedometerManager.m"
-            timestampString = "450442804.738084"
+            timestampString = "451407050.958932"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
             landmarkName = "-queryPedometer"
             landmarkType = "5">
          </BreakpointContent>
@@ -66,12 +66,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/ActivityManager.m"
-            timestampString = "451402745.326513"
+            timestampString = "451407050.958932"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "-queryActivities"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
+            landmarkName = "-activityUpdateHandler:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

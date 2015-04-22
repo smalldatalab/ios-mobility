@@ -64,9 +64,11 @@
 {
 #ifdef LOG_TABLE
     NSLog(@"logging message: %@", message);
-    DebugLogEntry *entry = (DebugLogEntry *)[self insertNewObjectForEntityForName:@"DebugLogEntry"];
-    entry.timestamp = [NSDate date];
-    entry.text = message;
+    [self.managedObjectContext performBlock:^{
+        DebugLogEntry *entry = (DebugLogEntry *)[self insertNewObjectForEntityForName:@"DebugLogEntry" moc:self.managedObjectContext];
+        entry.timestamp = [NSDate date];
+        entry.text = message;
+    }];
 #endif
 }
 
@@ -110,7 +112,7 @@
  */
 - (NSManagedObjectContext *)managedObjectContext {
     if (_managedObjectContext == nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
         [_managedObjectContext setUndoManager:nil];
         [_managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
     }
@@ -176,13 +178,13 @@
 
 #pragma mark - Model
 
-- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity
+- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc
 {
     assert(self.userEmail != nil);
-    MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate];
+    MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate moc:moc];
     if (existingActivity) return existingActivity;
     
-    MobilityActivity *newActivity = (MobilityActivity *)[self insertNewObjectForEntityForName:@"MobilityActivity"];
+    MobilityActivity *newActivity = (MobilityActivity *)[self insertNewObjectForEntityForName:@"MobilityActivity" moc:moc];
     newActivity.userEmail = self.userEmail;
     newActivity.timestamp = motionActivity.startDate;
     newActivity.confidence = motionActivity.confidence;
@@ -198,13 +200,13 @@
     return newActivity;
 }
 
-- (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation
+- (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation moc:(NSManagedObjectContext *)moc
 {
     assert(self.userEmail != nil);
-    MobilityLocation *existingLocation = (MobilityLocation *)[self fetchObjectWithEntityName:@"MobilityLocation" uniqueTimestamp:clLocation.timestamp];
+    MobilityLocation *existingLocation = (MobilityLocation *)[self fetchObjectWithEntityName:@"MobilityLocation" uniqueTimestamp:clLocation.timestamp moc:moc];
     if (existingLocation) return existingLocation;
     
-    MobilityLocation *newLocation = (MobilityLocation *)[self insertNewObjectForEntityForName:@"MobilityLocation"];
+    MobilityLocation *newLocation = (MobilityLocation *)[self insertNewObjectForEntityForName:@"MobilityLocation" moc:moc];
     newLocation.userEmail = self.userEmail;
     newLocation.timestamp = clLocation.timestamp;
     newLocation.latitude = clLocation.coordinate.latitude;
@@ -218,15 +220,15 @@
     return newLocation;
 }
 
-- (MobilityPedometerData *)uniquePedometerDataWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate
+- (MobilityPedometerData *)uniquePedometerDataWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate moc:(NSManagedObjectContext *)moc
 {
     assert(self.userEmail != nil);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"startDate == %@ && endDate == %@ && userEmail == %@",
                               startDate, endDate, self.userEmail];
-    MobilityPedometerData *existingPD = (MobilityPedometerData *)[self fetchObjectWithEntityName:@"MobilityPedometerData" uniquePredicate:predicate];
+    MobilityPedometerData *existingPD = (MobilityPedometerData *)[self fetchObjectWithEntityName:@"MobilityPedometerData" uniquePredicate:predicate moc:moc];
     if (existingPD) return existingPD;
     
-    MobilityPedometerData *newPD = (MobilityPedometerData *)[self insertNewObjectForEntityForName:@"MobilityPedometerData"];
+    MobilityPedometerData *newPD = (MobilityPedometerData *)[self insertNewObjectForEntityForName:@"MobilityPedometerData" moc:moc];
     newPD.userEmail = self.userEmail;
     newPD.startDate = startDate;
     newPD.endDate = endDate;
@@ -235,9 +237,9 @@
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
-- (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData
+- (MobilityPedometerData *)uniquePedometerDataWithCMPedometerData:(CMPedometerData *)cmPedometerData moc:(NSManagedObjectContext *)moc
 {
-    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:cmPedometerData.startDate endDate:cmPedometerData.endDate];
+    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:cmPedometerData.startDate endDate:cmPedometerData.endDate moc:moc];
     pd.stepCount = cmPedometerData.numberOfSteps;
     pd.distance = cmPedometerData.distance;
     pd.floorsAscended = cmPedometerData.floorsAscended;
@@ -248,9 +250,9 @@
 
 #else
 
-- (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate
+- (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate moc:(NSManagedObjectContext *)moc
 {
-    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:startDate endDate:endDate];
+    MobilityPedometerData *pd = [self uniquePedometerDataWithStartDate:startDate endDate:endDate moc:moc];
     pd.stepCount = @(stepCount);
     
     return pd;
@@ -295,20 +297,20 @@
     return fetchedObjects;
 }
 
-- (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp
+- (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp moc:(NSManagedObjectContext *)moc
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp == %@ && userEmail == %@ ", timestamp, self.userEmail];
-    return [self fetchObjectWithEntityName:entityName uniquePredicate:predicate];
+    return [self fetchObjectWithEntityName:entityName uniquePredicate:predicate moc:moc];
 }
 
-- (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniquePredicate:(NSPredicate *)predicate
+- (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniquePredicate:(NSPredicate *)predicate moc:(NSManagedObjectContext *)moc
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:moc]];
     [fetchRequest setPredicate:predicate];
     
     NSError *error = nil;
-    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSArray *fetchedObjects = [moc executeFetchRequest:fetchRequest error:&error];
     if (error) {
         NSLog(@"error fetching entity: %@, predicate: %@", entityName, predicate);
     }
@@ -324,10 +326,10 @@
     }
 }
 
-- (NSManagedObject *)insertNewObjectForEntityForName:(NSString *)entityName
+- (NSManagedObject *)insertNewObjectForEntityForName:(NSString *)entityName moc:(NSManagedObjectContext *)moc
 {
     return [NSEntityDescription insertNewObjectForEntityForName:entityName
-                                         inManagedObjectContext:self.managedObjectContext];
+                                         inManagedObjectContext:moc];
 }
 
 - (NSFetchedResultsController *)fetchedActivitesController
@@ -395,11 +397,13 @@
  */
 - (void)saveManagedContext
 {
-    NSError *error = nil;
-    [self.managedObjectContext save:&error];
-    if (error) {
-        NSLog(@"Error saving context: %@", [error localizedDescription]);
-    }
+    [self.managedObjectContext performBlock:^{
+        NSError *error = nil;
+        [self.managedObjectContext save:&error];
+        if (error) {
+            NSLog(@"Error saving context: %@", [error localizedDescription]);
+        }
+    }];
 }
 
 /**
@@ -416,6 +420,13 @@
     [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
     
     self.persistentStoreURL = nil;
+}
+
+- (NSManagedObjectContext *)newChildMOC
+{
+    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    moc.parentContext = self.managedObjectContext;
+    return moc;
 }
 
 @end

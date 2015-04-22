@@ -26,6 +26,8 @@
 @property (atomic, assign) int remainingQueries;
 
 @property (nonatomic, weak) MobilityModel *model;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
 
 @end
 
@@ -97,6 +99,22 @@
     return _model;
 }
 
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext == nil) {
+        _managedObjectContext = [self.model newChildMOC];
+    }
+    return _managedObjectContext;
+}
+
+- (NSOperationQueue *)operationQueue
+{
+    if (_operationQueue == nil) {
+        _operationQueue = [[NSOperationQueue alloc] init];
+    }
+    return _operationQueue;
+}
+
 
 #pragma mark - iOS 8+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
@@ -114,6 +132,13 @@
     if (![CMPedometer isStepCountingAvailable]) return;
     if (self.remainingQueries > 0) return;
     
+    [self.managedObjectContext performBlock:^{
+        [self backgroundQuery];
+    }];
+}
+
+- (void)backgroundQuery
+{
     NSTimeInterval totalQueryInterval = -[self.lastQueryDate timeIntervalSinceNow];
     int numQueries = totalQueryInterval / QUERY_INTERVAL;
     self.remainingQueries = numQueries;
@@ -127,11 +152,14 @@
             self.remainingQueries--;
             NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
             if (error == nil && [pedometerData.numberOfSteps intValue] > 0) {
-                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
+                [self logPedometerData:pedometerData];
+//                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
             }
             if (self.remainingQueries == 0) {
                 [self archive];
-                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO]; 
+                [self.managedObjectContext save:nil];
+                [self.model saveManagedContext];
+//                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO];
             }
         }];
     }
@@ -141,7 +169,7 @@
 
 - (void)logPedometerData:(CMPedometerData *)pd
 {
-    [self.model uniquePedometerDataWithCMPedometerData:pd];
+    [self.model uniquePedometerDataWithCMPedometerData:pd moc:self.managedObjectContext];
 }
 
 
@@ -161,6 +189,13 @@
     if (![CMStepCounter isStepCountingAvailable]) return;
     if (self.remainingQueries > 0) return;
     
+    [self.managedObjectContext performBlock:^{
+        [self backgroundQuery];
+    }];
+}
+
+- (void)backgroundQuery
+{
     NSTimeInterval totalQueryInterval = -[self.lastQueryDate timeIntervalSinceNow];
     int numQueries = totalQueryInterval / QUERY_INTERVAL;
     self.remainingQueries = numQueries;
@@ -170,14 +205,15 @@
         __block NSDate *startDate = [self.lastQueryDate dateByAddingTimeInterval:i*QUERY_INTERVAL];
         __block NSDate *endDate = [self.lastQueryDate dateByAddingTimeInterval:(i+1)*QUERY_INTERVAL];
         
-        [self.stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:[NSOperationQueue mainQueue] withHandler:^(NSInteger numberOfSteps, NSError *error) {
+        [self.stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:self.operationQueue withHandler:^(NSInteger numberOfSteps, NSError *error) {
             self.remainingQueries--;
             NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
             if (error == nil && numberOfSteps > 0) {
-                [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate];
+                [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate moc:self.managedObjectContext];
             }
             if (self.remainingQueries == 0) {
                 [self archive];
+                [self.managedObjectContext save:nil];
                 [self.model saveManagedContext];
             }
         }];

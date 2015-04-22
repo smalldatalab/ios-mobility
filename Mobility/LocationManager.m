@@ -19,6 +19,7 @@
 @property (nonatomic, strong) CLLocation *lastLocation;
 
 @property (nonatomic, weak) MobilityModel *model;
+@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
 
 @end
 
@@ -59,6 +60,14 @@
         _model = [MobilityModel sharedModel];
     }
     return _model;
+}
+
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext == nil) {
+        _managedObjectContext = [self.model newChildMOC];
+    }
+    return _managedObjectContext;
 }
 
 - (CLLocationManager *)locationManager
@@ -118,20 +127,24 @@
     [self logLocations:locations];
     
     [self endLocationSample];
-    [self.model saveManagedContext];
     
 }
 
 - (void)logLocations:(NSArray *)locations
 {
     //    NSLog(@"LOG LOCATIONS: %d", (int)locations.count);
-    for (CLLocation *location in locations) {
+    [self.managedObjectContext performBlock:^{
+        for (CLLocation *location in locations) {
+            
+            if ([self isDuplicateLocation:location]) continue;
+            
+            self.lastLocation = location;
+            [self.model uniqueLocationWithCLLocation:location moc:self.managedObjectContext];
+        }
         
-        if ([self isDuplicateLocation:location]) continue;
-        
-        self.lastLocation = location;
-        [self.model uniqueLocationWithCLLocation:location];
-    }
+        [self.managedObjectContext save:nil];
+        [self.model saveManagedContext];
+    }];
 }
 
 - (BOOL)isDuplicateLocation:(CLLocation *)location
