@@ -9,13 +9,15 @@
 #import "ActivityManager.h"
 #import "MobilityModel.h"
 
+#define QUERY_INTERVAL (60*10)
+
 @import CoreMotion;
 
 @interface ActivityManager ()
 
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) NSDate *lastQueriedActivityDate;
-@property (nonatomic, strong) NSDate *stillMotionStartDate;
+@property (nonatomic, strong) NSDate *lastQueryDate;
 @property (nonatomic, assign) BOOL isQueryingActivities;
 @property (nonatomic, assign) BOOL isLoggingActivities;
 @property (nonatomic, copy) void (^activitySampleCompletionBlock)(CMMotionActivity *currentActivity);
@@ -116,6 +118,13 @@
 
 - (void)queryActivities
 {
+    NSLog(@"query activities, isQuerying: %d, interval: %f", self.isQueryingActivities, -[self.lastQueryDate timeIntervalSinceNow]);
+    if (self.isQueryingActivities ||
+        (self.lastQueryDate && -[self.lastQueryDate timeIntervalSinceNow] < QUERY_INTERVAL))
+        return;
+    
+    self.lastQueryDate = [NSDate date];
+    
     [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
     self.isQueryingActivities = YES;
     __weak typeof(self) weakSelf = self;
@@ -138,6 +147,7 @@
              }
          }
          self.isQueryingActivities = NO;
+         NSLog(@"done querying activities, count: %@", [@(activities.count) stringValue]);
          
      }];
 }

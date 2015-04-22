@@ -20,9 +20,8 @@
 
 @interface MobilityLogger () <OMHReachabilityDelegate>
 
-@property (nonatomic, strong) NSTimer *stillTimer;
-
 @property (nonatomic, strong) NSTimer *uploadTimer;
+@property (nonatomic, strong) NSTimer *uploadBatchTimer;
 @property (nonatomic, strong) NSTimer *locationSampleTimer;
 
 @property (nonatomic, strong) NSDate *lastUploadDate;
@@ -209,7 +208,7 @@
 - (void)uploadData
 {
     NSLog(@"upload data, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
-    if ([self shouldUpload] && [OMHClient sharedClient].isReachable) {
+    if ([self shouldUpload]) {
         [self.activityManager queryActivities];
         [self.pedometerManager queryPedometer];
         [self uploadPendingData];
@@ -227,6 +226,11 @@
 
 - (void)uploadPendingData
 {
+    if (![OMHClient sharedClient].isReachable) return;
+    
+    [self.uploadBatchTimer invalidate];
+    self.uploadBatchTimer = nil;
+    
     int batchSize = kDataUploadMaxBatchSize / 3;
     
     NSArray *pendingActivities = [self.model oldestPendingActivitiesWithLimit:batchSize];
@@ -257,15 +261,15 @@
     
     NSLog(@"done uploading");
     
-    [self.model logMessage:[NSString stringWithFormat:@"uploading data A=%d, L=%d, P=%d", (int)pendingActivities.count, (int)pendingLocations.count, (int)pendingPedometerData.count]];
+    [self.model logMessage:[NSString stringWithFormat:@"uploading A=%d, L=%d, P=%d, q=%d", (int)pendingActivities.count, (int)pendingLocations.count, (int)pendingPedometerData.count, self.activityManager.isQueryingActivities]];
     
     if (pendingActivities.count == batchSize
         || pendingLocations.count == batchSize
         || pendingPedometerData.count == batchSize
         || self.activityManager.isQueryingActivities
         || self.pedometerManager.isQueryingPedometer) {
-        NSLog(@"starting timer for next batch");
-        [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(uploadData) userInfo:nil repeats:NO];
+        NSLog(@"starting timer for next batch"); // TODO: store this timer so can invalidate
+        self.uploadBatchTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(uploadData) userInfo:nil repeats:NO];
     }
     else {
         // only update upload date if we're done uploading all batches
@@ -292,8 +296,13 @@
     return activity.stationary;
 }
 
-
-
+- (void)OMHClient:(OMHClient *)client reachabilityStatusChanged:(BOOL)isReachable
+{
+    [self.model logMessage:[NSString stringWithFormat:@"reachability changed: %d", isReachable]];
+    if (isReachable) {
+        [self uploadData];
+    }
+}
 
 
 @end

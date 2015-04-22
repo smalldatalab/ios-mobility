@@ -34,11 +34,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/MobilityLogger.m"
-            timestampString = "450261002.477252"
+            timestampString = "451398706.091892"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "-startLogging"
             landmarkType = "5">
          </BreakpointContent>
@@ -56,6 +56,22 @@
             startingLineNumber = "161"
             endingLineNumber = "161"
             landmarkName = "-queryPedometer"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mobility/ActivityManager.m"
+            timestampString = "451402745.326513"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "-queryActivities"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
