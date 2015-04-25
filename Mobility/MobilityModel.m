@@ -178,11 +178,12 @@
 
 #pragma mark - Model
 
-- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc
+//- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc
+- (MobilityActivity *)insertActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc
 {
     assert(self.userEmail != nil);
-    MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate moc:moc];
-    if (existingActivity) return existingActivity;
+//    MobilityActivity *existingActivity = (MobilityActivity *)[self fetchObjectWithEntityName:@"MobilityActivity" uniqueTimestamp:motionActivity.startDate moc:moc];
+//    if (existingActivity) return existingActivity;
     
     MobilityActivity *newActivity = (MobilityActivity *)[self insertNewObjectForEntityForName:@"MobilityActivity" moc:moc];
     newActivity.userEmail = self.userEmail;
@@ -260,6 +261,12 @@
 
 #endif
 
+- (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp >= %@", startDate];
+    return [self fetchObjectsWithEntityName:@"MobilityActivity" predicate:predicate moc:moc];
+}
+
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
@@ -305,16 +312,7 @@
 
 - (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniquePredicate:(NSPredicate *)predicate moc:(NSManagedObjectContext *)moc
 {
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:moc]];
-    [fetchRequest setPredicate:predicate];
-    
-    NSError *error = nil;
-    NSArray *fetchedObjects = [moc executeFetchRequest:fetchRequest error:&error];
-    if (error) {
-        NSLog(@"error fetching entity: %@, predicate: %@", entityName, predicate);
-    }
-    
+    NSArray *fetchedObjects = [self fetchObjectsWithEntityName:entityName predicate:predicate moc:moc];
     if (fetchedObjects.count > 0) {
         if (fetchedObjects.count > 1) {
             NSLog(@"found more than one %@ with predicate %@", entityName, predicate);
@@ -324,6 +322,20 @@
     else {
         return nil;
     }
+}
+
+- (NSArray *)fetchObjectsWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate moc:(NSManagedObjectContext *)moc
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:moc]];
+    [fetchRequest setPredicate:predicate];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [moc executeFetchRequest:fetchRequest error:&error];
+    if (error) {
+        NSLog(@"error fetching entity: %@, predicate: %@", entityName, predicate);
+    }
+    return fetchedObjects;
 }
 
 - (NSManagedObject *)insertNewObjectForEntityForName:(NSString *)entityName moc:(NSManagedObjectContext *)moc

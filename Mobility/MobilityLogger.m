@@ -268,7 +268,7 @@
         || pendingPedometerData.count == batchSize
         || self.activityManager.isQueryingActivities
         || self.pedometerManager.isQueryingPedometer) {
-        NSLog(@"starting timer for next batch"); // TODO: store this timer so can invalidate
+        NSLog(@"starting timer for next batch");
         self.uploadBatchTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(uploadData) userInfo:nil repeats:NO];
     }
     else {

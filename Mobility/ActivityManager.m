@@ -18,8 +18,8 @@
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) NSDate *lastQueriedActivityDate;
 @property (nonatomic, strong) NSDate *lastQueryDate;
-@property (nonatomic, assign) BOOL isQueryingActivities;
-@property (nonatomic, assign) BOOL isLoggingActivities;
+@property (atomic, assign) BOOL isQueryingActivities;
+@property (atomic, assign) BOOL isLoggingActivities;
 @property (nonatomic, copy) void (^activitySampleCompletionBlock)(CMMotionActivity *currentActivity);
 
 @property (nonatomic, weak) MobilityModel *model;
@@ -158,21 +158,41 @@
              }
              else {
                  for (CMMotionActivity *activity in activities) {
-                     [weakSelf logActivity:activity];
+//                     [weakSelf logActivity:activity];
+                     
+                     [weakSelf.model insertActivityWithMotionActivity:activity moc:weakSelf.managedObjectContext];
                  }
                  if (activities.count > 0 ){
+                     [self removeDuplicateActivities];
                      CMMotionActivity *lastQueriedActivity = activities.lastObject;
                      self.lastQueriedActivityDate = lastQueriedActivity.startDate;
-                     [self archive];
                  }
              }
              self.isQueryingActivities = NO;
-             [self.managedObjectContext save:nil];
-             [self.model saveManagedContext];
+             [self save];
              NSLog(@"done querying activities, count: %@", [@(activities.count) stringValue]);
              
          }];
     }];
+}
+
+- (void)removeDuplicateActivities
+{
+    NSArray *activities = [self.model activitiesSinceDate:self.lastQueriedActivityDate moc:self.managedObjectContext];
+    NSLog(@"remove duplicate activites, inRange count: %@", [@(activities.count) stringValue]);
+    
+    NSMutableSet *timestamps = [NSMutableSet set];
+//    NSMutableArray *duplicates = [NSMutableArray array];
+    for (MobilityActivity *activity in activities) {
+        if ([timestamps containsObject:activity.timestamp]) {
+            NSLog(@"deleting duplicate activity for date: %@", activity.timestamp);
+            [self.managedObjectContext deleteObject:activity];
+        }
+        else {
+            [timestamps addObject:activity.timestamp];
+        }
+    }
+    
 }
 
 - (void)getCurrentActivityWithCompletionBlock:(void (^)(CMMotionActivity *))completionBlock
@@ -217,17 +237,19 @@
             [self stopUpdatingActivities];
         }
     }
-    [self logActivity:cmActivity];
+//    [self logActivity:cmActivity];
+    
+    [self.model insertActivityWithMotionActivity:cmActivity moc:self.managedObjectContext];
+    [self save];
 }
 
-- (void)logActivity:(CMMotionActivity *)cmActivity
-{
-    [self.model uniqueActivityWithMotionActivity:cmActivity moc:self.managedObjectContext];
-    if (self.isLoggingActivities) {
-        [self.managedObjectContext save:nil];
-        [self.model saveManagedContext];
-    }
-}
+//- (void)logActivity:(CMMotionActivity *)cmActivity
+//{
+//    [self.model uniqueActivityWithMotionActivity:cmActivity moc:self.managedObjectContext];
+//    if (self.isLoggingActivities) {
+//        [self save];
+//    }
+//}
 
 - (BOOL)motionActivityHasKnownActivity:(CMMotionActivity *)activity
 {
@@ -240,6 +262,20 @@
             || activity.walking
             || activity.running
             || activity.automotive);
+}
+
+- (void)save
+{
+    [self archive];
+    
+    NSError *error = nil;
+    [self.managedObjectContext save:&error];
+    if (error != nil) {
+        NSLog(@"error saving activites: %@", [error debugDescription]);
+    }
+    else {
+        [self.model saveManagedContext];
+    }
 }
 
 

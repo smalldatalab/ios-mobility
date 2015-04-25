@@ -183,6 +183,11 @@
         [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
                               withRowAnimation:UITableViewRowAnimationTop];
     }
+    else if (type == NSFetchedResultsChangeDelete) {
+        NSLog(@"deleting row. indexPath: %@, newIndexPath: %@", [@(indexPath.row) stringValue], [@(newIndexPath.row) stringValue]);
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
