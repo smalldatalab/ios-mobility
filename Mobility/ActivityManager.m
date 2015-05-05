@@ -145,7 +145,7 @@
     
     [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
     self.isQueryingActivities = YES;
-    __weak typeof(self) weakSelf = self;
+//    __weak typeof(self) weakSelf = self;
     
     [self.managedObjectContext performBlock:^{
         [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
@@ -153,6 +153,7 @@
                                                            toQueue:self.operationQueue
                                                        withHandler:^(NSArray *activities, NSError *error)
          {
+             NSLog(@"activity query handler");
              if (error) {
                  NSLog(@"activity fetch error: %@", error);
              }
@@ -160,7 +161,7 @@
                  for (CMMotionActivity *activity in activities) {
 //                     [weakSelf logActivity:activity];
                      
-                     [weakSelf.model insertActivityWithMotionActivity:activity moc:weakSelf.managedObjectContext];
+                     [self.model insertActivityWithMotionActivity:activity moc:self.managedObjectContext];
                  }
                  if (activities.count > 0 ){
                      [self removeDuplicateActivities];
@@ -228,6 +229,7 @@
 
 - (void)activityUpdateHandler:(CMMotionActivity *)cmActivity
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     if ([self motionActivityHasKnownActivity:cmActivity]) {
         if (self.activitySampleCompletionBlock != nil) {
             self.activitySampleCompletionBlock(cmActivity);
@@ -239,8 +241,11 @@
     }
 //    [self logActivity:cmActivity];
     
-    [self.model insertActivityWithMotionActivity:cmActivity moc:self.managedObjectContext];
-    [self save];
+    __block CMMotionActivity *blockActivity = cmActivity;
+    [self.managedObjectContext performBlock:^{
+        [self.model insertActivityWithMotionActivity:blockActivity moc:self.managedObjectContext];
+        [self save];
+    }];
 }
 
 //- (void)logActivity:(CMMotionActivity *)cmActivity
@@ -266,6 +271,7 @@
 
 - (void)save
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self archive];
     
     NSError *error = nil;

@@ -47,24 +47,25 @@
 - (void)enteredBackground
 {
     NSLog(@"log table entered background");
-    self.fetchedResultsController.delegate = nil;
+    self.fetchedResultsController = nil;
 }
 
 - (void)enteredForeground
 {
     NSLog(@"log table entered foreground");
-    [self.fetchedResultsController performFetch:nil];
-    [self.tableView reloadData];
-    self.fetchedResultsController.delegate = self;
+    [self.fetchedResultsController.managedObjectContext performBlock:^{
+        [self.fetchedResultsController performFetch:nil];
+        [self.tableView reloadData];
+    }];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    
-    self.fetchedResultsController = [[MobilityModel sharedModel] fetchedLogEntriesController];
-    self.fetchedResultsController.delegate = self;
-    [self.fetchedResultsController performFetch:nil];
+- (NSFetchedResultsController *)fetchedResultsController
+{
+    if (_fetchedResultsController == nil) {
+        _fetchedResultsController = [[MobilityModel sharedModel] fetchedLogEntriesController];
+        _fetchedResultsController.delegate = self;
+    }
+    return _fetchedResultsController;
 }
 
 - (void)didReceiveMemoryWarning

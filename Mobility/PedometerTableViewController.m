@@ -55,8 +55,10 @@
 - (void)enteredForeground
 {
     NSLog(@"pedometer table entered foreground");
-    [self.fetchedResultsController performFetch:nil];
-    [self.tableView reloadData];
+    [self.fetchedResultsController.managedObjectContext performBlock:^{
+        [self.fetchedResultsController performFetch:nil];
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)userChanged

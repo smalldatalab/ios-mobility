@@ -138,6 +138,8 @@
     [self.pedometerManager queryPedometer];
     [self.activityManager queryActivities];
     [self locationSampleTimerFired];
+    
+    [OMHClient sharedClient].reachabilityDelegate = self;
 }
 
 - (void)stopLogging
