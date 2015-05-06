@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Open mHealth. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MobilityBaseTableViewController.h"
 
-@interface LogTableViewController : UITableViewController
+@interface LogTableViewController : MobilityBaseTableViewController
 
 @end

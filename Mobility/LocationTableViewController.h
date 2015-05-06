@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Open mHealth. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MobilityBaseTableViewController.h"
 
-@interface LocationTableViewController : UITableViewController
+@interface LocationTableViewController : MobilityBaseTableViewController
 
 @end

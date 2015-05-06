@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "MobilityViewController.h"
+#import "ActivityTableViewController.h"
 #import "LocationTableViewController.h"
 #import "PedometerTableViewController.h"
 #import "LogTableViewController.h"
@@ -72,8 +72,8 @@
 - (UITabBarController *)tabBarController
 {
     if (_tabBarController == nil) {
-        MobilityViewController *mvc = [[MobilityViewController alloc] init];
-        UINavigationController *navconM = [[UINavigationController alloc] initWithRootViewController:mvc];
+        ActivityTableViewController *avc = [[ActivityTableViewController alloc] init];
+        UINavigationController *navconA = [[UINavigationController alloc] initWithRootViewController:avc];
         
         LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
         UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
@@ -82,7 +82,7 @@
         UINavigationController *navconP = [[UINavigationController alloc] initWithRootViewController:pvc];
         
         UITabBarController *tbc = [[UITabBarController alloc] init];
-        tbc.viewControllers = @[navconM, navconL, navconP];
+        tbc.viewControllers = @[navconA, navconL, navconP];
         
 #ifdef LOG_TABLE
         LogTableViewController *logvc = [[LogTableViewController alloc] init];

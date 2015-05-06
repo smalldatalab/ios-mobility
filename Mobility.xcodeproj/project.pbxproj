@@ -45,7 +45,7 @@
 		1E3FD0EF1A3EC330000C7E58 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD0D71A3EC32F000C7E58 /* UIKit.framework */; };
 		1E3FD0F71A3EC330000C7E58 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F51A3EC330000C7E58 /* InfoPlist.strings */; };
 		1E3FD0F91A3EC330000C7E58 /* MobilityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */; };
-		1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */; };
+		1E3FD1041A3EC372000C7E58 /* MobilityBaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1031A3EC372000C7E58 /* MobilityBaseTableViewController.m */; };
 		1E3FD1071A3EC565000C7E58 /* MobilityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD1061A3EC565000C7E58 /* MobilityLogger.m */; };
 		1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E3FD10B1A3ECA45000C7E58 /* MobilityDataPoint.m */; };
 		1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */; };
@@ -61,6 +61,7 @@
 		1E95D52A1AD6477B008721F4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5291AD6477B008721F4 /* LocationManager.m */; };
 		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */; };
+		1EDF56BF1AF915B000C63B3B /* ActivityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF56BE1AF915B000C63B3B /* ActivityTableViewController.m */; };
 		1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737F21A8530E9008913E0 /* OMHApplication.m */; };
 		1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */; };
 /* End PBXBuildFile section */
@@ -141,8 +142,8 @@
 		1E3FD0F41A3EC330000C7E58 /* MobilityTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MobilityTests-Info.plist"; sourceTree = "<group>"; };
 		1E3FD0F61A3EC330000C7E58 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1E3FD0F81A3EC330000C7E58 /* MobilityTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MobilityTests.m; sourceTree = "<group>"; };
-		1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityViewController.h; sourceTree = "<group>"; };
-		1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityViewController.m; sourceTree = "<group>"; };
+		1E3FD1021A3EC372000C7E58 /* MobilityBaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityBaseTableViewController.h; sourceTree = "<group>"; };
+		1E3FD1031A3EC372000C7E58 /* MobilityBaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityBaseTableViewController.m; sourceTree = "<group>"; };
 		1E3FD1051A3EC565000C7E58 /* MobilityLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityLogger.h; sourceTree = "<group>"; };
 		1E3FD1061A3EC565000C7E58 /* MobilityLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityLogger.m; sourceTree = "<group>"; };
 		1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
@@ -168,6 +169,8 @@
 		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EA7C67C1A5FFA7F009CABAA /* DebugLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogEntry.h; sourceTree = "<group>"; };
 		1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugLogEntry.m; sourceTree = "<group>"; };
+		1EDF56BD1AF915B000C63B3B /* ActivityTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityTableViewController.h; sourceTree = "<group>"; };
+		1EDF56BE1AF915B000C63B3B /* ActivityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityTableViewController.m; sourceTree = "<group>"; };
 		1EE737F11A8530E9008913E0 /* OMHApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHApplication.h; sourceTree = "<group>"; };
 		1EE737F21A8530E9008913E0 /* OMHApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHApplication.m; sourceTree = "<group>"; };
 		1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -337,8 +340,10 @@
 				1E95D5281AD6477B008721F4 /* LocationManager.h */,
 				1E95D5291AD6477B008721F4 /* LocationManager.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
-				1E3FD1021A3EC372000C7E58 /* MobilityViewController.h */,
-				1E3FD1031A3EC372000C7E58 /* MobilityViewController.m */,
+				1E3FD1021A3EC372000C7E58 /* MobilityBaseTableViewController.h */,
+				1E3FD1031A3EC372000C7E58 /* MobilityBaseTableViewController.m */,
+				1EDF56BD1AF915B000C63B3B /* ActivityTableViewController.h */,
+				1EDF56BE1AF915B000C63B3B /* ActivityTableViewController.m */,
 				1E0F7BB81A495C9C00D1E347 /* LocationTableViewController.h */,
 				1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */,
 				1E95D5221AD5032A008721F4 /* PedometerTableViewController.h */,
@@ -501,8 +506,9 @@
 				1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */,
 				1E1C75F81A42AB2A004AA4EA /* AFNetworkReachabilityManager.m in Sources */,
 				1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */,
-				1E3FD1041A3EC372000C7E58 /* MobilityViewController.m in Sources */,
+				1E3FD1041A3EC372000C7E58 /* MobilityBaseTableViewController.m in Sources */,
 				1E1C75FA1A42AB2A004AA4EA /* AFURLConnectionOperation.m in Sources */,
+				1EDF56BF1AF915B000C63B3B /* ActivityTableViewController.m in Sources */,
 				1E95D51B1AD3C121008721F4 /* PedometerManager.m in Sources */,
 				1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */,
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
@@ -588,7 +594,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LOG_TABLE=1",
-					"OMHDEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
