@@ -45,7 +45,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
+//    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
     [super viewWillAppear:animated];
     self.isActiveView = YES;
     [self loadTable];
@@ -53,13 +53,13 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
+//    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
     [super viewDidAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
+//    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
     [super viewDidDisappear:animated];
     self.isActiveView = NO;
     [self unloadTable];

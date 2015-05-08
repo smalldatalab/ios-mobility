@@ -18,6 +18,7 @@
 @property (nonatomic, strong) CMMotionActivityManager *motionActivitiyManager;
 @property (nonatomic, strong) NSDate *lastQueriedActivityDate;
 @property (nonatomic, strong) NSDate *lastQueryDate;
+@property (nonatomic, strong) CMMotionActivity *lastKnownActivity;
 @property (atomic, assign) BOOL isQueryingActivities;
 @property (atomic, assign) BOOL isLoggingActivities;
 @property (nonatomic, copy) void (^activitySampleCompletionBlock)(CMMotionActivity *currentActivity);
@@ -145,21 +146,21 @@
     
     [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
     self.isQueryingActivities = YES;
-//    __weak typeof(self) weakSelf = self;
     
-    [self.managedObjectContext performBlock:^{
-        [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
-                                                            toDate:[NSDate date]
-                                                           toQueue:self.operationQueue
-                                                       withHandler:^(NSArray *activities, NSError *error)
-         {
+    [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
+                                                        toDate:[NSDate date]
+                                                       toQueue:self.operationQueue
+                                                   withHandler:^(NSArray *activities, NSError *error)
+     {
+         [self.managedObjectContext performBlockAndWait:^{
              NSLog(@"activity query handler");
              if (error) {
                  NSLog(@"activity fetch error: %@", error);
              }
              else {
+                 
                  for (CMMotionActivity *activity in activities) {
-//                     [weakSelf logActivity:activity];
+                     //                     [weakSelf logActivity:activity];
                      
                      [self.model insertActivityWithMotionActivity:activity moc:self.managedObjectContext];
                  }
@@ -167,6 +168,10 @@
                      [self removeDuplicateActivities];
                      CMMotionActivity *lastQueriedActivity = activities.lastObject;
                      self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+                     
+                     if ([self motionActivityHasKnownActivity:lastQueriedActivity]) {
+                         [self updateLastKnowActivityWithActivity:lastQueriedActivity];
+                     }
                  }
              }
              self.isQueryingActivities = NO;
@@ -174,7 +179,7 @@
              NSLog(@"done querying activities, count: %@", [@(activities.count) stringValue]);
              
          }];
-    }];
+     }];
 }
 
 - (void)removeDuplicateActivities
@@ -198,6 +203,7 @@
 
 - (void)getCurrentActivityWithCompletionBlock:(void (^)(CMMotionActivity *))completionBlock
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.activitySampleCompletionBlock = completionBlock;
     if (!self.isLoggingActivities) {
         [self startUpdatingActivities];
@@ -230,22 +236,28 @@
 - (void)activityUpdateHandler:(CMMotionActivity *)cmActivity
 {
     NSLog(@"%s", __PRETTY_FUNCTION__);
-    if ([self motionActivityHasKnownActivity:cmActivity]) {
-        if (self.activitySampleCompletionBlock != nil) {
-            self.activitySampleCompletionBlock(cmActivity);
-            self.activitySampleCompletionBlock = nil;
-        }
-        if (!self.isLoggingActivities) {
-            [self stopUpdatingActivities];
-        }
-    }
-//    [self logActivity:cmActivity];
     
     __block CMMotionActivity *blockActivity = cmActivity;
     [self.managedObjectContext performBlock:^{
         [self.model insertActivityWithMotionActivity:blockActivity moc:self.managedObjectContext];
         [self save];
     }];
+    
+    
+    if ([self motionActivityHasKnownActivity:cmActivity]) {
+        [self updateLastKnowActivityWithActivity:cmActivity];
+        if (!self.isLoggingActivities) {
+            [self stopUpdatingActivities];
+        }
+    }
+    else {
+        cmActivity = self.lastKnownActivity;
+    }
+    
+    if (self.activitySampleCompletionBlock != nil) {
+        self.activitySampleCompletionBlock(cmActivity);
+        self.activitySampleCompletionBlock = nil;
+    }
 }
 
 //- (void)logActivity:(CMMotionActivity *)cmActivity
@@ -255,6 +267,16 @@
 //        [self save];
 //    }
 //}
+
+- (void)updateLastKnowActivityWithActivity:(CMMotionActivity *)activity
+{
+    if (self.lastKnownActivity == nil) {
+        self.lastKnownActivity = activity;
+    }
+    else if ([activity.startDate isAfterDate:self.lastKnownActivity.startDate]) {
+        self.lastKnownActivity = activity;
+    }
+}
 
 - (BOOL)motionActivityHasKnownActivity:(CMMotionActivity *)activity
 {

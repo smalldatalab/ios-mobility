@@ -116,6 +116,9 @@
 
 - (void)endLocationSample
 {
+    if (self.locationManager.desiredAccuracy == kCLLocationAccuracyThreeKilometers) return;
+    
+    [self.model logMessage:@"ending location sample"];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers];
     [self.locationManager setDistanceFilter:CLLocationDistanceMax];
 }

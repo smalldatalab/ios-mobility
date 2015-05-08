@@ -63,9 +63,15 @@
     }
     
     MobilityActivity *activity = self.fetchedResultsController.fetchedObjects[indexPath.row];
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
-    cell.detailTextLabel.text = [activity.timestamp formattedDate];
+//    if (activity.fault) {
+//        cell.textLabel.text = @"fault";
+//        cell.detailTextLabel.text = nil;
+//    }
+//    else
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
+        cell.detailTextLabel.text = [activity.timestamp formattedDate];
+    }
     
     return cell;
 }

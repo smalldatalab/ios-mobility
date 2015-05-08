@@ -383,7 +383,7 @@
     [fetchRequest setSortDescriptors:@[descriptor]];
     [fetchRequest setPredicate:predicate];
     [fetchRequest setFetchBatchSize:100];
-    [fetchRequest setFetchLimit:1000];
+    [fetchRequest setFetchLimit:10000];
     
     // Build a fetch results controller based on the above fetch request.
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

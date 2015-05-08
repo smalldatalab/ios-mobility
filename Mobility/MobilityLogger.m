@@ -180,6 +180,7 @@
 
 - (void)startLocationSampleTimerWithCurrentActivity:(CMMotionActivity *)currentActivity
 {
+    NSLog(@"%s, isMainThread: %d", __PRETTY_FUNCTION__, [NSThread isMainThread]);
     [self stopLocationSampleTimer];
     
     [self.model logMessage:[NSString stringWithFormat:@"starting timer, still: %d", [self motionActivityIsStationary:currentActivity]]];
@@ -203,7 +204,8 @@
 {
     [self.locationManager sampleLocation];
     [self.activityManager getCurrentActivityWithCompletionBlock:^(CMMotionActivity *currentActivity) {
-        [self startLocationSampleTimerWithCurrentActivity:currentActivity];
+        [self performSelectorOnMainThread:@selector(startLocationSampleTimerWithCurrentActivity:) withObject:currentActivity waitUntilDone:NO];
+//        [self startLocationSampleTimerWithCurrentActivity:currentActivity];
     }];
 }
 
