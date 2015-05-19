@@ -594,6 +594,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LOG_TABLE=1",
+					"OMHDEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

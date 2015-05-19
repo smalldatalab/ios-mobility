@@ -33,6 +33,7 @@
     MobilityPedometerDataDictionary *pd = [[MobilityPedometerDataDictionary alloc] init];
     pd.startDate = self.startDate;
     pd.endDate = self.endDate;
+    pd.stepCount = self.stepCount;
     pd.distance = self.distance;
     pd.floorsAscended = self.floorsAscended;
     pd.floorsDescended = self.floorsDescended;

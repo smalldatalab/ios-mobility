@@ -109,6 +109,13 @@
 
 - (void)loadTable {}
 
+- (void)reloadData
+{
+    [self.fetchedResultsController.managedObjectContext performBlock:^{
+        [self.tableView reloadData];
+    }];
+}
+
 - (void)unloadTable
 {
     self.fetchedResultsController = nil;

@@ -33,7 +33,9 @@
         self.fetchedResultsController.delegate = self;
     }
     
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
+    
+    [self reloadData];
 }
 
 

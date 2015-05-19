@@ -211,7 +211,8 @@
 
 - (void)uploadData
 {
-    NSLog(@"upload data, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
+//    NSLog(@"upload data, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
+    [self.model logMessage:[NSString stringWithFormat:@"should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable]];
     if ([self shouldUpload]) {
         [self.activityManager queryActivities];
         [self.pedometerManager queryPedometer];

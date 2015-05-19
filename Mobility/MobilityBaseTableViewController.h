@@ -20,5 +20,6 @@
 
 - (void)loadTable;
 - (void)unloadTable;
+- (void)reloadData;
 
 @end

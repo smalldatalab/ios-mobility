@@ -348,27 +348,32 @@
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityActivities"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate sortDescriptor:descriptor cacheName:nil];
+//    return [self fetchedResultsControllerWithEntityName:@"MobilityActivity" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityActivities"];
 }
 
 - (NSFetchedResultsController *)fetchedLocationsController
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityLocations"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate sortDescriptor:descriptor cacheName:nil];
+//    return [self fetchedResultsControllerWithEntityName:@"MobilityLocation" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityLocations"];
+
 }
 
 - (NSFetchedResultsController *)fetchedPedometerDataController
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:NO];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"userEmail == %@", self.userEmail];
-    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityPedometerData"];
+    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate sortDescriptor:descriptor cacheName:nil];
+//    return [self fetchedResultsControllerWithEntityName:@"MobilityPedometerData" predicate:predicate sortDescriptor:descriptor cacheName:@"MobilityPedometerData"];
 }
 
 - (NSFetchedResultsController *)fetchedLogEntriesController
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
-    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil sortDescriptor:descriptor cacheName:@"DebugLogEntries"];
+    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil sortDescriptor:descriptor cacheName:nil];
+//    return [self fetchedResultsControllerWithEntityName:@"DebugLogEntry" predicate:nil sortDescriptor:descriptor cacheName:@"DebugLogEntries"];
 }
 
 - (NSFetchedResultsController *)fetchedResultsControllerWithEntityName:(NSString *)entityName
@@ -392,14 +397,13 @@
                                                                                                           cacheName:cacheName];
     
     
-    NSError *error = nil;
-    BOOL success = [fetchedResultsController performFetch:&error];
-    if (success == NO) {
-        // Not sure if we should return the 'dead' controller or just return 'nil'...
-        // [fetchedResultsController setDelegate:nil];
-        // [fetchedResultsController release];
-        // fetchedResultsController = nil;
-    }
+    [self.managedObjectContext performBlockAndWait:^{
+        NSError *error = nil;
+        [fetchedResultsController performFetch:&error];
+        if (error != nil) {
+            NSLog(@"Error performing fetch: %@", [error debugDescription]);
+        }
+    }];
     
     return fetchedResultsController;
 }

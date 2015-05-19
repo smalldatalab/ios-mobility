@@ -132,9 +132,7 @@
     if (![CMPedometer isStepCountingAvailable]) return;
     if (self.remainingQueries > 0) return;
     
-    [self.managedObjectContext performBlock:^{
-        [self backgroundQuery];
-    }];
+    [self backgroundQuery];
 }
 
 - (void)backgroundQuery
@@ -151,16 +149,18 @@
         [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
             self.remainingQueries--;
             NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
-            if (error == nil && [pedometerData.numberOfSteps intValue] > 0) {
-                [self logPedometerData:pedometerData];
-//                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
-            }
-            if (self.remainingQueries == 0) {
-                [self archive];
-                [self.managedObjectContext save:nil];
-                [self.model saveManagedContext];
-//                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO];
-            }
+            [self.managedObjectContext performBlock:^{
+                if (error == nil && [pedometerData.numberOfSteps intValue] > 0) {
+                    [self logPedometerData:pedometerData];
+                    //                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
+                }
+                if (self.remainingQueries == 0) {
+                    [self archive];
+                    [self.managedObjectContext save:nil];
+                    [self.model saveManagedContext];
+                    //                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO];
+                }
+            }];
         }];
     }
     
@@ -189,9 +189,7 @@
     if (![CMStepCounter isStepCountingAvailable]) return;
     if (self.remainingQueries > 0) return;
     
-    [self.managedObjectContext performBlock:^{
-        [self backgroundQuery];
-    }];
+    [self backgroundQuery];
 }
 
 - (void)backgroundQuery
@@ -208,14 +206,18 @@
         [self.stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:self.operationQueue withHandler:^(NSInteger numberOfSteps, NSError *error) {
             self.remainingQueries--;
             NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
-            if (error == nil && numberOfSteps > 0) {
-                [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate moc:self.managedObjectContext];
-            }
-            if (self.remainingQueries == 0) {
-                [self archive];
-                [self.managedObjectContext save:nil];
-                [self.model saveManagedContext];
-            }
+            
+            [self.managedObjectContext performBlock:^{
+                if (error == nil && numberOfSteps > 0) {
+                    [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate moc:self.managedObjectContext];
+                }
+                if (self.remainingQueries == 0) {
+                    [self archive];
+                    [self.managedObjectContext save:nil];
+                    [self.model saveManagedContext];
+                }
+                
+            }];
         }];
     }
     

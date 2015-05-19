@@ -296,14 +296,16 @@
     NSLog(@"%s", __PRETTY_FUNCTION__);
     [self archive];
     
-    NSError *error = nil;
-    [self.managedObjectContext save:&error];
-    if (error != nil) {
-        NSLog(@"error saving activites: %@", [error debugDescription]);
-    }
-    else {
-        [self.model saveManagedContext];
-    }
+    [self.managedObjectContext performBlock:^{
+        NSError *error = nil;
+        [self.managedObjectContext save:&error];
+        if (error != nil) {
+            NSLog(@"error saving activites: %@", [error debugDescription]);
+        }
+        else {
+            [self.model saveManagedContext];
+        }
+    }];
 }
 
 

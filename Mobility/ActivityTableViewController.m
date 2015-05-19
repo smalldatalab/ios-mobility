@@ -41,7 +41,7 @@
         self.fetchedResultsController.delegate = self;
     }
     
-    [self.tableView reloadData];
+    [self reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

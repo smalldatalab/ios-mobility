@@ -500,6 +500,7 @@ static GPPSignIn *_gppSignIn = nil;
 {
     NSDate *validDate = [self.accessTokenDate dateByAddingTimeInterval:self.accessTokenValidDuration];
     NSComparisonResult comp = [validDate compare:[NSDate date]];
+    OMHLog(@"valid date: %@, now: %@, ascending: %d", validDate, [NSDate date], comp == NSOrderedAscending);
     return (comp == NSOrderedAscending);
 }
 

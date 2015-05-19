@@ -34,7 +34,9 @@
         self.fetchedResultsController.delegate = self;
     }
     
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
+    
+    [self reloadData];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
