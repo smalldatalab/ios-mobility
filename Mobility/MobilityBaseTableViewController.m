@@ -10,6 +10,8 @@
 
 @interface MobilityBaseTableViewController ()
 
+@property (assign) BOOL shouldAnimateTableUpdates;
+
 @end
 
 @implementation MobilityBaseTableViewController
@@ -111,9 +113,10 @@
 
 - (void)reloadData
 {
-    [self.fetchedResultsController.managedObjectContext performBlock:^{
-        [self.tableView reloadData];
-    }];
+    [self.tableView reloadData];
+//    [self.fetchedResultsController.managedObjectContext performBlock:^{
+//        [self.tableView reloadData];
+//    }];
 }
 
 - (void)unloadTable
@@ -150,13 +153,18 @@
 
 - (void)controllerWillChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView beginUpdates];
+    self.shouldAnimateTableUpdates = [self.tableView.indexPathsForVisibleRows containsObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (self.shouldAnimateTableUpdates) {
+        [self.tableView beginUpdates];
+    }
 }
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
+    if (!self.shouldAnimateTableUpdates) return;
+    
     if (type == NSFetchedResultsChangeInsert) {
         [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
                               withRowAnimation:UITableViewRowAnimationTop];
@@ -170,7 +178,18 @@
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-    [self.tableView endUpdates];
+    if (self.shouldAnimateTableUpdates) {
+        [self.tableView endUpdates];
+    }
+    else {
+        CGSize beforeContentSize = self.tableView.contentSize;
+        [self.tableView reloadData];
+        CGSize afterContentSize = self.tableView.contentSize;
+        
+        CGPoint afterContentOffset = self.tableView.contentOffset;
+        CGPoint newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height);
+        self.tableView.contentOffset = newContentOffset;
+    }
 }
 
 @end
