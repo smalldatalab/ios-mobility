@@ -61,6 +61,7 @@
 		1E95D52A1AD6477B008721F4 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5291AD6477B008721F4 /* LocationManager.m */; };
 		1E9ED5841A515468003CBB77 /* MobilityActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E9ED5831A515468003CBB77 /* MobilityActivity.m */; };
 		1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */; };
+		1EA7F6891B0AF67F00D02536 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EA7F6881B0AF67F00D02536 /* Crashlytics.framework */; };
 		1EDF56BF1AF915B000C63B3B /* ActivityTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EDF56BE1AF915B000C63B3B /* ActivityTableViewController.m */; };
 		1EE737F31A8530E9008913E0 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EE737F21A8530E9008913E0 /* OMHApplication.m */; };
 		1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */; };
@@ -169,6 +170,7 @@
 		1E9ED5831A515468003CBB77 /* MobilityActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityActivity.m; sourceTree = "<group>"; };
 		1EA7C67C1A5FFA7F009CABAA /* DebugLogEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugLogEntry.h; sourceTree = "<group>"; };
 		1EA7C67D1A5FFA7F009CABAA /* DebugLogEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugLogEntry.m; sourceTree = "<group>"; };
+		1EA7F6881B0AF67F00D02536 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		1EDF56BD1AF915B000C63B3B /* ActivityTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityTableViewController.h; sourceTree = "<group>"; };
 		1EDF56BE1AF915B000C63B3B /* ActivityTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityTableViewController.m; sourceTree = "<group>"; };
 		1EE737F11A8530E9008913E0 /* OMHApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHApplication.h; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0F7BC61A4A5EAB00D1E347 /* CoreData.framework in Frameworks */,
+				1EA7F6891B0AF67F00D02536 /* Crashlytics.framework in Frameworks */,
 				1EF4F6A31A45592300DE06F1 /* MediaPlayer.framework in Frameworks */,
 				1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */,
 				1E1C75FE1A42AB2A004AA4EA /* GoogleOpenSource.framework in Frameworks */,
@@ -306,6 +309,7 @@
 		1E3FD0D21A3EC32F000C7E58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1EA7F6881B0AF67F00D02536 /* Crashlytics.framework */,
 				1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */,
 				1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */,
 				1E5BB3A91A441647008B6B95 /* AddressBook.framework */,
@@ -403,6 +407,7 @@
 				1E3FD0CC1A3EC32F000C7E58 /* Sources */,
 				1E3FD0CD1A3EC32F000C7E58 /* Frameworks */,
 				1E3FD0CE1A3EC32F000C7E58 /* Resources */,
+				1EA7F6851B0AF24600D02536 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -486,6 +491,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1EA7F6851B0AF24600D02536 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Crashlytics.framework/run 9e374b1b5bf08074d78da492850342b98bf183ff b963218436a3cba91f2e27ba4aa81284d8ae01b911acc22e811ee2042af65c96";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1E3FD0CC1A3EC32F000C7E58 /* Sources */ = {
@@ -651,6 +672,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
@@ -678,6 +700,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
@@ -773,6 +796,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";

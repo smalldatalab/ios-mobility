@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Open mHealth. All rights reserved.
 //
 
+#import <Crashlytics/Crashlytics.h>
+
 #import "AppDelegate.h"
 #import "ActivityTableViewController.h"
 #import "LocationTableViewController.h"
@@ -29,12 +31,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [Crashlytics startWithAPIKey:@"9e374b1b5bf08074d78da492850342b98bf183ff"];
     
     [OMHClient setupClientWithAppGoogleClientID:kMobilityGoogleClientID
                            serverGoogleClientID:kOMHServerGoogleClientID
                                  appDSUClientID:kMobilityDSUClientID
                              appDSUClientSecret:kMobilityDSUClientSecret];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     if (![OMHClient sharedClient].isSignedIn) {
         self.window.rootViewController = self.loginViewController;
