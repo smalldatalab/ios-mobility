@@ -18,10 +18,9 @@ extern NSString * const kNotificationCategoryIdentifierSettings;
 + (BOOL)hasNotificationPermissions;
 + (void)requestNotificationPermissions;
 
-+ (void)presentNotification:(NSString *)message;
+//+ (void)presentNotification:(NSString *)message;
 + (void)presentSettingsNotification;
 + (void)scheduleResumeNotificationWithFireDate:(NSDate *)fireDate;
-+ (void)scheduleResumeNotificationWithMessage:(NSString *)message fireDate:(NSDate *)fireDate;
 
 + (instancetype)sharedManager;
 - (void)presentSettingsAlert;

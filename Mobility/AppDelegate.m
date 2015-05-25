@@ -56,46 +56,11 @@
     [[MobilityModel sharedModel] logMessage:@"APP DID LAUNCH"];
     
     if ([[launchOptions valueForKey:UIApplicationLaunchOptionsLocationKey] boolValue]) {
-        [NotificationManager presentNotification:@"app launch for location"];
         [[MobilityModel sharedModel] logMessage:@"app launched for location"];
     }
     
     return YES;
 }
-
-- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier
-forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
-{
-    if ([identifier isEqualToString:kNotificationActionIdentifierResume]) {
-        [[MobilityLogger sharedLogger] startLogging];
-    }
-    else if ([identifier isEqualToString:kNotificationActionIdentifierSettings]) {
-        [application openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
-    
-    completionHandler();
-}
-
-//#ifdef DEBUG
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    if ([notification.category isEqualToString:kNotificationCategoryIdentifierSettings]) {
-        [[NotificationManager sharedManager] presentSettingsAlert];
-    }
-//    else
-//    {
-//        // If we're the foreground application, then show an alert view as one would not have been
-//        // presented to the user via the notification center.
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Notification"
-//                                                            message:notification.alertBody
-//                                                           delegate:nil
-//                                                  cancelButtonTitle:@"Ok"
-//                                                  otherButtonTitles:nil];
-//        
-//        [alertView show];
-//    }
-}
-//#endif
 
 - (void)userDidLogin
 {
@@ -185,5 +150,34 @@ forLocalNotification:(UILocalNotification *)notification completionHandler:(void
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[MobilityModel sharedModel] logMessage:@"APP WILL TERMINATE"];
 }
+
+
+#pragma mark - iOS 8 Notification Handling
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier
+forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
+{
+    NSLog(@"%s, identifier: %@", __PRETTY_FUNCTION__, identifier);
+    if ([identifier isEqualToString:kNotificationActionIdentifierResume]) {
+        [[MobilityLogger sharedLogger] startLogging];
+    }
+    else if ([identifier isEqualToString:kNotificationActionIdentifierSettings]) {
+        [application openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
+    
+    completionHandler();
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"%s, notification: %@", __PRETTY_FUNCTION__, notification.alertBody);
+    if ([notification.category isEqualToString:kNotificationCategoryIdentifierSettings]) {
+        [[NotificationManager sharedManager] presentSettingsAlert];
+    }
+}
+
+#endif
 
 @end

@@ -26,6 +26,7 @@ NSString * const kNotificationCategoryIdentifierSettings =
 
 static NSString * const kSettingsAlertTitle = @"Enable Location";
 static NSString * const kSettingsAlertBody = @"To continue tracking in the background, please allow location access for Mobility in your settings.";
+static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7 days. Please launch Mobility to avoid losing activity data.";
 
 @interface NotificationManager() <UIAlertViewDelegate>
 
@@ -33,142 +34,56 @@ static NSString * const kSettingsAlertBody = @"To continue tracking in the backg
 
 @implementation NotificationManager
 
-+ (void)presentNotification:(NSString *)message
+//+ (void)presentNotification:(NSString *)message
+//{
+//    NSLog(@"present notification: %@", message);
+//    UILocalNotification *notification = [[UILocalNotification alloc] init];
+//    notification.alertBody = message;
+//    notification.soundName = UILocalNotificationDefaultSoundName;
+//    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+//}
+
++ (UILocalNotification *)notificationWithBody:(NSString *)body fireDate:(NSDate *)fireDate category:(NSString *)category
 {
-    NSLog(@"present notification: %@", message);
     UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.alertBody = message;
     notification.soundName = UILocalNotificationDefaultSoundName;
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    notification.alertBody = body;
+    notification.fireDate = fireDate;
+    if ([notification respondsToSelector:@selector(category)]) {
+        [notification performSelector:@selector(setCategory:) withObject:category];
+    }
+    
+    return notification;
 }
 
 + (void)presentSettingsNotification
 {
     NSLog(@"present settings notification");
-//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
-//        [[self sharedManager] presentSettingsAlert];
-//        return;
-//    }
-    
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.alertBody = kSettingsAlertBody;
-//    notification.alertTitle = @"
-    notification.soundName = UILocalNotificationDefaultSoundName;
-    notification.category = kNotificationCategoryIdentifierSettings;
+    UILocalNotification *notification = [self notificationWithBody:kSettingsAlertBody
+                                                          fireDate:nil
+                                                          category:kNotificationCategoryIdentifierSettings];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
-+ (void)scheduleNotificationWithMessage:(NSString *)message fireDate:(NSDate *)fireDate
++ (void)scheduleResumeNotificationWithFireDate:(NSDate *)fireDate
 {
+    NSLog(@"schedule resume notification with fire date: %@", fireDate);
     [[UIApplication sharedApplication] cancelAllLocalNotifications];
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    notification.alertBody = message;
-    notification.soundName = UILocalNotificationDefaultSoundName;
+    
+    UILocalNotification *notification = [self notificationWithBody:@"Stopped tracking. Tap to resume"
+                                                          fireDate:fireDate
+                                                          category:kNotificationCategoryIdentifierResume];
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    
+    [self scheduleSevenDayWarningNotification];
 }
 
-+ (UIUserNotificationAction *)resumeAction
++ (void)scheduleSevenDayWarningNotification
 {
-    UIMutableUserNotificationAction *resumeAction =
-    [[UIMutableUserNotificationAction alloc] init];
-    
-    // Define an ID string to be passed back to your app when you handle the action
-    resumeAction.identifier = kNotificationActionIdentifierResume;
-    
-    // Localized string displayed in the action button
-    resumeAction.title = @"Resume";
-    
-    // If you need to show UI, choose foreground
-    resumeAction.activationMode = UIUserNotificationActivationModeBackground;
-    
-    // Destructive actions display in red
-    resumeAction.destructive = NO;
-    
-    // Set whether the action requires the user to authenticate
-    resumeAction.authenticationRequired = NO;
-    
-    return resumeAction;
-}
-
-+ (UIUserNotificationAction *)settingsAction
-{
-    UIMutableUserNotificationAction *settingsAction =
-    [[UIMutableUserNotificationAction alloc] init];
-    
-    // Define an ID string to be passed back to your app when you handle the action
-    settingsAction.identifier = kNotificationActionIdentifierSettings;
-    
-    // Localized string displayed in the action button
-    settingsAction.title = @"Settings";
-    
-    // If you need to show UI, choose foreground
-    settingsAction.activationMode = UIUserNotificationActivationModeBackground;
-    
-    // Destructive actions display in red
-    settingsAction.destructive = NO;
-    
-    // Set whether the action requires the user to authenticate
-    settingsAction.authenticationRequired = NO;
-    
-    return settingsAction;
-}
-
-+ (UIUserNotificationCategory *)resumeCategory
-{
-    // First create the category
-    UIMutableUserNotificationCategory *resumeCategory =
-    [[UIMutableUserNotificationCategory alloc] init];
-    
-    UIUserNotificationAction *resumeAction = [self resumeAction];
-    
-    // Identifier to include in your push payload and local notification
-    resumeCategory.identifier = kNotificationCategoryIdentifierResume;
-    
-    // Add the actions to the category and set the action context
-    [resumeCategory setActions:@[resumeAction]
-                    forContext:UIUserNotificationActionContextDefault];
-    
-    // Set the actions to present in a minimal context
-    [resumeCategory setActions:@[resumeAction]
-                    forContext:UIUserNotificationActionContextMinimal];
-    
-    return resumeCategory;
-}
-
-+ (UIUserNotificationCategory *)settingsCategory
-{
-    // First create the category
-    UIMutableUserNotificationCategory *settingsCategory =
-    [[UIMutableUserNotificationCategory alloc] init];
-    
-    UIUserNotificationAction *settingsAction = [self settingsAction];
-    
-    // Identifier to include in your push payload and local notification
-    settingsCategory.identifier = kNotificationCategoryIdentifierSettings;
-    
-    // Add the actions to the category and set the action context
-    [settingsCategory setActions:@[settingsAction]
-                    forContext:UIUserNotificationActionContextDefault];
-    
-    // Set the actions to present in a minimal context
-    [settingsCategory setActions:@[settingsAction]
-                    forContext:UIUserNotificationActionContextMinimal];
-    
-    return settingsCategory;
-}
-
-+ (BOOL)hasNotificationPermissions
-{
-    
-    if (![[UIApplication sharedApplication] respondsToSelector:@selector(currentUserNotificationSettings)]) {
-        return YES;
-    }
-    
-    UIUserNotificationSettings *settings = [UIApplication sharedApplication].currentUserNotificationSettings;
-    NSLog(@"settings: %@", settings);
-    
-    return NO; // TODO: remove
-    return ((settings.types & UIUserNotificationTypeAlert));
+    UILocalNotification *notification = [self notificationWithBody:kSettingsAlertBody
+                                                          fireDate:[[NSDate date] dateByAddingDays:7]
+                                                          category:nil];
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
 }
 
 + (void)requestNotificationPermissions
@@ -176,16 +91,6 @@ static NSString * const kSettingsAlertBody = @"To continue tracking in the backg
     [[self sharedManager] requestNotificationPermissions];
 }
 
-+ (void)registerNotificationSettings
-{
-    NSSet *categories = [NSSet setWithObjects:[self resumeCategory], [self settingsCategory], nil];
-    UIUserNotificationType types = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
-                                               
-    UIUserNotificationSettings *settings =
-    [UIUserNotificationSettings settingsForTypes:types categories:categories];
-    
-    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-}
 
 #pragma mark - Singleton
 
@@ -211,14 +116,11 @@ static NSString * const kSettingsAlertBody = @"To continue tracking in the backg
 
 - (instancetype)initPrivate
 {
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
+    return [super init];
 }
 
-#pragma mark - iOS 8 Notification Permission
+
+#pragma mark - iOS 8
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
 
@@ -268,6 +170,100 @@ static NSString * const kSettingsAlertBody = @"To continue tracking in the backg
         [[self class] registerNotificationSettings];
     }
 }
+
++ (UIUserNotificationAction *)resumeAction
+{
+    UIMutableUserNotificationAction *resumeAction =
+    [[UIMutableUserNotificationAction alloc] init];
+    
+    resumeAction.identifier = kNotificationActionIdentifierResume;
+    resumeAction.title = @"Resume";
+    resumeAction.activationMode = UIUserNotificationActivationModeBackground;
+    resumeAction.destructive = NO;
+    resumeAction.authenticationRequired = NO;
+    
+    return resumeAction;
+}
+
++ (UIUserNotificationAction *)settingsAction
+{
+    UIMutableUserNotificationAction *settingsAction =
+    [[UIMutableUserNotificationAction alloc] init];
+    
+    settingsAction.identifier = kNotificationActionIdentifierSettings;
+    settingsAction.title = @"Settings";
+    settingsAction.activationMode = UIUserNotificationActivationModeBackground;
+    settingsAction.destructive = NO;
+    settingsAction.authenticationRequired = NO;
+    
+    return settingsAction;
+}
+
++ (UIUserNotificationCategory *)resumeCategory
+{
+    UIMutableUserNotificationCategory *resumeCategory =
+    [[UIMutableUserNotificationCategory alloc] init];
+    resumeCategory.identifier = kNotificationCategoryIdentifierResume;
+    
+    UIUserNotificationAction *resumeAction = [self resumeAction];
+    
+    [resumeCategory setActions:@[resumeAction]
+                    forContext:UIUserNotificationActionContextDefault];
+    
+    [resumeCategory setActions:@[resumeAction]
+                    forContext:UIUserNotificationActionContextMinimal];
+    
+    return resumeCategory;
+}
+
++ (UIUserNotificationCategory *)settingsCategory
+{
+    UIMutableUserNotificationCategory *settingsCategory =
+    [[UIMutableUserNotificationCategory alloc] init];
+    settingsCategory.identifier = kNotificationCategoryIdentifierSettings;
+    
+    UIUserNotificationAction *settingsAction = [self settingsAction];
+    
+    [settingsCategory setActions:@[settingsAction]
+                      forContext:UIUserNotificationActionContextDefault];
+    
+    [settingsCategory setActions:@[settingsAction]
+                      forContext:UIUserNotificationActionContextMinimal];
+    
+    return settingsCategory;
+}
+
+
++ (BOOL)hasNotificationPermissions
+{
+    UIUserNotificationSettings *settings = [UIApplication sharedApplication].currentUserNotificationSettings;
+//    NSLog(@"settings: %@", settings);
+    
+    return ((settings.types & UIUserNotificationTypeAlert) && settings.categories.count > 0);
+}
+
++ (void)registerNotificationSettings
+{
+    NSSet *categories = [NSSet setWithObjects:[self resumeCategory], [self settingsCategory], nil];
+    UIUserNotificationType types = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
+    
+    UIUserNotificationSettings *settings =
+    [UIUserNotificationSettings settingsForTypes:types categories:categories];
+    
+    [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+}
+
+
+#else
+#pragma mark - iOS 7
+
++ (BOOL)hasNotificationPermissions
+{
+    return YES;
+}
+
+- (void)requestNotificationPermissions {};
+- (void)presentSettingsAlert {};
 
 #endif
 

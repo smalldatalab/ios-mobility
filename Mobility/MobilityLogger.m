@@ -196,6 +196,7 @@
     : kLocationSamplingIntervalMoving;
     
     self.locationSampleTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(locationSampleTimerFired) userInfo:nil repeats:NO];
+    [NotificationManager scheduleResumeNotificationWithFireDate:[[NSDate date] dateByAddingTimeInterval:interval + 30]];
 }
 
 - (void)stopLocationSampleTimer

@@ -170,6 +170,7 @@
     NSLog(@"location manager did fail with error: %@", error);
     [self.model logMessage:[NSString stringWithFormat:@"location failed with error: %ld", (long)error.code]];
     if (error.code == kCLErrorDenied) {
+        [NotificationManager presentSettingsNotification];
         [self stopTrackingLocation];
     }
 }
@@ -183,9 +184,7 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (status == kCLAuthorizationStatusDenied)
     {
         // Location services are disabled on the device.
-//        [self stopTrackingLocation];
-        
-//        [NotificationManager presentNotification:@"location status denied"];
+        [self stopTrackingLocation];
         [NotificationManager presentSettingsNotification];
         
     }
@@ -195,8 +194,6 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
         if ([OMHClient sharedClient].isSignedIn) {
             [self startTrackingLocation];
         }
-        
-        [NotificationManager presentNotification:@"location status authorized"];
     }
 }
 
