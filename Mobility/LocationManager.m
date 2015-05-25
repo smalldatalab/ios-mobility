@@ -10,6 +10,8 @@
 #import "MobilityModel.h"
 #import "OMHClient.h"
 
+#import "NotificationManager.h"
+
 @import CoreLocation;
 
 @interface LocationManager () <CLLocationManagerDelegate>
@@ -86,13 +88,16 @@
 {
     [self.model logMessage:@"start tracking location"];
     
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined
+        || ![CLLocationManager locationServicesEnabled]) {
+        
         if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
             [self.locationManager performSelector:@selector(requestAlwaysAuthorization)];
         }
     }
     
     [self.locationManager startUpdatingLocation];
+    [self.locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)stopTrackingLocation
@@ -178,16 +183,32 @@ didChangeAuthorizationStatus:(CLAuthorizationStatus)status
     if (status == kCLAuthorizationStatusDenied)
     {
         // Location services are disabled on the device.
-        [self stopTrackingLocation];
+//        [self stopTrackingLocation];
+        
+//        [NotificationManager presentNotification:@"location status denied"];
+        [NotificationManager presentSettingsNotification];
         
     }
-    if (status == kCLAuthorizationStatusAuthorized)
+    if ([self statusIsAuthorized:status])
     {
         // Location services have just been authorized on the device, start updating now.
         if ([OMHClient sharedClient].isSignedIn) {
             [self startTrackingLocation];
         }
+        
+        [NotificationManager presentNotification:@"location status authorized"];
     }
+}
+
+- (BOOL)statusIsAuthorized:(CLAuthorizationStatus)status
+{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
+    if (status == kCLAuthorizationStatusAuthorizedAlways) {
+        return YES;
+    }
+#endif
+    
+    return (status == kCLAuthorizationStatusAuthorized);
 }
 
 

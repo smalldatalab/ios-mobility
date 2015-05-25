@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E086BD21B10723D00F30CDC /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E086BD11B10723D00F30CDC /* NotificationManager.m */; };
 		1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */; };
 		1E0F7BBA1A495C9C00D1E347 /* LocationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */; };
 		1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */; };
@@ -78,6 +79,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E086BD01B10723D00F30CDC /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
+		1E086BD11B10723D00F30CDC /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
 		1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Additions.h"; sourceTree = "<group>"; };
 		1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Additions.m"; sourceTree = "<group>"; };
 		1E0F7BB81A495C9C00D1E347 /* LocationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationTableViewController.h; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 				1E95D5261AD643FD008721F4 /* ActivityManager.m */,
 				1E95D5281AD6477B008721F4 /* LocationManager.h */,
 				1E95D5291AD6477B008721F4 /* LocationManager.m */,
+				1E086BD01B10723D00F30CDC /* NotificationManager.h */,
+				1E086BD11B10723D00F30CDC /* NotificationManager.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
 				1E3FD1021A3EC372000C7E58 /* MobilityBaseTableViewController.h */,
 				1E3FD1031A3EC372000C7E58 /* MobilityBaseTableViewController.m */,
@@ -539,6 +544,7 @@
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
 				1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */,
 				1E3FD0E01A3EC330000C7E58 /* main.m in Sources */,
+				1E086BD21B10723D00F30CDC /* NotificationManager.m in Sources */,
 				1E3FD10C1A3ECA45000C7E58 /* MobilityDataPoint.m in Sources */,
 				1E1C75F61A42AB2A004AA4EA /* AFHTTPSessionManager.m in Sources */,
 				1E1C76011A42AB2A004AA4EA /* OMHClientDSUConnector.m in Sources */,
@@ -615,7 +621,6 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LOG_TABLE=1",
-					"OMHDEBUG=1",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

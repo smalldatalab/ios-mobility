@@ -14,11 +14,13 @@
 #import "ActivityManager.h"
 #import "LocationManager.h"
 
+#import "NotificationManager.h"
+
 @import CoreLocation;
 @import CoreMotion;
 
 
-@interface MobilityLogger () <OMHReachabilityDelegate>
+@interface MobilityLogger () <OMHReachabilityDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSTimer *uploadTimer;
 @property (nonatomic, strong) NSTimer *uploadBatchTimer;
@@ -132,6 +134,10 @@
 - (void)startLogging
 {
     if (![OMHClient sharedClient].isSignedIn) return;
+    
+    if (![NotificationManager hasNotificationPermissions]) {
+        [NotificationManager requestNotificationPermissions];
+    }
     
     [self.locationManager startTrackingLocation];
     [self startUploadTimer];
@@ -308,6 +314,7 @@
         [self uploadData];
     }
 }
+
 
 
 @end
