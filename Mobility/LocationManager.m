@@ -96,6 +96,10 @@
         }
     }
     
+    if (![CLLocationManager locationServicesEnabled]) {
+        [NotificationManager presentSettingsNotification];
+    }
+    
     [self.locationManager startUpdatingLocation];
     [self.locationManager startMonitoringSignificantLocationChanges];
 }

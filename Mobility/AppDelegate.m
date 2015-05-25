@@ -163,9 +163,9 @@ forLocalNotification:(UILocalNotification *)notification completionHandler:(void
     if ([identifier isEqualToString:kNotificationActionIdentifierResume]) {
         [[MobilityLogger sharedLogger] startLogging];
     }
-    else if ([identifier isEqualToString:kNotificationActionIdentifierSettings]) {
-        [application openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
-    }
+//    else if ([identifier isEqualToString:kNotificationActionIdentifierSettings]) {
+//        [application openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+//    }
     
     completionHandler();
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E059A971B130C93001E9B2E /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E059A961B130C93001E9B2E /* Fabric.framework */; };
 		1E086BD21B10723D00F30CDC /* NotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E086BD11B10723D00F30CDC /* NotificationManager.m */; };
 		1E0F7BB71A493D9100D1E347 /* NSDate+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB61A493D9100D1E347 /* NSDate+Additions.m */; };
 		1E0F7BBA1A495C9C00D1E347 /* LocationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BB91A495C9C00D1E347 /* LocationTableViewController.m */; };
@@ -79,6 +80,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1E059A961B130C93001E9B2E /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		1E086BD01B10723D00F30CDC /* NotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationManager.h; sourceTree = "<group>"; };
 		1E086BD11B10723D00F30CDC /* NotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationManager.m; sourceTree = "<group>"; };
 		1E0F7BB51A493D9100D1E347 /* NSDate+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Additions.h"; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */,
 				1E5BB3A21A44162B008B6B95 /* SystemConfiguration.framework in Frameworks */,
 				1E5BB3A41A441631008B6B95 /* Security.framework in Frameworks */,
+				1E059A971B130C93001E9B2E /* Fabric.framework in Frameworks */,
 				1E5BB3A61A441636008B6B95 /* CoreText.framework in Frameworks */,
 				1E5BB3A81A441643008B6B95 /* AssetsLibrary.framework in Frameworks */,
 				1E5BB3AA1A441647008B6B95 /* AddressBook.framework in Frameworks */,
@@ -312,6 +315,7 @@
 		1E3FD0D21A3EC32F000C7E58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E059A961B130C93001E9B2E /* Fabric.framework */,
 				1EA7F6881B0AF67F00D02536 /* Crashlytics.framework */,
 				1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */,
 				1EF4F6A21A45592300DE06F1 /* MediaPlayer.framework */,

@@ -26,9 +26,12 @@ NSString * const kNotificationCategoryIdentifierSettings =
 
 static NSString * const kSettingsAlertTitle = @"Enable Location";
 static NSString * const kSettingsAlertBody = @"To continue tracking in the background, please allow location access for Mobility in your settings.";
+static NSString * const kResumeAlertBody = @"Stopped tracking. Tap to resume";
 static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7 days. Please launch Mobility to avoid losing activity data.";
 
 @interface NotificationManager() <UIAlertViewDelegate>
+
+@property (nonatomic, strong) NSDate *lastSettingsNotificationDate;;
 
 @end
 
@@ -58,7 +61,18 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
 
 + (void)presentSettingsNotification
 {
-    NSLog(@"present settings notification");
+    NotificationManager *manager = [self sharedManager];
+    NSDate *lastFire = manager.lastSettingsNotificationDate;
+    NSLog(@"present settings notification, lastFire: %@", lastFire);
+    if (lastFire == nil || ([lastFire timeIntervalSinceNow] < -30)) {
+        manager.lastSettingsNotificationDate = [NSDate date];
+    }
+    else {
+        return;
+    }
+    
+    [self cancelNotificationsWithBody:kSettingsAlertBody];
+    
     UILocalNotification *notification = [self notificationWithBody:kSettingsAlertBody
                                                           fireDate:nil
                                                           category:kNotificationCategoryIdentifierSettings];
@@ -68,9 +82,10 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
 + (void)scheduleResumeNotificationWithFireDate:(NSDate *)fireDate
 {
     NSLog(@"schedule resume notification with fire date: %@", fireDate);
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
-    UILocalNotification *notification = [self notificationWithBody:@"Stopped tracking. Tap to resume"
+    [self cancelNotificationsWithBody:kResumeAlertBody];
+    
+    UILocalNotification *notification = [self notificationWithBody:kResumeAlertBody
                                                           fireDate:fireDate
                                                           category:kNotificationCategoryIdentifierResume];
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
@@ -80,10 +95,22 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
 
 + (void)scheduleSevenDayWarningNotification
 {
-    UILocalNotification *notification = [self notificationWithBody:kSettingsAlertBody
+    [self cancelNotificationsWithBody:kSevenDayWarningText];
+    
+    UILocalNotification *notification = [self notificationWithBody:kSevenDayWarningText
                                                           fireDate:[[NSDate date] dateByAddingDays:7]
                                                           category:nil];
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
++ (void)cancelNotificationsWithBody:(NSString *)body
+{
+    NSArray *notes = [UIApplication sharedApplication].scheduledLocalNotifications;
+    for (UILocalNotification *note in notes) {
+        if ([note.alertBody isEqualToString:body]) {
+            [[UIApplication sharedApplication] cancelLocalNotification:note];
+        }
+    }
 }
 
 + (void)requestNotificationPermissions
@@ -151,6 +178,7 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
 
 - (void)presentSettingsAlert
 {
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kSettingsAlertTitle
                                                     message:kSettingsAlertBody
                                                    delegate:self
@@ -192,7 +220,7 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     
     settingsAction.identifier = kNotificationActionIdentifierSettings;
     settingsAction.title = @"Settings";
-    settingsAction.activationMode = UIUserNotificationActivationModeBackground;
+    settingsAction.activationMode = UIUserNotificationActivationModeForeground;
     settingsAction.destructive = NO;
     settingsAction.authenticationRequired = NO;
     
@@ -222,13 +250,13 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     [[UIMutableUserNotificationCategory alloc] init];
     settingsCategory.identifier = kNotificationCategoryIdentifierSettings;
     
-    UIUserNotificationAction *settingsAction = [self settingsAction];
-    
-    [settingsCategory setActions:@[settingsAction]
-                      forContext:UIUserNotificationActionContextDefault];
-    
-    [settingsCategory setActions:@[settingsAction]
-                      forContext:UIUserNotificationActionContextMinimal];
+//    UIUserNotificationAction *settingsAction = [self settingsAction];
+//    
+//    [settingsCategory setActions:@[settingsAction]
+//                      forContext:UIUserNotificationActionContextDefault];
+//    
+//    [settingsCategory setActions:@[settingsAction]
+//                      forContext:UIUserNotificationActionContextMinimal];
     
     return settingsCategory;
 }
