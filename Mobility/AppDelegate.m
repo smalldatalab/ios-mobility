@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Open mHealth. All rights reserved.
 //
 
-#import <Crashlytics/Crashlytics.h>
-
 #import "AppDelegate.h"
 #import "ActivityTableViewController.h"
 #import "LocationTableViewController.h"
@@ -21,6 +19,9 @@
 
 #import "NotificationManager.h"
 
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 
 @interface AppDelegate ()
 
@@ -33,7 +34,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [Crashlytics startWithAPIKey:@"9e374b1b5bf08074d78da492850342b98bf183ff"];
+    [Fabric with:@[CrashlyticsKit]];
     
     [OMHClient setupClientWithClientID:kMobilityDSUClientID clientSecret:kMobilityDSUClientSecret];
     
