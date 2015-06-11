@@ -12,8 +12,6 @@
 /**
  *  DSU Sign-in keys
  */
-extern NSString * const kMobilityGoogleClientID;
-extern NSString * const kOMHServerGoogleClientID;
 extern NSString * const kMobilityDSUClientID;
 extern NSString * const kMobilityDSUClientSecret;
 

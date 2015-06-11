@@ -35,10 +35,7 @@
 {
     [Crashlytics startWithAPIKey:@"9e374b1b5bf08074d78da492850342b98bf183ff"];
     
-    [OMHClient setupClientWithAppGoogleClientID:kMobilityGoogleClientID
-                           serverGoogleClientID:kOMHServerGoogleClientID
-                                 appDSUClientID:kMobilityDSUClientID
-                             appDSUClientSecret:kMobilityDSUClientSecret];
+    [OMHClient setupClientWithClientID:kMobilityDSUClientID clientSecret:kMobilityDSUClientSecret];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -103,16 +100,6 @@
         _tabBarController = tbc;
     }
     return _tabBarController;
-}
-
-- (BOOL)application: (UIApplication *)application
-            openURL: (NSURL *)url
-  sourceApplication: (NSString *)sourceApplication
-         annotation: (id)annotation {
-    NSLog(@"openURL: %@, source: %@, annotation: %@", url, sourceApplication, annotation);
-    return [[OMHClient sharedClient] handleURL:url
-                             sourceApplication:sourceApplication
-                                    annotation:annotation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -70,7 +70,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    [[MobilityModel sharedModel] logMessage:@(__PRETTY_FUNCTION__)];
+    [[MobilityModel sharedModel] logMessage:@"Memory Warning"];
 }
 
 - (void)registerForNotifications

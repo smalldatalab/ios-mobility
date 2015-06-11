@@ -148,7 +148,7 @@
         
         [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
             self.remainingQueries--;
-            NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
+//            NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
             [self.managedObjectContext performBlock:^{
                 if (error == nil && [pedometerData.numberOfSteps intValue] > 0) {
                     [self logPedometerData:pedometerData];
@@ -205,7 +205,7 @@
         
         [self.stepCounter queryStepCountStartingFrom:startDate to:endDate toQueue:self.operationQueue withHandler:^(NSInteger numberOfSteps, NSError *error) {
             self.remainingQueries--;
-            NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
+//            NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
             
             [self.managedObjectContext performBlock:^{
                 if (error == nil && numberOfSteps > 0) {
