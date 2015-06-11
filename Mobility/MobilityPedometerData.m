@@ -18,15 +18,7 @@
 @dynamic distance;
 @dynamic floorsAscended;
 @dynamic floorsDescended;
-@dynamic userEmail;
-@dynamic uuid;
-@dynamic submitted;
 
-- (void)awakeFromInsert
-{
-    [super awakeFromInsert];
-    self.uuid = [[[NSUUID alloc] init] UUIDString];
-}
 
 - (MobilityPedometerDataDictionary *)jsonDictionary
 {

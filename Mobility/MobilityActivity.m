@@ -12,16 +12,12 @@
 @implementation MobilityActivity
 
 @dynamic confidence;
-@dynamic timestamp;
-@dynamic uuid;
-@dynamic userEmail;
 @dynamic stationary;
 @dynamic walking;
 @dynamic running;
 @dynamic automotive;
 @dynamic cycling;
 @dynamic unknown;
-@dynamic submitted;
 
 @synthesize activitiesArray=_activitiesArray;
 
@@ -77,12 +73,6 @@
         default:
             return nil;
     }
-}
-
-- (void)awakeFromInsert
-{
-    [super awakeFromInsert];
-    self.uuid = [[[NSUUID alloc] init] UUIDString];
 }
 
 - (void)didTurnIntoFault

@@ -54,6 +54,7 @@
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (accuracy: %gm)", [location.timestamp formattedDate], location.horizontalAccuracy];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"lat: %f, long: %f", location.latitude, location.longitude];
+    cell.accessoryType = location.uploaded ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }

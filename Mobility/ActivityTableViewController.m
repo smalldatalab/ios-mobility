@@ -63,15 +63,9 @@
     }
     
     MobilityActivity *activity = self.fetchedResultsController.fetchedObjects[indexPath.row];
-//    if (activity.fault) {
-//        cell.textLabel.text = @"fault";
-//        cell.detailTextLabel.text = nil;
-//    }
-//    else
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
-        cell.detailTextLabel.text = [activity.timestamp formattedDate];
-    }
+    cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
+    cell.detailTextLabel.text = [activity.timestamp formattedDate];
+    cell.accessoryType = activity.uploaded ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
     
     return cell;
 }

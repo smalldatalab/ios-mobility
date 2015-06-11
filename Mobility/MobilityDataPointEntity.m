@@ -17,4 +17,11 @@
 @dynamic uuid;
 @dynamic uploaded;
 
+
+- (void)awakeFromInsert
+{
+    [super awakeFromInsert];
+    self.uuid = [[[NSUUID alloc] init] UUIDString];
+}
+
 @end

@@ -23,8 +23,6 @@ typedef NSMutableDictionary MobilityLocationDictionary;
 @property (nonatomic) double bearing;
 @property (nonatomic) double speed;
 
-@property (nonatomic, readonly) MobilityLocationDictionary *jsonDictionary;
-
 @end
 
 

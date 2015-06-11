@@ -40,7 +40,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    if (![OMHClient sharedClient].isSignedIn) {
+    if (![OMHClient sharedClient].isSignedIn || ![MobilityModel sharedModel].hasUser) {
         self.window.rootViewController = self.loginViewController;
     }
     else {

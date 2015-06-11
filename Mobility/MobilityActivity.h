@@ -37,8 +37,6 @@ typedef enum {
 @property (nonatomic, readonly) NSString *debugActivityString;
 @property (nonatomic, readonly) NSString *confidenceString;
 
-@property (nonatomic, readonly) NSMutableDictionary *jsonDictionary;
-
 + (NSString *)stringForActivityType:(MobilityActivityType)activityType;
 + (MobilityActivityType)typeForActivityString:(NSString *)activityString;
 

@@ -90,6 +90,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kMobilityModelUserChangedNotification object:self];
 }
 
+- (BOOL)hasUser
+{
+    return self.userEmail != nil;
+}
+
 
 #pragma mark - Property Accessors (Core Data)
 
@@ -231,7 +236,7 @@
     
     MobilityPedometerData *newPD = (MobilityPedometerData *)[self insertNewObjectForEntityForName:@"MobilityPedometerData" moc:moc];
     newPD.userEmail = self.userEmail;
-    newPD.startDate = startDate;
+    newPD.startDate = newPD.timestamp = startDate;
     newPD.endDate = endDate;
     
     return newPD;
@@ -262,6 +267,22 @@
 #endif
 
 
+-(void)markUploadCompleteForDataPointWithUUID:(NSString *)uuid
+{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", uuid];
+    MobilityDataPointEntity *dataPointEntity =
+    (MobilityDataPointEntity *)[self fetchObjectWithEntityName:@"MobilityDataPointEntity"
+                                               uniquePredicate:predicate
+                                                           moc:self.managedObjectContext];
+    
+    if (dataPointEntity == nil) {
+        NSLog(@"can't find data point to mark complete with uuid: %@", uuid);
+        return;
+    }
+    
+    dataPointEntity.uploaded = YES;
+    [self saveManagedContext];
+}
 
 - (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc
 {
@@ -269,42 +290,62 @@
     return [self fetchObjectsWithEntityName:@"MobilityActivity" predicate:predicate moc:moc];
 }
 
-- (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
+- (NSArray *)oldestPendingDataPointEntitiesWithLimit:(NSInteger)fetchLimit
 {
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
-    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" sortDescriptor:descriptor fetchLimit:fetchLimit];
-}
-
-- (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit
-{
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
-    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" sortDescriptor:descriptor fetchLimit:fetchLimit];
-}
-
-- (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit
-{
-    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
-    return [self fetchPendingObjectsWithEntityName:@"MobilityPedometerData" sortDescriptor:descriptor fetchLimit:fetchLimit];
-}
-
-- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName sortDescriptor:(NSSortDescriptor *)descriptor fetchLimit:(NSInteger)limit
-{
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO && userEmail == %@", self.userEmail];
     
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"MobilityDataPointEntity" inManagedObjectContext:self.managedObjectContext]];
     [fetchRequest setPredicate:predicate];
     [fetchRequest setSortDescriptors:@[descriptor]];
-    [fetchRequest setFetchLimit:limit];
+    [fetchRequest setFetchLimit:fetchLimit];
     
     NSError *error = nil;
     NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     if (error) {
-        NSLog(@"error fetching pending objects for entity: %@", entityName);
+        NSLog(@"error fetching pending data point entities");
     }
     
     return fetchedObjects;
 }
+
+//- (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit
+//{
+//    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
+//    return [self fetchPendingObjectsWithEntityName:@"MobilityActivity" sortDescriptor:descriptor fetchLimit:fetchLimit];
+//}
+//
+//- (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit
+//{
+//    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:YES];
+//    return [self fetchPendingObjectsWithEntityName:@"MobilityLocation" sortDescriptor:descriptor fetchLimit:fetchLimit];
+//}
+//
+//- (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit
+//{
+//    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"startDate" ascending:YES];
+//    return [self fetchPendingObjectsWithEntityName:@"MobilityPedometerData" sortDescriptor:descriptor fetchLimit:fetchLimit];
+//}
+//
+//- (NSArray *)fetchPendingObjectsWithEntityName:(NSString *)entityName sortDescriptor:(NSSortDescriptor *)descriptor fetchLimit:(NSInteger)limit
+//{
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"submitted == NO && userEmail == %@", self.userEmail];
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//    [fetchRequest setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
+//    [fetchRequest setPredicate:predicate];
+//    [fetchRequest setSortDescriptors:@[descriptor]];
+//    [fetchRequest setFetchLimit:limit];
+//    
+//    NSError *error = nil;
+//    NSArray *fetchedObjects = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//    if (error) {
+//        NSLog(@"error fetching pending objects for entity: %@", entityName);
+//    }
+//    
+//    return fetchedObjects;
+//}
 
 - (NSManagedObject *)fetchObjectWithEntityName:(NSString *)entityName uniqueTimestamp:(NSDate *)timestamp moc:(NSManagedObjectContext *)moc
 {

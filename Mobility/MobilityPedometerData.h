@@ -21,8 +21,6 @@ typedef NSMutableDictionary MobilityPedometerDataDictionary;
 @property (nonatomic, strong) NSNumber *floorsAscended;
 @property (nonatomic, strong) NSNumber *floorsDescended;
 
-@property (nonatomic, readonly) NSMutableDictionary *jsonDictionary;
-
 @end
 
 

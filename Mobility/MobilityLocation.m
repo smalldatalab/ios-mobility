@@ -18,16 +18,7 @@
 @dynamic altitude;
 @dynamic bearing;
 @dynamic speed;
-@dynamic uuid;
-@dynamic userEmail;
-@dynamic timestamp;
-@dynamic submitted;
 
-- (void)awakeFromInsert
-{
-    [super awakeFromInsert];
-    self.uuid = [[[NSUUID alloc] init] UUIDString];
-}
 
 - (MobilityLocationDictionary *)jsonDictionary
 {

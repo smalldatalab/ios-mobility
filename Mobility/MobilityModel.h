@@ -22,6 +22,8 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 
 + (instancetype)sharedModel;
 
+@property (nonatomic, readonly) BOOL hasUser;
+
 - (void)setUserEmail:(NSString *)userEmail;
 - (void)saveManagedContext;
 
@@ -38,6 +40,7 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 
 - (void)markUploadCompleteForDataPointWithUUID:(NSString *)uuid;
 - (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc;
+- (NSArray *)oldestPendingDataPointEntitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit;

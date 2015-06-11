@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MobilityActivity;
-@class MobilityLocation;
-@class MobilityPedometerData;
+@class MobilityDataPointEntity;
 
 typedef NSMutableDictionary MobilityDataPoint;
 typedef NSMutableDictionary MobilityDataPointBody;
@@ -18,9 +16,7 @@ typedef NSMutableDictionary MobilityDataPointBody;
 
 @interface NSMutableDictionary (MobilityDataPoint)
 
-+ (instancetype)dataPointWithActivity:(MobilityActivity *)activity;
-+ (instancetype)dataPointWithLocation:(MobilityLocation *)location;
-+ (instancetype)dataPointWithPedometerData:(MobilityPedometerData *)pedometerData;
++ (instancetype)dataPointWithEntity:(MobilityDataPointEntity *)entity;
 
 @end
 

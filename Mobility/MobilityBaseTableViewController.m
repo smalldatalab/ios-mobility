@@ -174,6 +174,9 @@
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationAutomatic];
     }
+    else if (type == NSFetchedResultsChangeUpdate) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
 }
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
