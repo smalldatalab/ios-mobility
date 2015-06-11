@@ -261,6 +261,8 @@
 
 #endif
 
+
+
 - (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc
 {
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"timestamp >= %@", startDate];
@@ -388,7 +390,7 @@
     [fetchRequest setSortDescriptors:@[descriptor]];
     [fetchRequest setPredicate:predicate];
     [fetchRequest setFetchBatchSize:100];
-    [fetchRequest setFetchLimit:10000];
+    [fetchRequest setFetchLimit:15000]; // TODO
     
     // Build a fetch results controller based on the above fetch request.
     NSFetchedResultsController *fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

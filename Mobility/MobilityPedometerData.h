@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "MobilityDataPointEntity.h"
 
 typedef NSMutableDictionary MobilityPedometerDataDictionary;
 
-@interface MobilityPedometerData : NSManagedObject
+@interface MobilityPedometerData : MobilityDataPointEntity
 
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSDate *endDate;
@@ -19,9 +20,6 @@ typedef NSMutableDictionary MobilityPedometerDataDictionary;
 @property (nonatomic, strong) NSNumber *distance;
 @property (nonatomic, strong) NSNumber *floorsAscended;
 @property (nonatomic, strong) NSNumber *floorsDescended;
-@property (nonatomic, retain) NSString * userEmail;
-@property (nonatomic, retain) NSString * uuid;
-@property (nonatomic) BOOL submitted;
 
 @property (nonatomic, readonly) NSMutableDictionary *jsonDictionary;
 

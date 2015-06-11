@@ -35,6 +35,8 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 #else
 - (MobilityPedometerData *)uniquePedometerDataWithStepCount:(NSInteger)stepCount startDate:(NSDate *)startDate endDate:(NSDate *)endDate moc:(NSManagedObjectContext *)moc;
 #endif
+
+- (void)markUploadCompleteForDataPointWithUUID:(NSString *)uuid;
 - (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc;
 - (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
 - (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;

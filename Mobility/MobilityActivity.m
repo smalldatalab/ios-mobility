@@ -93,44 +93,44 @@
 - (NSArray *)activitiesArray
 {
     if (_activitiesArray == nil) {
-
+        
         NSMutableArray *array = [NSMutableArray array];
         
         if (self.stationary) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeStill],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         if (self.walking) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeWalk],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         if (self.running) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeRun],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         if (self.automotive) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeTransport],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         if (self.cycling) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeCycle],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         if (self.unknown || array.count == 0) {
             [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
-                                         @"confidence" : self.confidenceString}];
+                               @"confidence" : self.confidenceString}];
         }
         
         
-//        if (self.unknown) {
-//            [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
-//                               @"confidence" : self.confidenceString}];
-//        }
-//        
-//        if (array.count == 0) {
-//            [array addObject:@{@"activity" : @"\"unknown\"",
-//                               @"confidence" : self.confidenceString}];
-//        }
+        //        if (self.unknown) {
+        //            [array addObject:@{@"activity" : [MobilityActivity stringForActivityType:MobilityActivityTypeUnknown],
+        //                               @"confidence" : self.confidenceString}];
+        //        }
+        //
+        //        if (array.count == 0) {
+        //            [array addObject:@{@"activity" : @"\"unknown\"",
+        //                               @"confidence" : self.confidenceString}];
+        //        }
         
         _activitiesArray = array;
     }
