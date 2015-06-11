@@ -20,7 +20,7 @@
 @import CoreMotion;
 
 
-@interface MobilityLogger () <OMHReachabilityDelegate, UIAlertViewDelegate>
+@interface MobilityLogger () <OMHReachabilityDelegate, OMHUploadDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) NSTimer *uploadTimer;
 @property (nonatomic, strong) NSTimer *uploadBatchTimer;
@@ -314,6 +314,11 @@
     if (isReachable) {
         [self uploadData];
     }
+}
+
+- (void)OMHClient:(OMHClient *)client didUploadDataPoint:(NSDictionary *)dataPoint
+{
+    
 }
 
 

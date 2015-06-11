@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "MobilityDataPointEntity.h"
 
 typedef NSMutableDictionary MobilityLocationDictionary;
 
 
-@interface MobilityLocation : NSManagedObject
+@interface MobilityLocation : MobilityDataPointEntity
 
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
@@ -21,10 +22,6 @@ typedef NSMutableDictionary MobilityLocationDictionary;
 @property (nonatomic) double altitude;
 @property (nonatomic) double bearing;
 @property (nonatomic) double speed;
-@property (nonatomic, strong) NSString * uuid;
-@property (nonatomic, strong) NSString * userEmail;
-@property (nonatomic, strong) NSDate * timestamp;
-@property (nonatomic) BOOL submitted;
 
 @property (nonatomic, readonly) MobilityLocationDictionary *jsonDictionary;
 

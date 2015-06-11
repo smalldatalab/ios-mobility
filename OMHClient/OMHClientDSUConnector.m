@@ -594,6 +594,9 @@ static GPPSignIn *_gppSignIn = nil;
                 // conflict, data point already uploaded
                 [self.pendingDataPoints removeObject:blockDataPoint];
                 [self saveClientState];
+                if (self.uploadDelegate) {
+                    [self.uploadDelegate OMHClient:self didUploadDataPoint:blockDataPoint];
+                }
             }
         }
     }];

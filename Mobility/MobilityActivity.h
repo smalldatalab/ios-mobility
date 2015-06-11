@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <CoreMotion/CoreMotion.h>
+#import "MobilityDataPointEntity.h"
 
 typedef NSDictionary MobilityActivityDictionary;
 
@@ -22,19 +23,15 @@ typedef enum {
 } MobilityActivityType;
 
 
-@interface MobilityActivity : NSManagedObject
+@interface MobilityActivity : MobilityDataPointEntity
 
 @property (nonatomic) int16_t confidence;
-@property (nonatomic, strong) NSDate * timestamp;
-@property (nonatomic, strong) NSString * uuid;
-@property (nonatomic, strong) NSString * userEmail;
 @property (nonatomic) BOOL stationary;
 @property (nonatomic) BOOL walking;
 @property (nonatomic) BOOL running;
 @property (nonatomic) BOOL automotive;
 @property (nonatomic) BOOL cycling;
 @property (nonatomic) BOOL unknown;
-@property (nonatomic) BOOL submitted;
 
 @property (nonatomic, readonly) NSArray *activitiesArray;
 @property (nonatomic, readonly) NSString *debugActivityString;
