@@ -65,7 +65,10 @@
     MobilityActivity *activity = self.fetchedResultsController.fetchedObjects[indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"%@ (confidence: %@)", activity.debugActivityString, activity.confidenceString];
     cell.detailTextLabel.text = [activity.timestamp formattedDate];
+    
+//    cell.detailTextLabel.text = [NSString stringWithFormat:@"%f", activity.timestamp.timeIntervalSince1970];
     cell.accessoryType = activity.uploaded ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

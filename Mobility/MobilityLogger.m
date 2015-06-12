@@ -230,10 +230,9 @@
 
 - (BOOL)shouldUpload
 {
-    return YES; //TODO: remove
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
-    if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return NO;
-    else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
+    if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
+    else if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return YES;
     else if (self.lastUploadDate == nil) return YES;
     else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > kDataUploadInterval);
 }
@@ -246,51 +245,18 @@
     [self.uploadBatchTimer invalidate];
     self.uploadBatchTimer = nil;
     
-//    int batchSize = kDataUploadMaxBatchSize / 3;
-    
     NSArray *pendingDataPointEntities = [self.model oldestPendingDataPointEntitiesWithLimit:kDataUploadMaxBatchSize];
-    
-//    NSArray *pendingActivities = [self.model oldestPendingActivitiesWithLimit:batchSize];
-//    NSArray *pendingLocations = [self.model oldestPendingLocationsWithLimit:batchSize];
-//    NSArray *pendingPedometerData = [self.model oldestPendingPedometerDataWithLimit:batchSize];
-//    NSLog(@"uploading data A=%d, L=%d, P=%d", (int)pendingActivities.count, (int)pendingLocations.count, (int)pendingPedometerData.count);
     NSLog(@"uploading data points: %@", [@(pendingDataPointEntities.count) stringValue]);
     
     for (MobilityDataPointEntity *entity in pendingDataPointEntities) {
         MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithEntity:entity];
         [client submitDataPoint:dataPoint];
+        entity.submitted = YES;
     }
     
-    
-//    for (MobilityActivity *activity in pendingActivities) {
-////        NSLog(@"submitting activity with timestamp: %@", activity.timestamp);
-//        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithActivity:activity];
-//        [[OMHClient sharedClient] submitDataPoint:dataPoint];
-//        activity.submitted = YES;
-//    }
-//    
-//    for (MobilityLocation *location in pendingLocations) {
-////        NSLog(@"submitting location with timestamp: %@", location.timestamp);
-//        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithLocation:location];
-//        [[OMHClient sharedClient] submitDataPoint:dataPoint];
-//        location.submitted = YES;
-//    }
-//    
-//    for (MobilityPedometerData *pd in pendingPedometerData) {
-//        MobilityDataPoint *dataPoint = [MobilityDataPoint dataPointWithPedometerData:pd];
-//        [[OMHClient sharedClient] submitDataPoint:dataPoint];
-//        pd.submitted = YES;
-//    }
-    
-//    NSLog(@"done uploading");
-    
-//    [self.model logMessage:[NSString stringWithFormat:@"uploading A=%d, L=%d, P=%d, q=%d", (int)pendingActivities.count, (int)pendingLocations.count, (int)pendingPedometerData.count, self.activityManager.isQueryingActivities]];
     [self.model logMessage:[NSString stringWithFormat:@"uploading data points: %d, q=%d", (int)pendingDataPointEntities.count, self.activityManager.isQueryingActivities]];
     
     if (pendingDataPointEntities.count == kDataUploadMaxBatchSize
-//    if (pendingActivities.count == batchSize
-//        || pendingLocations.count == batchSize
-//        || pendingPedometerData.count == batchSize
         || self.activityManager.isQueryingActivities
         || self.pedometerManager.isQueryingPedometer) {
         NSLog(@"starting timer for next batch");

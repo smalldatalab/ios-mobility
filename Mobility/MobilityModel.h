@@ -29,7 +29,7 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 
 - (void)logMessage:(NSString *)message;
 
-//- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc;
+- (MobilityActivity *)uniqueActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc;
 - (MobilityActivity *)insertActivityWithMotionActivity:(CMMotionActivity *)motionActivity moc:(NSManagedObjectContext *)moc;
 - (MobilityLocation *)uniqueLocationWithCLLocation:(CLLocation *)clLocation moc:(NSManagedObjectContext *)moc;
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
@@ -41,9 +41,6 @@ static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelU
 - (void)markUploadCompleteForDataPointWithUUID:(NSString *)uuid;
 - (NSArray *)activitiesSinceDate:(NSDate *)startDate moc:(NSManagedObjectContext *)moc;
 - (NSArray *)oldestPendingDataPointEntitiesWithLimit:(NSInteger)fetchLimit;
-- (NSArray *)oldestPendingActivitiesWithLimit:(NSInteger)fetchLimit;
-- (NSArray *)oldestPendingLocationsWithLimit:(NSInteger)fetchLimit;
-- (NSArray *)oldestPendingPedometerDataWithLimit:(NSInteger)fetchLimit;
 - (NSFetchedResultsController *)fetchedActivitesController;
 - (NSFetchedResultsController *)fetchedLocationsController;
 - (NSFetchedResultsController *)fetchedPedometerDataController;

@@ -33,8 +33,6 @@
         self.fetchedResultsController.delegate = self;
     }
     
-//    [self.tableView reloadData];
-    
     [self reloadData];
 }
 
@@ -50,6 +48,7 @@
     DebugLogEntry *logEntry = self.fetchedResultsController.fetchedObjects[indexPath.row];
     cell.textLabel.text = logEntry.text;
     cell.detailTextLabel.text = [logEntry.timestamp formattedDate];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

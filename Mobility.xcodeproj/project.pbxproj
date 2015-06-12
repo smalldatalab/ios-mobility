@@ -640,6 +640,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 					"LOG_TABLE=1",
+					"OMHDEBUG=1",
 				);
 				INFOPLIST_FILE = "Mobility/Mobility-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

@@ -50,6 +50,7 @@
     cell.textLabel.text = [NSString stringWithFormat:@"%@ steps", dp.stepCount];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@", [dp.startDate formattedDate], [dp.endDate formattedDate]];
     cell.accessoryType = dp.uploaded ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

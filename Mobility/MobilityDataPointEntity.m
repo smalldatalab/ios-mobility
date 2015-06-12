@@ -17,6 +17,8 @@
 @dynamic uuid;
 @dynamic uploaded;
 
+@dynamic jsonDictionary;
+
 
 - (void)awakeFromInsert
 {

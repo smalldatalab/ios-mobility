@@ -157,22 +157,26 @@
              if (error) {
                  NSLog(@"activity fetch error: %@", error);
              }
-             else {
+             else if (activities.count > 0 ) {
                  
+                 NSSet *existingTimestamps = [self timestampsSinceDate:self.lastQueriedActivityDate];
                  for (CMMotionActivity *activity in activities) {
-                     //                     [weakSelf logActivity:activity];
                      
-                     [self.model insertActivityWithMotionActivity:activity moc:self.managedObjectContext];
-                 }
-                 if (activities.count > 0 ){
-                     [self removeDuplicateActivities];
-                     CMMotionActivity *lastQueriedActivity = activities.lastObject;
-                     self.lastQueriedActivityDate = lastQueriedActivity.startDate;
-                     
-                     if ([self motionActivityHasKnownActivity:lastQueriedActivity]) {
-                         [self updateLastKnowActivityWithActivity:lastQueriedActivity];
+                     if (![existingTimestamps containsObject:activity.startDate]) {
+                         [self.model insertActivityWithMotionActivity:activity moc:self.managedObjectContext];
+                     }
+                     else {
+                         NSLog(@"ignoring activity with existing timestamp: %@", activity.startDate);
                      }
                  }
+                 
+                 CMMotionActivity *lastQueriedActivity = activities.lastObject;
+                 self.lastQueriedActivityDate = lastQueriedActivity.startDate;
+                 
+                 if ([self motionActivityHasKnownActivity:lastQueriedActivity]) {
+                     [self updateLastKnowActivityWithActivity:lastQueriedActivity];
+                 }
+                     
              }
              self.isQueryingActivities = NO;
              [self save];
@@ -182,23 +186,14 @@
      }];
 }
 
-- (void)removeDuplicateActivities
+- (NSSet *)timestampsSinceDate:(NSDate *)date
 {
-    NSArray *activities = [self.model activitiesSinceDate:self.lastQueriedActivityDate moc:self.managedObjectContext];
-    NSLog(@"remove duplicate activites, inRange count: %@", [@(activities.count) stringValue]);
-    
+    NSArray *activities = [self.model activitiesSinceDate:date moc:self.managedObjectContext];
     NSMutableSet *timestamps = [NSMutableSet set];
-//    NSMutableArray *duplicates = [NSMutableArray array];
     for (MobilityActivity *activity in activities) {
-        if ([timestamps containsObject:activity.timestamp]) {
-            NSLog(@"deleting duplicate activity for date: %@", activity.timestamp);
-            [self.managedObjectContext deleteObject:activity];
-        }
-        else {
-            [timestamps addObject:activity.timestamp];
-        }
+        [timestamps addObject:activity.timestamp];
     }
-    
+    return timestamps;
 }
 
 - (void)getCurrentActivityWithCompletionBlock:(void (^)(CMMotionActivity *))completionBlock
@@ -239,7 +234,7 @@
     
     __block CMMotionActivity *blockActivity = cmActivity;
     [self.managedObjectContext performBlock:^{
-        [self.model insertActivityWithMotionActivity:blockActivity moc:self.managedObjectContext];
+        [self.model uniqueActivityWithMotionActivity:blockActivity moc:self.managedObjectContext];
         [self save];
     }];
     

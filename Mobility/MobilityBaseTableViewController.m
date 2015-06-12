@@ -163,6 +163,10 @@
        atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
       newIndexPath:(NSIndexPath *)newIndexPath
 {
+    if (type == NSFetchedResultsChangeUpdate) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+    
     if (!self.shouldAnimateTableUpdates) return;
     
     if (type == NSFetchedResultsChangeInsert) {
@@ -173,9 +177,6 @@
         NSLog(@"%s deleting row. indexPath: %@, newIndexPath: %@", __PRETTY_FUNCTION__, [@(indexPath.row) stringValue], [@(newIndexPath.row) stringValue]);
         [self.tableView deleteRowsAtIndexPaths:@[indexPath]
                               withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    else if (type == NSFetchedResultsChangeUpdate) {
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
