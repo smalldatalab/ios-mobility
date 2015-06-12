@@ -106,11 +106,11 @@
     
     [OMHClient sharedClient].signInDelegate = self;
     
-#ifdef DEBUG
-    self.userTextField.text = @"google:116987092988748961637";
-    self.passwordTextField.text = @"testUserPassword";
-    [self setSignInButtonEnabled:YES];
-#endif
+//#ifdef DEBUG
+//    self.userTextField.text = @"google:116987092988748961637";
+//    self.passwordTextField.text = @"testUserPassword";
+//    [self setSignInButtonEnabled:YES];
+//#endif
 }
 
 - (void)signInButtonPressed:(id)sender
