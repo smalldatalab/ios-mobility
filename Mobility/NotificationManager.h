@@ -21,7 +21,7 @@ extern NSString * const kNotificationCategoryIdentifierSettings;
 //+ (void)presentNotification:(NSString *)message;
 + (void)presentSettingsNotification;
 + (void)scheduleResumeNotificationWithFireDate:(NSDate *)fireDate;
-+ (void)handleNotification:(UILocalNotification *)notification;
+//+ (void)handleNotification:(UILocalNotification *)notification;
 
 + (instancetype)sharedManager;
 - (void)presentSettingsAlert;

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UITextField *userTextField;
 @property (nonatomic, strong) UITextField *passwordTextField;
 @property (nonatomic, strong) UIButton *signInButton;
+@property (nonatomic, weak) UIButton *googleSignInButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) UILabel *signInFailureLabel;
 
@@ -106,6 +107,8 @@
     
     [OMHClient sharedClient].signInDelegate = self;
     
+    [self setupGoogleSignInButton];
+    
 //#ifdef DEBUG
 //    self.userTextField.text = @"google:116987092988748961637";
 //    self.passwordTextField.text = @"testUserPassword";
@@ -113,10 +116,30 @@
 //#endif
 }
 
+- (void)setupGoogleSignInButton
+{
+    if (self.googleSignInButton) {
+        [self.googleSignInButton removeFromSuperview];
+        self.googleSignInButton = nil;
+    }
+    
+    UIButton *googleButton = [OMHClient googleSignInButton];
+    [googleButton addTarget:self action:@selector(signInButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:googleButton];
+    [self.view constrainChildToDefaultHorizontalInsets:googleButton];
+    [googleButton constrainToBottomInParentWithMargin:80];
+    
+    [OMHClient sharedClient].signInDelegate = self;
+    self.googleSignInButton = googleButton;
+}
+
 - (void)signInButtonPressed:(id)sender
 {
-    [[OMHClient sharedClient] signInWithUsername:self.userTextField.text
-                                        password:self.passwordTextField.text];
+    if ([sender isEqual:self.signInButton]) {
+        [[OMHClient sharedClient] signInWithUsername:self.userTextField.text
+                                            password:self.passwordTextField.text];
+    }
     
     if (self.signInFailureLabel != nil) {
         [self.signInFailureLabel removeFromSuperview];
@@ -124,6 +147,7 @@
     }
     
     [self setSignInButtonEnabled:NO];
+    self.googleSignInButton.enabled = NO;
     
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     [self.view addSubview:indicator];
@@ -161,13 +185,15 @@
 
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
 {
-    [self.activityIndicator stopAnimating];
-    [self.activityIndicator removeFromSuperview];
-    
-    [self setSignInButtonEnabled:YES];
-    
     if (error != nil) {
         NSLog(@"OMHClientLoginFinishedWithError: %@", error);
+        
+        [self.activityIndicator stopAnimating];
+        [self.activityIndicator removeFromSuperview];
+        
+        [self setSignInButtonEnabled:(self.userTextField.text.length > 0 && self.passwordTextField.text.length > 0)];
+        self.googleSignInButton.enabled = YES;
+        
         [self presentSignInFailureMessage];
         return;
     }
@@ -181,6 +207,19 @@
     }
     else {
         [(AppDelegate *)[UIApplication sharedApplication].delegate userDidLogin];
+    }
+}
+
+- (void)OMHClientSignInCancelled:(OMHClient *)client
+{
+    [self.activityIndicator stopAnimating];
+    [self.activityIndicator removeFromSuperview];
+    
+    [self setSignInButtonEnabled:YES];
+    self.googleSignInButton.enabled = YES;
+    
+    if (self.presentedViewController != nil) {
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

@@ -36,7 +36,10 @@
 {
     [Fabric with:@[CrashlyticsKit]];
     
-    [OMHClient setupClientWithClientID:kMobilityDSUClientID clientSecret:kMobilityDSUClientSecret];
+    [OMHClient setupClientWithAppGoogleClientID:[AppConstants mobilityGoogleClientID]
+                           serverGoogleClientID:kOMHServerGoogleClientID
+                                 appDSUClientID:kMobilityDSUClientID
+                             appDSUClientSecret:kMobilityDSUClientSecret];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
@@ -101,6 +104,16 @@
         _tabBarController = tbc;
     }
     return _tabBarController;
+}
+
+- (BOOL)application: (UIApplication *)application
+            openURL: (NSURL *)url
+  sourceApplication: (NSString *)sourceApplication
+         annotation: (id)annotation {
+    NSLog(@"openURL: %@, source: %@, annotation: %@", url, sourceApplication, annotation);
+    return [[OMHClient sharedClient] handleURL:url
+                             sourceApplication:sourceApplication
+                                    annotation:annotation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -13,6 +13,18 @@
 		1E0F7BBD1A49A4BB00D1E347 /* Mobility.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BBB1A49A4BB00D1E347 /* Mobility.xcdatamodeld */; };
 		1E0F7BC61A4A5EAB00D1E347 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */; };
 		1E0F7BC91A4A5F0E00D1E347 /* MobilityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E0F7BC81A4A5F0E00D1E347 /* MobilityModel.m */; };
+		1E1204A31B35F71500E6DE30 /* GoogleOpenSource.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E12049E1B35F71500E6DE30 /* GoogleOpenSource.framework */; };
+		1E1204A41B35F71600E6DE30 /* GooglePlus.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1E12049F1B35F71500E6DE30 /* GooglePlus.bundle */; };
+		1E1204A51B35F71600E6DE30 /* GooglePlus.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204A01B35F71500E6DE30 /* GooglePlus.framework */; };
+		1E1204A61B35F71600E6DE30 /* OMHApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1204A21B35F71500E6DE30 /* OMHApplication.m */; };
+		1E1204A71B35F79400E6DE30 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E3FD1081A3EC596000C7E58 /* CoreMotion.framework */; };
+		1E1204AF1B35F79400E6DE30 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204A81B35F79400E6DE30 /* AddressBook.framework */; };
+		1E1204B01B35F79400E6DE30 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204A91B35F79400E6DE30 /* AssetsLibrary.framework */; };
+		1E1204B11B35F79400E6DE30 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204AA1B35F79400E6DE30 /* CoreGraphics.framework */; };
+		1E1204B21B35F79400E6DE30 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204AB1B35F79400E6DE30 /* CoreText.framework */; };
+		1E1204B31B35F79400E6DE30 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204AC1B35F79400E6DE30 /* MediaPlayer.framework */; };
+		1E1204B41B35F79400E6DE30 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204AD1B35F79400E6DE30 /* Security.framework */; };
+		1E1204B51B35F79400E6DE30 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E1204AE1B35F79400E6DE30 /* SystemConfiguration.framework */; };
 		1E12F6CE1A4555EF00331827 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6CD1A4555EF00331827 /* LoginViewController.m */; };
 		1E12F6D11A45561200331827 /* UIView+AutoLayoutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E12F6D01A45561200331827 /* UIView+AutoLayoutHelpers.m */; };
 		1E1C75F41A42AB2A004AA4EA /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1C75D61A42AB2A004AA4EA /* AFHTTPRequestOperation.m */; };
@@ -80,6 +92,18 @@
 		1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		1E0F7BC71A4A5F0E00D1E347 /* MobilityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobilityModel.h; sourceTree = "<group>"; };
 		1E0F7BC81A4A5F0E00D1E347 /* MobilityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MobilityModel.m; sourceTree = "<group>"; };
+		1E12049E1B35F71500E6DE30 /* GoogleOpenSource.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleOpenSource.framework; sourceTree = "<group>"; };
+		1E12049F1B35F71500E6DE30 /* GooglePlus.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GooglePlus.bundle; sourceTree = "<group>"; };
+		1E1204A01B35F71500E6DE30 /* GooglePlus.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GooglePlus.framework; sourceTree = "<group>"; };
+		1E1204A11B35F71500E6DE30 /* OMHApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OMHApplication.h; sourceTree = "<group>"; };
+		1E1204A21B35F71500E6DE30 /* OMHApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OMHApplication.m; sourceTree = "<group>"; };
+		1E1204A81B35F79400E6DE30 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		1E1204A91B35F79400E6DE30 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		1E1204AA1B35F79400E6DE30 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1E1204AB1B35F79400E6DE30 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		1E1204AC1B35F79400E6DE30 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		1E1204AD1B35F79400E6DE30 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		1E1204AE1B35F79400E6DE30 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		1E12F6CC1A4555EF00331827 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		1E12F6CD1A4555EF00331827 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		1E12F6CF1A45561200331827 /* UIView+AutoLayoutHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+AutoLayoutHelpers.h"; sourceTree = "<group>"; };
@@ -168,7 +192,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E1204AF1B35F79400E6DE30 /* AddressBook.framework in Frameworks */,
+				1E1204B01B35F79400E6DE30 /* AssetsLibrary.framework in Frameworks */,
+				1E1204B11B35F79400E6DE30 /* CoreGraphics.framework in Frameworks */,
+				1E1204B21B35F79400E6DE30 /* CoreText.framework in Frameworks */,
+				1E1204B31B35F79400E6DE30 /* MediaPlayer.framework in Frameworks */,
+				1E1204B41B35F79400E6DE30 /* Security.framework in Frameworks */,
+				1E1204B51B35F79400E6DE30 /* SystemConfiguration.framework in Frameworks */,
+				1E1204A71B35F79400E6DE30 /* CoreMotion.framework in Frameworks */,
 				1E0F7BC61A4A5EAB00D1E347 /* CoreData.framework in Frameworks */,
+				1E1204A51B35F71600E6DE30 /* GooglePlus.framework in Frameworks */,
+				1E1204A31B35F71500E6DE30 /* GoogleOpenSource.framework in Frameworks */,
 				1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */,
 				1E3FD0D81A3EC32F000C7E58 /* UIKit.framework in Frameworks */,
 				1E3FD0D41A3EC32F000C7E58 /* Foundation.framework in Frameworks */,
@@ -212,15 +246,28 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		1E12049D1B35F71500E6DE30 /* GoogleSDK */ = {
+			isa = PBXGroup;
+			children = (
+				1E12049E1B35F71500E6DE30 /* GoogleOpenSource.framework */,
+				1E12049F1B35F71500E6DE30 /* GooglePlus.bundle */,
+				1E1204A01B35F71500E6DE30 /* GooglePlus.framework */,
+			);
+			path = GoogleSDK;
+			sourceTree = "<group>";
+		};
 		1E1C75D21A42AB2A004AA4EA /* OMHClient */ = {
 			isa = PBXGroup;
 			children = (
 				1E1C75D41A42AB2A004AA4EA /* AFNetworking */,
+				1E12049D1B35F71500E6DE30 /* GoogleSDK */,
 				1E1C75EE1A42AB2A004AA4EA /* OMHClient.h */,
 				1E1C75EF1A42AB2A004AA4EA /* OMHClientDSUConnector.h */,
 				1E1C75F01A42AB2A004AA4EA /* OMHClientDSUConnector.m */,
 				1E1C75F11A42AB2A004AA4EA /* OMHDataPoint.h */,
 				1E1C75F21A42AB2A004AA4EA /* OMHDataPoint.m */,
+				1E1204A11B35F71500E6DE30 /* OMHApplication.h */,
+				1E1204A21B35F71500E6DE30 /* OMHApplication.m */,
 			);
 			path = OMHClient;
 			sourceTree = SOURCE_ROOT;
@@ -275,6 +322,13 @@
 		1E3FD0D21A3EC32F000C7E58 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E1204A81B35F79400E6DE30 /* AddressBook.framework */,
+				1E1204A91B35F79400E6DE30 /* AssetsLibrary.framework */,
+				1E1204AA1B35F79400E6DE30 /* CoreGraphics.framework */,
+				1E1204AB1B35F79400E6DE30 /* CoreText.framework */,
+				1E1204AC1B35F79400E6DE30 /* MediaPlayer.framework */,
+				1E1204AD1B35F79400E6DE30 /* Security.framework */,
+				1E1204AE1B35F79400E6DE30 /* SystemConfiguration.framework */,
 				1E575C4F1B15641600E7096A /* Fabric.framework */,
 				1E575C4D1B15641400E7096A /* Crashlytics.framework */,
 				1E0F7BC51A4A5EAB00D1E347 /* CoreData.framework */,
@@ -439,6 +493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E3FD0DE1A3EC330000C7E58 /* InfoPlist.strings in Resources */,
+				1E1204A41B35F71600E6DE30 /* GooglePlus.bundle in Resources */,
 				1E3FD0E61A3EC330000C7E58 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -509,6 +564,7 @@
 				1E4208B81B24979400DFE9FB /* MobilityLocation.m in Sources */,
 				1EA7C67E1A5FFA80009CABAA /* DebugLogEntry.m in Sources */,
 				1E1C75F91A42AB2A004AA4EA /* AFSecurityPolicy.m in Sources */,
+				1E1204A61B35F71600E6DE30 /* OMHApplication.m in Sources */,
 				1E1C75FC1A42AB2A004AA4EA /* AFURLResponseSerialization.m in Sources */,
 				1E1C75F71A42AB2A004AA4EA /* AFNetworkActivityIndicatorManager.m in Sources */,
 			);
@@ -633,6 +689,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
+					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
@@ -658,11 +715,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: CORNELL University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: CORNELL University";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
+					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";
@@ -759,6 +817,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
+					"$(PROJECT_DIR)/OMHClient/GoogleSDK",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mobility/Mobility-Prefix.pch";

@@ -194,11 +194,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/MobilityDataPoint.m"
-            timestampString = "455770775.673855"
+            timestampString = "456522443.501167"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
             landmarkName = "+dataPointWithEntity:"
             landmarkType = "5">
          </BreakpointContent>

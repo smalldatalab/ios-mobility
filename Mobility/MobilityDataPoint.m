@@ -8,9 +8,7 @@
 
 #import "MobilityDataPoint.h"
 #import "OMHDataPoint.h"
-#import "MobilityActivity.h"
-#import "MobilityLocation.h"
-#import "MobilityPedometerData.h"
+#import "MobilityDataPointEntity.h"
 
 @implementation NSMutableDictionary (MobilityDataPoint)
 
@@ -41,8 +39,9 @@
 {
     static OMHAcquisitionProvenance *sProvenance = nil;
     if (!sProvenance) {
+        NSString *version = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
         sProvenance = [[OMHAcquisitionProvenance alloc] init];
-        sProvenance.sourceName = @"Mobility-iOS-1.0";
+        sProvenance.sourceName = [NSString stringWithFormat:@"Mobility-iOS-%@", version];
         sProvenance.modality = OMHAcquisitionProvenanceModalitySensed;
     }
     return sProvenance;
