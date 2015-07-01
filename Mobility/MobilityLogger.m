@@ -16,6 +16,8 @@
 
 #import "NotificationManager.h"
 
+#import <Crashlytics/Crashlytics.h>
+
 @import CoreLocation;
 @import CoreMotion;
 
@@ -133,7 +135,12 @@
 
 - (void)startLogging
 {
-    if (![OMHClient sharedClient].isSignedIn) return;
+    if (![OMHClient sharedClient].isSignedIn || !self.model.hasUser) {
+        [self.model logMessage:@"START LOGGING W/O USER!"];
+        CLSLog(@"attempt to start logging without user. client.isSignedIn: %d, model.hasUser: %d",
+               [OMHClient sharedClient].isSignedIn, self.model.hasUser);
+        return;
+    }
     
     if (![NotificationManager hasNotificationPermissions]) {
         [NotificationManager requestNotificationPermissions];
@@ -166,7 +173,7 @@
 
 - (void)enteredForeground
 {
-    if (![OMHClient sharedClient].isSignedIn) return;
+    if (![OMHClient sharedClient].isSignedIn || !self.model.hasUser) return;
     [self.activityManager startLogging];
 }
 
