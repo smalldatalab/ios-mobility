@@ -109,6 +109,10 @@
     
     [self setupGoogleSignInButton];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundTapped:)];
+    tap.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tap];
+    
 //#ifdef DEBUG
 //    self.userTextField.text = @"google:116987092988748961637";
 //    self.passwordTextField.text = @"testUserPassword";
@@ -181,6 +185,11 @@
     self.signInButton.alpha = enabled ? 1.0 : 0.65;
 }
 
+- (void)backgroundTapped:(id)sender
+{
+    [self.view endEditing:YES];
+}
+
 #pragma mark - OMHSignInDelegate
 
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
@@ -243,6 +252,12 @@
     }
     [self setSignInButtonEnabled:enable];
     
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
     return YES;
 }
 
