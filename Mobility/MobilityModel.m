@@ -11,12 +11,13 @@
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OMHClient.h"
+#import <Crashlytics/Crashlytics.h>
 
 @interface MobilityModel ()
 
 @property(nonatomic, strong) NSURL *persistentStoreURL;
 @property(nonatomic, strong) NSManagedObjectContext *managedObjectContext;
-@property(nonatomic, strong) NSManagedObjectModel *managedObjectModel;
+//@property(nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @property(nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @property (nonatomic, copy) NSString *userEmail;
@@ -49,6 +50,8 @@
 {
     self = [super init];
     if (self) {
+        
+        [self setupCoreDataStack];
         
         // fetch logged-in user
         NSString *userEmail = [self persistentStoreMetadataTextForKey:@"userEmail"];
@@ -95,6 +98,42 @@
     return self.userEmail != nil;
 }
 
+- (void)setupCoreDataStack
+{
+    NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:[NSBundle allBundles]];
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model];
+    
+    NSURL *url = self.persistentStoreURL;
+    
+    NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete,
+                              NSMigratePersistentStoresAutomaticallyOption:@YES,
+                              NSInferMappingModelAutomaticallyOption : @YES};
+    NSError *error = nil;
+    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:options error:&error];
+    if (!store)
+    {
+        CLSLog(@"Error adding persistent store. Error %@",error);
+        
+        NSError *deleteError = nil;
+        if ([[NSFileManager defaultManager] removeItemAtURL:url error:&deleteError])
+        {
+            error = nil;
+            store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
+        }
+        
+        if (!store)
+        {
+            // Also inform the user...
+            CLSLog(@"Failed to create persistent store. Error %@. Delete error %@",error,deleteError);
+            abort();
+        }
+    }
+    
+    self.persistentStoreCoordinator = psc;
+    self.managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    self.managedObjectContext.persistentStoreCoordinator = psc;
+}
+
 
 #pragma mark - Property Accessors (Core Data)
 
@@ -112,53 +151,53 @@
     return _persistentStoreURL;
 }
 
-/**
- *  managedObjectContext
- */
-- (NSManagedObjectContext *)managedObjectContext {
-    if (_managedObjectContext == nil) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
-        [_managedObjectContext setUndoManager:nil];
-        [_managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
-    }
-    
-    return _managedObjectContext;
-}
-
-/**
- *  managedObjectModel
- */
-- (NSManagedObjectModel *)managedObjectModel {
-    if (_managedObjectModel == nil) {
-        _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
-    }
-    
-    return _managedObjectModel;
-}
-
-/**
- *  persistentStoreCoordinator
- */
-- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    if (_persistentStoreCoordinator == nil) {
-        NSError *error = nil;
-        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
-            // Replace this implementation with code to handle the error appropriately.
-            NSLog(@"Error opening persistent store, deleting persistent store\n%@\n%@", error, [error userInfo]);
-            [self deletePersistentStore];
-            [[OMHClient sharedClient] signOut];
-            _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-            if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
-                NSLog(@"Error opening persistent store after reset. abort.");
-                abort();
-            }
-            
-        }
-    }
-    
-    return _persistentStoreCoordinator;
-}
+///**
+// *  managedObjectContext
+// */
+//- (NSManagedObjectContext *)managedObjectContext {
+//    if (_managedObjectContext == nil) {
+//        _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+//        [_managedObjectContext setUndoManager:nil];
+//        [_managedObjectContext setPersistentStoreCoordinator:self.persistentStoreCoordinator];
+//    }
+//    
+//    return _managedObjectContext;
+//}
+//
+///**
+// *  managedObjectModel
+// */
+//- (NSManagedObjectModel *)managedObjectModel {
+//    if (_managedObjectModel == nil) {
+//        _managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+//    }
+//    
+//    return _managedObjectModel;
+//}
+//
+///**
+// *  persistentStoreCoordinator
+// */
+//- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+//    if (_persistentStoreCoordinator == nil) {
+//        NSError *error = nil;
+//        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+//        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
+//            // Replace this implementation with code to handle the error appropriately.
+//            CLSLog(@"Error opening persistent store, deleting. %@", [error debugDescription]);
+//            [self deletePersistentStore];
+////            [[OMHClient sharedClient] signOut];
+//            _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+//            if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:nil error:&error]) {
+//                CLSLog(@"Error opening persistent store after reset. abort. %@", [error debugDescription]);
+//                abort();
+//            }
+//            
+//        }
+//    }
+//    
+//    return _persistentStoreCoordinator;
+//}
 
 - (NSString *)persistentStoreMetadataTextForKey:(NSString *)key
 {
@@ -431,18 +470,18 @@
 /**
  *  deletePersistentStore
  */
-- (void)deletePersistentStore
-{
-    NSLog(@"Deleting persistent store.");
-    self.managedObjectContext = nil;
-    self.managedObjectModel = nil;
-    self.persistentStoreCoordinator = nil;
-    
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
-    
-    self.persistentStoreURL = nil;
-}
+//- (void)deletePersistentStore
+//{
+//    NSLog(@"Deleting persistent store.");
+//    self.managedObjectContext = nil;
+////    self.managedObjectModel = nil;
+//    self.persistentStoreCoordinator = nil;
+//    
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    [fileManager removeItemAtURL:self.persistentStoreURL error:nil];
+//    
+//    self.persistentStoreURL = nil;
+//}
 
 - (NSManagedObjectContext *)newChildMOC
 {

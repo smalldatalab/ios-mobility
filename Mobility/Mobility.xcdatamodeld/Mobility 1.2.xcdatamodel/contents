@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7549" systemVersion="14D136" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="DebugLogEntry" representedClassName="DebugLogEntry" syncable="YES">
+        <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="MobilityActivity" representedClassName="MobilityActivity" parentEntity="MobilityDataPointEntity" syncable="YES">
+        <attribute name="automotive" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="confidence" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="cycling" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="running" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="stationary" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="unknown" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="walking" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="MobilityDataPointEntity" representedClassName="MobilityDataPointEntity" isAbstract="YES" syncable="YES">
+        <attribute name="submitted" attributeType="Boolean" defaultValueString="NO" indexed="YES" syncable="YES"/>
+        <attribute name="timestamp" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="userEmail" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="uuid" attributeType="String" indexed="YES" syncable="YES"/>
+    </entity>
+    <entity name="MobilityLocation" representedClassName="MobilityLocation" parentEntity="MobilityDataPointEntity" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="bearing" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="horizontalAccuracy" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="verticalAccuracy" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="MobilityPedometerData" representedClassName="MobilityPedometerData" parentEntity="MobilityDataPointEntity" syncable="YES">
+        <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="floorsAscended" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="floorsDescended" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="stepCount" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="DebugLogEntry" positionX="-54" positionY="90" width="128" height="75"/>
+        <element name="MobilityActivity" positionX="-54" positionY="45" width="128" height="150"/>
+        <element name="MobilityLocation" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="MobilityPedometerData" positionX="-54" positionY="99" width="128" height="135"/>
+        <element name="MobilityDataPointEntity" positionX="-54" positionY="99" width="128" height="120"/>
+    </elements>
+</model>

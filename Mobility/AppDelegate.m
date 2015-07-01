@@ -47,6 +47,7 @@
         self.window.rootViewController = self.loginViewController;
     }
     else {
+        [CrashlyticsKit setUserName:[OMHClient signedInUsername]];
         self.window.rootViewController = self.tabBarController;
         [[MobilityLogger sharedLogger] startLogging];
     }
@@ -70,6 +71,8 @@
         self.window.rootViewController = newRoot;
         self.loginViewController = nil;
     }];
+    
+    [CrashlyticsKit setUserName:[OMHClient signedInUsername]];
 }
 
 - (LoginViewController *)loginViewController
