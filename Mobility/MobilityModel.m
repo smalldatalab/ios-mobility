@@ -12,6 +12,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OMHClient.h"
 #import <Crashlytics/Crashlytics.h>
+#import "NotificationManager.h"
 
 @interface MobilityModel ()
 
@@ -90,7 +91,7 @@
 {
     _userEmail = [userEmail copy];
     [self setPersistentStoreMetadataText:userEmail forKey:@"userEmail"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kMobilityModelUserChangedNotification object:self];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:kMobilityModelUserChangedNotification object:self];
 }
 
 - (BOOL)hasUser
@@ -113,6 +114,14 @@
     if (!store)
     {
         CLSLog(@"Error adding persistent store. Error %@",error);
+        if (error.code == 256) {
+            // device locked:
+            // http://stackoverflow.com/questions/12845790/how-to-debug-handle-intermittent-authorization-denied-and-disk-i-o-errors-wh
+            if ([OMHClient sharedClient].isSignedIn) {
+                [NotificationManager scheduleResumeNotificationWithFireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+            }
+            abort();
+        }
         
         NSError *deleteError = nil;
         if ([[NSFileManager defaultManager] removeItemAtURL:url error:&deleteError])

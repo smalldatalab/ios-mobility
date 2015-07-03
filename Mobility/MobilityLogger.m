@@ -238,7 +238,8 @@
 - (BOOL)shouldUpload
 {
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
-    if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
+    if (![OMHClient sharedClient].isReachable || !self.model.hasUser) return NO;
+    else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
     else if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return YES;
     else if (self.lastUploadDate == nil) return YES;
     else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > kDataUploadInterval);

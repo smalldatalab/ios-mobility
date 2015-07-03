@@ -7,6 +7,7 @@
 //
 
 #import "MobilityBaseTableViewController.h"
+#import "AppDelegate.h"
 
 @interface MobilityBaseTableViewController ()
 
@@ -77,14 +78,14 @@
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userChanged) name:kMobilityModelUserChangedNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userChanged) name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)unregisterForNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMobilityModelUserChangedNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kMobilityModelUserChangedNotification object:nil];
 }
 
 - (void)enteredForeground
@@ -130,7 +131,8 @@
     [[MobilityLogger sharedLogger] stopLogging];
     [[OMHClient sharedClient] signOut];
     [[MobilityModel sharedModel] setUserEmail:nil];
-    [self presentViewController:[[LoginViewController alloc] init] animated:YES completion:nil];
+    
+    [(AppDelegate *)[UIApplication sharedApplication].delegate userDidLogout];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -12,7 +12,7 @@
 #import "MobilityPedometerData.h"
 #import "DebugLogEntry.h"
 
-static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelUserChanged";
+//static NSString * const kMobilityModelUserChangedNotification = @"MobilityModelUserChanged";
 
 @class CLLocation;
 @class CMMotionActivity;

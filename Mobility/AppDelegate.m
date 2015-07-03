@@ -23,7 +23,7 @@
 #import <Crashlytics/Crashlytics.h>
 
 
-@interface AppDelegate ()
+@interface AppDelegate () <OMHSignInDelegate>
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
 @property (nonatomic, strong) UITabBarController *tabBarController;
@@ -49,6 +49,7 @@
     else {
         [CrashlyticsKit setUserName:[OMHClient signedInUsername]];
         self.window.rootViewController = self.tabBarController;
+        [OMHClient sharedClient].signInDelegate = self;
         [[MobilityLogger sharedLogger] startLogging];
     }
     
@@ -73,6 +74,22 @@
     }];
     
     [CrashlyticsKit setUserName:[OMHClient signedInUsername]];
+}
+
+
+- (void)userDidLogout
+{
+    LoginViewController *newRoot = self.loginViewController;
+    
+    UIView *fromView = self.tabBarController.view;
+    
+    [UIView transitionFromView:fromView toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
+        NSLog(@"finished:  %d", finished);
+        self.window.rootViewController = newRoot;
+        self.tabBarController = nil;
+    }];
+    
+    [CrashlyticsKit setUserName:nil];
 }
 
 - (LoginViewController *)loginViewController
@@ -154,6 +171,22 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [[MobilityModel sharedModel] logMessage:@"APP WILL TERMINATE"];
 }
+
+
+
+
+#pragma mark - OMHSignInDelegate
+
+- (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
+{
+    if (error != nil) {
+        [self userDidLogout];
+    }
+}
+
+- (void)OMHClientSignInCancelled:(OMHClient *)client {}
+- (void)presentViewController:(UIViewController *)viewControllerToPresent animated:(BOOL)flag completion:(void (^)(void))completion {}
+- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {}
 
 
 #pragma mark - iOS 8 Notification Handling
