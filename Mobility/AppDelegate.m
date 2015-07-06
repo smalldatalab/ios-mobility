@@ -37,7 +37,6 @@
     [Fabric with:@[CrashlyticsKit]];
     
     [OMHClient setupClientWithAppGoogleClientID:[AppConstants mobilityGoogleClientID]
-                           serverGoogleClientID:kOMHServerGoogleClientID
                                  appDSUClientID:kMobilityDSUClientID
                              appDSUClientSecret:kMobilityDSUClientSecret];
     
