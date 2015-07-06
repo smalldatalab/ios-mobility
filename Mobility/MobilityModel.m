@@ -118,9 +118,9 @@
             // device locked:
             // http://stackoverflow.com/questions/12845790/how-to-debug-handle-intermittent-authorization-denied-and-disk-i-o-errors-wh
             if ([OMHClient sharedClient].isSignedIn) {
-                [NotificationManager scheduleResumeNotificationWithFireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+                [NotificationManager presentAuthenticationNotification];
             }
-            abort();
+            exit(EXIT_FAILURE);
         }
         
         NSError *deleteError = nil;

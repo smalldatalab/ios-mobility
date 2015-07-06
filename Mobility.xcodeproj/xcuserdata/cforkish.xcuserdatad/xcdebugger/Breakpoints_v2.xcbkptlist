@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/MobilityBaseTableViewController.m"
-            timestampString = "455769218.864452"
+            timestampString = "457661210.898425"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203">
+            startingLineNumber = "202"
+            endingLineNumber = "202">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -98,11 +98,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/NotificationManager.m"
-            timestampString = "454236719.591081"
+            timestampString = "457841554.04975"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
             landmarkName = "+presentSettingsNotification"
             landmarkType = "5">
          </BreakpointContent>
@@ -114,11 +114,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Mobility/NotificationManager.m"
-            timestampString = "454236921.734139"
+            timestampString = "457841973.528682"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
             landmarkName = "-presentSettingsAlert"
             landmarkType = "5">
          </BreakpointContent>
@@ -232,6 +232,22 @@
             startingLineNumber = "56"
             endingLineNumber = "56"
             landmarkName = "-initPrivate"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Mobility/NotificationManager.m"
+            timestampString = "457841973.528682"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
+            landmarkName = "+hasNotificationPermissions"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

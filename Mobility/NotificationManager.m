@@ -14,11 +14,17 @@ static NSString * const kHasRequestedNotificationPermissionKey =
 NSString * const kNotificationActionIdentifierResume =
 @"NOTIFICATION_ACTION_IDENTIFIER_RESUME";
 
+NSString * const kNotificationActionIdentifierResumeAuthenticated =
+@"NOTIFICATION_ACTION_IDENTIFIER_RESUME_AUTHENTICATED";
+
 NSString * const kNotificationActionIdentifierSettings =
 @"NOTIFICATION_ACTION_IDENTIFIER_SETTINGS";
 
 NSString * const kNotificationCategoryIdentifierResume =
 @"NOTIFICATION_CATEGORY_IDENTIFIER_RESUME";
+
+NSString * const kNotificationCategoryIdentifierResumeAuthenticated =
+@"NOTIFICATION_CATEGORY_IDENTIFIER_RESUME_AUTHENTICATED";
 
 NSString * const kNotificationCategoryIdentifierSettings =
 @"NOTIFICATION_CATEGORY_IDENTIFIER_SETTINGS";
@@ -27,7 +33,11 @@ NSString * const kNotificationCategoryIdentifierSettings =
 static NSString * const kSettingsAlertTitle = @"Enable Location";
 static NSString * const kSettingsAlertBody = @"To continue tracking in the background, please allow location access for Mobility in your settings.";
 static NSString * const kResumeAlertBody = @"Stopped tracking. Tap to resume";
+static NSString * const kResumeAuthenticaedAlertBody = @"Please unlock your device to resume tracking.";
 static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7 days. Please launch Mobility to avoid losing activity data.";
+
+static NSString * const kNotificationsVersionKey = @"NOTIFICATIONS_VERSION";
+static NSInteger const kNotificationsVersion = 2;
 
 @interface NotificationManager() <UIAlertViewDelegate>
 
@@ -76,6 +86,16 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     UILocalNotification *notification = [self notificationWithBody:kSettingsAlertBody
                                                           fireDate:nil
                                                           category:kNotificationCategoryIdentifierSettings];
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+}
+
++ (void)presentAuthenticationNotification
+{
+    [self cancelNotificationsWithBody:kResumeAuthenticaedAlertBody];
+    
+    UILocalNotification *notification = [self notificationWithBody:kResumeAuthenticaedAlertBody
+                                                          fireDate:nil
+                                                          category:kNotificationCategoryIdentifierResumeAuthenticated];
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
@@ -156,16 +176,20 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     NSString *title;
     NSString *message;
     BOOL hasRequested = [[NSUserDefaults standardUserDefaults] boolForKey:kHasRequestedNotificationPermissionKey];
+    NSInteger version = [[NSUserDefaults standardUserDefaults] integerForKey:kNotificationsVersionKey];
     
     if (!hasRequested) {
         title = @"Notification Permissions";
         message = @"To alert you if data tracking stops, Mobility needs permission to display notifications. Please allow notifications for Mobility.";
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kHasRequestedNotificationPermissionKey];
     }
-    else {
+    else if (version == kNotificationsVersion) {
         title = @"Insufficient Permissions";
         message = @"To alert you if data tracking stops, Mobility needs permission to display notifications. Please enable notifications for Mobility in your device settings.";
         
+    }
+    else {
+        return;
     }
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
@@ -213,6 +237,20 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     return resumeAction;
 }
 
++ (UIUserNotificationAction *)resumeAuthenticatedAction
+{
+    UIMutableUserNotificationAction *resumeAction =
+    [[UIMutableUserNotificationAction alloc] init];
+    
+    resumeAction.identifier = kNotificationActionIdentifierResumeAuthenticated;
+    resumeAction.title = @"Resume";
+    resumeAction.activationMode = UIUserNotificationActivationModeBackground;
+    resumeAction.destructive = NO;
+    resumeAction.authenticationRequired = YES;
+    
+    return resumeAction;
+}
+
 + (UIUserNotificationAction *)settingsAction
 {
     UIMutableUserNotificationAction *settingsAction =
@@ -244,6 +282,23 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
     return resumeCategory;
 }
 
++ (UIUserNotificationCategory *)resumeAuthenticatedCategory
+{
+    UIMutableUserNotificationCategory *resumeCategory =
+    [[UIMutableUserNotificationCategory alloc] init];
+    resumeCategory.identifier = kNotificationCategoryIdentifierResumeAuthenticated;
+    
+    UIUserNotificationAction *resumeAction = [self resumeAuthenticatedAction];
+    
+    [resumeCategory setActions:@[resumeAction]
+                    forContext:UIUserNotificationActionContextDefault];
+    
+    [resumeCategory setActions:@[resumeAction]
+                    forContext:UIUserNotificationActionContextMinimal];
+    
+    return resumeCategory;
+}
+
 + (UIUserNotificationCategory *)settingsCategory
 {
     UIMutableUserNotificationCategory *settingsCategory =
@@ -264,21 +319,25 @@ static NSString * const kSevenDayWarningText = @"Tracking has been stopped for 7
 
 + (BOOL)hasNotificationPermissions
 {
+    NSInteger version = [[NSUserDefaults standardUserDefaults] integerForKey:kNotificationsVersionKey];
+    if (version != kNotificationsVersion) return false;
     UIUserNotificationSettings *settings = [UIApplication sharedApplication].currentUserNotificationSettings;
 //    NSLog(@"settings: %@", settings);
     
-    return ((settings.types & UIUserNotificationTypeAlert) && settings.categories.count > 0);
+    return (settings.types & UIUserNotificationTypeAlert);
 }
 
 + (void)registerNotificationSettings
 {
-    NSSet *categories = [NSSet setWithObjects:[self resumeCategory], [self settingsCategory], nil];
+    NSSet *categories = [NSSet setWithObjects:[self resumeCategory], [self resumeAuthenticatedAction], [self settingsCategory], nil];
     UIUserNotificationType types = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
     
     UIUserNotificationSettings *settings =
     [UIUserNotificationSettings settingsForTypes:types categories:categories];
     
     [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+    
+    [[NSUserDefaults standardUserDefaults] setInteger:kNotificationsVersion forKey:kNotificationsVersionKey];
 }
 
 

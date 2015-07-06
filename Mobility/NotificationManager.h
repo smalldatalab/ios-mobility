@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 
 extern NSString * const kNotificationActionIdentifierResume;
+extern NSString * const kNotificationActionIdentifierResumeAuthenticated;
 extern NSString * const kNotificationActionIdentifierSettings;
 extern NSString * const kNotificationCategoryIdentifierResume;
+extern NSString * const kNotificationCategoryIdentifierResumeAuthenticated;
 extern NSString * const kNotificationCategoryIdentifierSettings;
 
 @interface NotificationManager : NSObject
@@ -19,6 +21,7 @@ extern NSString * const kNotificationCategoryIdentifierSettings;
 + (void)requestNotificationPermissions;
 
 //+ (void)presentNotification:(NSString *)message;
++ (void)presentAuthenticationNotification;
 + (void)presentSettingsNotification;
 + (void)scheduleResumeNotificationWithFireDate:(NSDate *)fireDate;
 //+ (void)handleNotification:(UILocalNotification *)notification;

@@ -197,7 +197,7 @@
 forLocalNotification:(UILocalNotification *)notification completionHandler:(void (^)())completionHandler
 {
     NSLog(@"%s, identifier: %@", __PRETTY_FUNCTION__, identifier);
-    if ([identifier isEqualToString:kNotificationActionIdentifierResume]) {
+    if ([identifier isEqualToString:kNotificationActionIdentifierResumeAuthenticated]) {
         [[MobilityLogger sharedLogger] startLogging];
     }
 //    else if ([identifier isEqualToString:kNotificationActionIdentifierSettings]) {
