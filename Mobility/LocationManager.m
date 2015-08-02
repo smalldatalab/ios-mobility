@@ -117,7 +117,7 @@
 
 - (void)startLocationSample
 {
-    [self.model logMessage:@"starting location sample"];
+//    [self.model logMessage:@"starting location sample"];
     self.bestAccuracy = CLLocationDistanceMax;
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
     [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
@@ -127,7 +127,7 @@
 {
     if (self.locationManager.desiredAccuracy == kCLLocationAccuracyThreeKilometers) return;
     
-    [self.model logMessage:@"ending location sample"];
+//    [self.model logMessage:@"ending location sample"];
     [self.locationManager setDesiredAccuracy:kCLLocationAccuracyThreeKilometers];
     [self.locationManager setDistanceFilter:CLLocationDistanceMax];
 }

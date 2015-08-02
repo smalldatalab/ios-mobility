@@ -168,13 +168,14 @@
 {
     [self.activityManager stopLogging];
     [self archiveDataPoints];
-    [self uploadData];
+//    [self uploadData];
 }
 
 - (void)enteredForeground
 {
     if (![OMHClient sharedClient].isSignedIn || !self.model.hasUser) return;
     [self.activityManager startLogging];
+    [self uploadData];
 }
 
 - (void)startUploadTimer
@@ -227,7 +228,6 @@
 - (void)uploadData
 {
 //    NSLog(@"upload data, should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable);
-    [self.model logMessage:[NSString stringWithFormat:@"should upload: %d, reachable: %d", [self shouldUpload], [OMHClient sharedClient].isReachable]];
     if ([self shouldUpload]) {
         [self.activityManager queryActivities];
         [self.pedometerManager queryPedometer];
@@ -238,11 +238,28 @@
 - (BOOL)shouldUpload
 {
     NSLog(@"should upload, active: %d, pending: %d, interval: %g", ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground), [OMHClient sharedClient].pendingDataPointCount, [[NSDate date] timeIntervalSinceDate:self.lastUploadDate]/60);
-    if (![OMHClient sharedClient].isReachable || !self.model.hasUser) return NO;
-    else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) return NO;
-    else if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) return YES;
-    else if (self.lastUploadDate == nil) return YES;
-    else return ([[NSDate date] timeIntervalSinceDate:self.lastUploadDate] > kDataUploadInterval);
+    if (![OMHClient sharedClient].isReachable || !self.model.hasUser) {
+        [self.model logMessage:[NSString stringWithFormat:@"don't upload. user: %d, reachable: %d", self.model.hasUser, [OMHClient sharedClient].isReachable]];
+        return NO;
+    }
+    else if ([OMHClient sharedClient].pendingDataPointCount >= kDataUploadMaxBatchSize) {
+        [self.model logMessage:[NSString stringWithFormat:@"don't upload. pending data: %d", [OMHClient sharedClient].pendingDataPointCount]];
+        return NO;
+    }
+    else if ([UIApplication sharedApplication].applicationState != UIApplicationStateBackground) {
+        [self.model logMessage:@"do upload. foreground"];
+        return YES;
+    }
+    else if (self.lastUploadDate == nil) {
+        [self.model logMessage:@"do upload. lastDate=nil"];
+        return YES;
+    }
+    else {
+        NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.lastUploadDate];
+        BOOL shouldUpload = interval > kDataUploadInterval;
+        [self.model logMessage:[NSString stringWithFormat:@"should upload: %d, interval: %f", shouldUpload, interval]];
+        return shouldUpload;
+    }
 }
 
 - (void)uploadPendingData
@@ -253,6 +270,8 @@
     [self.uploadBatchTimer invalidate];
     self.uploadBatchTimer = nil;
     
+    BOOL isQuerying = self.activityManager.isQueryingActivities || self.pedometerManager.isQueryingPedometer;
+    
     NSArray *pendingDataPointEntities = [self.model oldestPendingDataPointEntitiesWithLimit:kDataUploadMaxBatchSize];
     NSLog(@"uploading data points: %@", [@(pendingDataPointEntities.count) stringValue]);
     
@@ -262,11 +281,9 @@
         entity.submitted = YES;
     }
     
-    [self.model logMessage:[NSString stringWithFormat:@"uploading data points: %d, q=%d", (int)pendingDataPointEntities.count, self.activityManager.isQueryingActivities]];
+    [self.model logMessage:[NSString stringWithFormat:@"uploading data points: %d, q=%d", (int)pendingDataPointEntities.count, isQuerying]];
     
-    if (pendingDataPointEntities.count == kDataUploadMaxBatchSize
-        || self.activityManager.isQueryingActivities
-        || self.pedometerManager.isQueryingPedometer) {
+    if (pendingDataPointEntities.count == kDataUploadMaxBatchSize || isQuerying) {
         NSLog(@"starting timer for next batch");
         self.uploadBatchTimer = [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(uploadData) userInfo:nil repeats:NO];
     }

@@ -179,7 +179,12 @@
 - (void)OMHClient:(OMHClient *)client signInFinishedWithError:(NSError *)error
 {
     if (error != nil) {
+        [[MobilityModel sharedModel] logMessage:@"SIGN IN ERROR"];
         [self userDidLogout];
+        [NotificationManager presentAuthenticationNotification];
+    }
+    else {
+        [[MobilityModel sharedModel] logMessage:@"sign in success"];
     }
 }
 

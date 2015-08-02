@@ -106,11 +106,11 @@
     
     NSURL *url = self.persistentStoreURL;
     
-    NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionComplete,
+    NSDictionary *options = @{NSPersistentStoreFileProtectionKey: NSFileProtectionCompleteUntilFirstUserAuthentication,
                               NSMigratePersistentStoresAutomaticallyOption:@YES,
                               NSInferMappingModelAutomaticallyOption : @YES};
     NSError *error = nil;
-    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:self.persistentStoreURL options:options error:&error];
+    NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:options error:&error];
     if (!store)
     {
         CLSLog(@"Error adding persistent store. Error %@",error);
