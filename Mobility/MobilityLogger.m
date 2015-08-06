@@ -198,14 +198,14 @@
     NSLog(@"%s, isMainThread: %d", __PRETTY_FUNCTION__, [NSThread isMainThread]);
     [self stopLocationSampleTimer];
     
-    [self.model logMessage:[NSString stringWithFormat:@"starting timer, still: %d", [self motionActivityIsStationary:currentActivity]]];
+//    [self.model logMessage:[NSString stringWithFormat:@"starting timer, still: %d", [self motionActivityIsStationary:currentActivity]]];
     
     NSTimeInterval interval = [self motionActivityIsStationary:currentActivity]
     ? kLocationSamplingIntervalStationary
     : kLocationSamplingIntervalMoving;
     
     self.locationSampleTimer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(locationSampleTimerFired) userInfo:nil repeats:NO];
-    [NotificationManager scheduleResumeNotificationWithFireDate:[[NSDate date] dateByAddingTimeInterval:interval + 30]];
+    [NotificationManager scheduleResumeNotificationWithFireDate:[[NSDate date] dateByAddingTimeInterval:interval * 2]];
 }
 
 - (void)stopLocationSampleTimer
@@ -257,7 +257,7 @@
     else {
         NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:self.lastUploadDate];
         BOOL shouldUpload = interval > kDataUploadInterval;
-        [self.model logMessage:[NSString stringWithFormat:@"should upload: %d, interval: %f", shouldUpload, interval]];
+        [self.model logMessage:[NSString stringWithFormat:@"should upload: %d, interval: %.2f", shouldUpload, interval/kDataUploadInterval]];
         return shouldUpload;
     }
 }

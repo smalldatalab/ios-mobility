@@ -204,6 +204,18 @@
         self.googleSignInButton.enabled = YES;
         
         [self presentSignInFailureMessage];
+        
+#ifdef LOG_TABLE
+        [[MobilityModel sharedModel] logMessage:@"SIGN IN ERROR"];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sign In Error"
+                                                        message:error.debugDescription
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+#endif
+        
+        [client signOut];
         return;
     }
     

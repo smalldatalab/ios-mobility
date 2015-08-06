@@ -8,6 +8,7 @@
 
 #import "MobilityBaseTableViewController.h"
 #import "AppDelegate.h"
+#import "AppConstants.h"
 
 @interface MobilityBaseTableViewController ()
 
@@ -44,6 +45,17 @@
     
     self.navigationItem.leftBarButtonItem = logoutButton;
     
+    // only show visualize button for default DSU URL
+    if ([[OMHClient defaultDSUBaseURL] isEqualToString:[OMHClient DSUBaseURL]]) {
+    
+        UIBarButtonItem *visualizeButton = [[UIBarButtonItem alloc] initWithTitle:@"Visualize"
+                                                                            style:UIBarButtonItemStylePlain
+                                                                           target:self
+                                                                           action:@selector(visualizeButtonPressed)];
+        
+        self.navigationItem.rightBarButtonItem = visualizeButton;
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -67,12 +79,12 @@
     self.isActiveView = NO;
     [self unloadTable];
 }
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [[MobilityModel sharedModel] logMessage:@"Memory Warning"];
-}
+//
+//- (void)didReceiveMemoryWarning
+//{
+//    [super didReceiveMemoryWarning];
+//    [[MobilityModel sharedModel] logMessage:@"Memory Warning"];
+//}
 
 - (void)registerForNotifications
 {
@@ -133,6 +145,12 @@
     [[MobilityModel sharedModel] setUserEmail:nil];
     
     [(AppDelegate *)[UIApplication sharedApplication].delegate userDidLogout];
+}
+
+- (void)visualizeButtonPressed
+{
+    NSURL *url = [NSURL URLWithString:kMobilityVisualizerURL];
+    [[UIApplication sharedApplication] openURL:url];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

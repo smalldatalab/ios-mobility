@@ -16,6 +16,7 @@
 
 - (NSString *)ISO8601String;
 - (NSString *)formattedDate;
+- (NSString *)stringWithFormatTemplate:(NSString *)formatTemplate;
 
 - (NSDate *)dateByAddingMonths:(NSInteger)months;
 - (NSDate *)dateByAddingWeeks:(NSInteger)weeks;

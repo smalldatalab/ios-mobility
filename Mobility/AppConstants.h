@@ -15,6 +15,7 @@
 //extern NSString * const kMobilityGoogleClientID;
 extern NSString * const kMobilityDSUClientID;
 extern NSString * const kMobilityDSUClientSecret;
+extern NSString * const kMobilityVisualizerURL;
 
 /**
  *  kLocationSamplingIntervalStationary

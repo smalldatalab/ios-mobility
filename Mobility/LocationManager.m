@@ -172,7 +172,9 @@
        didFailWithError:(NSError *)error
 {
     NSLog(@"location manager did fail with error: %@", error);
-    [self.model logMessage:[NSString stringWithFormat:@"location failed with error: %ld", (long)error.code]];
+    if (error.code > 0 ) {
+        [self.model logMessage:[NSString stringWithFormat:@"location failed with error: %ld", (long)error.code]];
+    }
     if (error.code == kCLErrorDenied) {
         [NotificationManager presentSettingsNotification];
         [self stopTrackingLocation];

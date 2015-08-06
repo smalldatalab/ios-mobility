@@ -13,6 +13,8 @@
 NSString * const kMobilityDSUClientID = @"org.openmhealth.ios.mobility";
 NSString * const kMobilityDSUClientSecret = @"Rtg43jkLD7z76c";
 
+NSString * const kMobilityVisualizerURL = @"https://ohmage-omh.smalldata.io/mobility-ui/";
+
 int const kLocationSamplingIntervalStationary = 60 * 5;
 int const kLocationSamplingIntervalMoving = 60 * 1;
 int const kDataUploadInterval = 60 * 20;

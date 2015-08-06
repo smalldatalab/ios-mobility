@@ -44,6 +44,12 @@
     [self reloadData];
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [[MobilityModel sharedModel] logMessage:@"Memory Warning"];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (!self.isActivityAvailable) return 1;

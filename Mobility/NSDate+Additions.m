@@ -81,6 +81,16 @@
     return [dateFormatter stringFromDate:self];
 }
 
+- (NSString *)stringWithFormatTemplate:(NSString *)formatTemplate
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:formatTemplate options:0
+                                                              locale:[NSLocale currentLocale]];
+    [dateFormatter setDateFormat:formatString];
+    
+    return [dateFormatter stringFromDate:self];
+}
+
 
 /**
  *  dateByAddingMonths

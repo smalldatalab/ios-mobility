@@ -144,7 +144,7 @@
     
     self.lastQueryDate = [NSDate date];
     
-    [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate formattedDate]]];
+    [self.model logMessage:[NSString stringWithFormat:@"query activities from: %@", [self.lastQueriedActivityDate stringWithFormatTemplate:@"M/d h:m:s"]]];
     self.isQueryingActivities = YES;
     
     [self.motionActivitiyManager queryActivityStartingFromDate:self.lastQueriedActivityDate
@@ -302,6 +302,8 @@
         }
     }];
 }
+
+
 
 
 @end
