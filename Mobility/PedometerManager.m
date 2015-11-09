@@ -24,6 +24,7 @@
 
 @property (nonatomic, strong) NSDate *lastQueryDate;
 @property (atomic, assign) int remainingQueries;
+@property (atomic, assign) BOOL isQuerying;
 
 @property (nonatomic, weak) MobilityModel *model;
 @property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
@@ -115,6 +116,18 @@
     return _operationQueue;
 }
 
+- (BOOL)isQueryingPedometer
+{
+    return self.isQuerying;
+}
+
+
+- (void)stopQueries {
+    self.isQuerying = NO;
+    self.remainingQueries = 0;
+}
+
+
 
 #pragma mark - iOS 8+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
@@ -132,9 +145,9 @@
     if (![CMPedometer isStepCountingAvailable]) return;
     if (self.remainingQueries > 0) return;
     
+    self.isQuerying = YES;
     [self backgroundQuery];
 }
-
 - (void)backgroundQuery
 {
     NSTimeInterval totalQueryInterval = -[self.lastQueryDate timeIntervalSinceNow];
@@ -149,22 +162,24 @@
         [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData *pedometerData, NSError *error) {
             self.remainingQueries--;
 //            NSLog(@"pedData: %@, remQueries: %d, error: %@", pedometerData, self.remainingQueries, error);
-            [self.managedObjectContext performBlock:^{
-                if (error == nil && [pedometerData.numberOfSteps intValue] > 0) {
+            [self.managedObjectContext performBlockAndWait:^{
+                if (error == nil && [pedometerData.numberOfSteps intValue] > 0 && self.isQuerying) {
                     [self logPedometerData:pedometerData];
                     //                [self performSelectorOnMainThread:@selector(logPedometerData:) withObject:pedometerData waitUntilDone:NO];
                 }
                 if (self.remainingQueries == 0) {
+                    self.lastQueryDate = self.isQuerying ? endDate : startDate;
                     [self archive];
                     [self.managedObjectContext save:nil];
                     [self.model saveManagedContext];
+                    self.isQuerying = NO;
                     //                [self.model performSelectorOnMainThread:@selector(saveManagedContext) withObject:nil waitUntilDone:NO];
                 }
             }];
         }];
     }
     
-    self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
+//    self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
 }
 
 - (void)logPedometerData:(CMPedometerData *)pd
@@ -208,10 +223,11 @@
 //            NSLog(@"numberOfSteps: %d, remQueries: %d, error: %@", (int)numberOfSteps, self.remainingQueries, error);
             
             [self.managedObjectContext performBlock:^{
-                if (error == nil && numberOfSteps > 0) {
+                if (error == nil && numberOfSteps > 0 && self.isQuerying) {
                     [self.model uniquePedometerDataWithStepCount:numberOfSteps startDate:startDate endDate:endDate moc:self.managedObjectContext];
                 }
                 if (self.remainingQueries == 0) {
+                    self.lastQueryDate = self.isQuerying ? endDate : startDate;
                     [self archive];
                     [self.managedObjectContext save:nil];
                     [self.model saveManagedContext];
@@ -221,7 +237,7 @@
         }];
     }
     
-    self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
+//    self.lastQueryDate = [self.lastQueryDate dateByAddingTimeInterval:numQueries*QUERY_INTERVAL];
 }
 
 #endif

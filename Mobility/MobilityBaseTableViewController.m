@@ -9,6 +9,7 @@
 #import "MobilityBaseTableViewController.h"
 #import "AppDelegate.h"
 #import "AppConstants.h"
+#import "WebViewController.h"
 
 @interface MobilityBaseTableViewController ()
 
@@ -38,23 +39,9 @@
 {
     [super viewDidLoad];
     
-    UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout"
-                                                                     style:UIBarButtonItemStylePlain
-                                                                    target:self
-                                                                    action:@selector(logout)];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneButtonPressed)];
     
-    self.navigationItem.leftBarButtonItem = logoutButton;
-    
-    // only show visualize button for default DSU URL
-    if ([[OMHClient defaultDSUBaseURL] isEqualToString:[OMHClient DSUBaseURL]]) {
-    
-        UIBarButtonItem *visualizeButton = [[UIBarButtonItem alloc] initWithTitle:@"Visualize"
-                                                                            style:UIBarButtonItemStylePlain
-                                                                           target:self
-                                                                           action:@selector(visualizeButtonPressed)];
-        
-        self.navigationItem.rightBarButtonItem = visualizeButton;
-    }
+    self.navigationItem.rightBarButtonItem = doneButton;
     
 }
 
@@ -63,13 +50,13 @@
 //    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
     [super viewWillAppear:animated];
     self.isActiveView = YES;
-    [self loadTable];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
 //    NSLog(@"%s, %@", __PRETTY_FUNCTION__, [self class]);
     [super viewDidAppear:animated];
+    [self loadTable];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -85,6 +72,12 @@
 //    [super didReceiveMemoryWarning];
 //    [[MobilityModel sharedModel] logMessage:@"Memory Warning"];
 //}
+
+- (void)doneButtonPressed {
+    UINavigationController *nav = (UINavigationController *)self.presentingViewController;
+    WebViewController *wv = (WebViewController *)nav.topViewController;
+    [wv dismissDataTabs];
+}
 
 - (void)registerForNotifications
 {

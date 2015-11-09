@@ -39,7 +39,6 @@ static GPPSignIn *_gppSignIn = nil;
 @property (nonatomic, strong) AFHTTPSessionManager *backgroundSessionManager;
 
 @property (nonatomic, strong) NSString *userPassword;
-@property (nonatomic, strong) NSString *dsuAccessToken;
 @property (nonatomic, strong) NSString *dsuRefreshToken;
 @property (nonatomic, strong) NSDate *accessTokenDate;
 @property (nonatomic, assign) NSTimeInterval accessTokenValidDuration;
@@ -808,10 +807,20 @@ static GPPSignIn *_gppSignIn = nil;
     [self saveClientState];
 }
 
+- (NSDate *)accessTokenExpirationDate {
+    return [self.accessTokenDate dateByAddingTimeInterval:self.accessTokenValidDuration];
+}
+
+- (NSTimeInterval)accessTokenExpiresIn {
+    if (self.accessTokenDate == nil)
+        return -1;
+    
+    return [[self accessTokenExpirationDate] timeIntervalSinceNow];
+}
+
 - (BOOL)accessTokenHasExpired
 {
-    NSDate *validDate = [self.accessTokenDate dateByAddingTimeInterval:self.accessTokenValidDuration];
-    NSComparisonResult comp = [validDate compare:[NSDate date]];
+    NSComparisonResult comp = [[self accessTokenExpirationDate] compare:[NSDate date]];
     return (comp == NSOrderedAscending);
 }
 

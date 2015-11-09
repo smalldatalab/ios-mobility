@@ -7,6 +7,7 @@
 //
 
 #import "ActivityTableViewController.h"
+#import "ActivityManager.h"
 
 @interface ActivityTableViewController ()
 
@@ -29,6 +30,18 @@
     [super viewDidLoad];
     
     self.isActivityAvailable = [CMMotionActivityManager isActivityAvailable];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[ActivityManager sharedManager] startLogging];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[ActivityManager sharedManager] stopLogging];
 }
 
 - (void)loadTable

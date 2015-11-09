@@ -47,6 +47,9 @@
 @property (nonatomic, readonly) int pendingDataPointCount;
 @property (nonatomic, assign) BOOL allowsCellularAccess;
 
+@property (nonatomic, strong) NSString *dsuAccessToken;
+@property (nonatomic, readonly) NSTimeInterval accessTokenExpiresIn;
+
 
 - (BOOL)handleURL:(NSURL *)url
 sourceApplication:(NSString *)sourceApplication

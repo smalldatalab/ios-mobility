@@ -17,7 +17,7 @@ typedef NSMutableDictionary OMHMediaAttachment;
 
 /**
  *  Data Point
- *  http://www.openmhealth.org/developers/schemas/#data-point
+ *  http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_data-point
  *
  * The easiest way to create a new data point conforming to the OmH
  * data point schema is with a call to [OMHDataPoint templateDataPoint].
@@ -47,7 +47,7 @@ typedef NSMutableDictionary OMHMediaAttachment;
 
 /**
  *  Header
- *  http://www.openmhealth.org/developers/schemas/#header
+ *  http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_header
  */
 @property (nonatomic, copy) NSString *headerID;
 @property (nonatomic, copy) NSDate *creationDateTime;
@@ -57,7 +57,7 @@ typedef NSMutableDictionary OMHMediaAttachment;
 
 /**
  *  Schema ID
- *  http://www.openmhealth.org/developers/schemas/#schema-id
+ *  http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_schema-id
  */
 @property (nonatomic, copy) NSString *schemaNamespace;
 @property (nonatomic, copy) NSString *name;
@@ -66,7 +66,7 @@ typedef NSMutableDictionary OMHMediaAttachment;
 
 /**
  *  Acquisition Provenance
- *  http://www.openmhealth.org/developers/schemas/#header
+ *  http://www.openmhealth.org/documentation/#/schema-docs/schema-library/schemas/omh_header
  */
 typedef enum {
     OMHAcquisitionProvenanceModalitySensed,

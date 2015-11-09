@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "F888AFBF921C36B21FE3D77D6E6F89D711AE6FA4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "F888AFBF921C36B21FE3D77D6E6F89D711AE6FA4" : 0,
+    "6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6CA3C168-5EE3-47AE-BBD4-BDA26D130240",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "F888AFBF921C36B21FE3D77D6E6F89D711AE6FA4" : "Mobility\/",
+    "6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C" : "Mobility\/OMHClient\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Mobility",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Mobility.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/smalldatalab\/ios-omh-dsu-client-lib.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/smalldatalab\/ios-mobility.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F888AFBF921C36B21FE3D77D6E6F89D711AE6FA4"
+    }
+  ]
+}

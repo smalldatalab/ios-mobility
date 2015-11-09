@@ -63,6 +63,7 @@
 		1E575C4E1B15641400E7096A /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E575C4D1B15641400E7096A /* Crashlytics.framework */; };
 		1E575C501B15641600E7096A /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E575C4F1B15641600E7096A /* Fabric.framework */; };
 		1E5BB3A01A4415D2008B6B95 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */; };
+		1E6CA0851BED390F007E2C09 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E6CA0841BED390F007E2C09 /* WebViewController.m */; };
 		1E95D51B1AD3C121008721F4 /* PedometerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D51A1AD3C121008721F4 /* PedometerManager.m */; };
 		1E95D5241AD5032A008721F4 /* PedometerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5231AD5032A008721F4 /* PedometerTableViewController.m */; };
 		1E95D5271AD643FD008721F4 /* ActivityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E95D5261AD643FD008721F4 /* ActivityManager.m */; };
@@ -174,6 +175,8 @@
 		1E575C4D1B15641400E7096A /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = external/Crashlytics.framework; sourceTree = "<group>"; };
 		1E575C4F1B15641600E7096A /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = external/Fabric.framework; sourceTree = "<group>"; };
 		1E5BB39F1A4415D2008B6B95 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1E6CA0831BED390F007E2C09 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		1E6CA0841BED390F007E2C09 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		1E95D5191AD3C121008721F4 /* PedometerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PedometerManager.h; sourceTree = "<group>"; };
 		1E95D51A1AD3C121008721F4 /* PedometerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PedometerManager.m; sourceTree = "<group>"; };
 		1E95D5221AD5032A008721F4 /* PedometerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PedometerTableViewController.h; sourceTree = "<group>"; };
@@ -361,6 +364,8 @@
 				1E086BD01B10723D00F30CDC /* NotificationManager.h */,
 				1E086BD11B10723D00F30CDC /* NotificationManager.m */,
 				1E0F7BBE1A4A5E3F00D1E347 /* Model */,
+				1E6CA0831BED390F007E2C09 /* WebViewController.h */,
+				1E6CA0841BED390F007E2C09 /* WebViewController.m */,
 				1E3FD1021A3EC372000C7E58 /* MobilityBaseTableViewController.h */,
 				1E3FD1031A3EC372000C7E58 /* MobilityBaseTableViewController.m */,
 				1EDF56BD1AF915B000C63B3B /* ActivityTableViewController.h */,
@@ -463,7 +468,7 @@
 				ORGANIZATIONNAME = "Open mHealth";
 				TargetAttributes = {
 					1E3FD0CF1A3EC32F000C7E58 = {
-						DevelopmentTeam = N6LPGP6RYT;
+						DevelopmentTeam = 62Q6KFJKEC;
 					};
 					1E3FD0EA1A3EC330000C7E58 = {
 						TestTargetID = 1E3FD0CF1A3EC32F000C7E58;
@@ -549,6 +554,7 @@
 				1E1C76021A42AB2A004AA4EA /* OMHDataPoint.m in Sources */,
 				1E3FD0E41A3EC330000C7E58 /* AppDelegate.m in Sources */,
 				1E1C75FB1A42AB2A004AA4EA /* AFURLRequestSerialization.m in Sources */,
+				1E6CA0851BED390F007E2C09 /* WebViewController.m in Sources */,
 				1E4208BB1B24979400DFE9FB /* MobilityPedometerData.m in Sources */,
 				1E2DEF861AAAE1CC006A9E4C /* DSUURLViewController.m in Sources */,
 				1E1C75F51A42AB2A004AA4EA /* AFHTTPRequestOperationManager.m in Sources */,
@@ -646,8 +652,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: CORNELL University";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: CORNELL University";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
@@ -659,7 +666,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b5b63fd3-b332-4a29-a7eb-3c1d58be8a44";
 				SDKROOT = iphoneos8.3;
 				WRAPPER_EXTENSION = app;
 			};
@@ -759,8 +766,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Charles Forkish (A2HDKNQ6ZN)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Charles Forkish (A2HDKNQ6ZN)";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
@@ -779,7 +787,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b5b63fd3-b332-4a29-a7eb-3c1d58be8a44";
 				SDKROOT = iphoneos8.3;
 				WRAPPER_EXTENSION = app;
 			};
@@ -790,8 +798,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: CORNELL University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: CORNELL University";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
@@ -803,7 +812,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b5b63fd3-b332-4a29-a7eb-3c1d58be8a44";
 				SDKROOT = iphoneos8.3;
 				WRAPPER_EXTENSION = app;
 			};
@@ -889,6 +898,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
@@ -900,7 +910,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b5b63fd3-b332-4a29-a7eb-3c1d58be8a44";
 				SDKROOT = iphoneos8.3;
 				WRAPPER_EXTENSION = app;
 			};

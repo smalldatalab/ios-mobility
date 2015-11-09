@@ -7,15 +7,12 @@
 //
 
 #import "AppDelegate.h"
-#import "ActivityTableViewController.h"
-#import "LocationTableViewController.h"
-#import "PedometerTableViewController.h"
-#import "LogTableViewController.h"
 #import "LoginViewController.h"
 #import "OMHClient.h"
 #import "MobilityLogger.h"
 #import "MobilityModel.h"
 #import "AppConstants.h"
+#import "WebViewController.h"
 
 #import "NotificationManager.h"
 
@@ -26,7 +23,7 @@
 @interface AppDelegate () <OMHSignInDelegate>
 
 @property (nonatomic, strong) LoginViewController *loginViewController;
-@property (nonatomic, strong) UITabBarController *tabBarController;
+@property (nonatomic, strong) UINavigationController *navigationController;
 
 @end
 
@@ -47,7 +44,7 @@
     }
     else {
         [CrashlyticsKit setUserName:[OMHClient signedInUsername]];
-        self.window.rootViewController = self.tabBarController;
+        self.window.rootViewController = self.navigationController;
         [OMHClient sharedClient].signInDelegate = self;
         [[MobilityLogger sharedLogger] startLogging];
     }
@@ -66,7 +63,7 @@
 
 - (void)userDidLogin
 {
-    UITabBarController *newRoot = self.tabBarController;
+    UINavigationController *newRoot = self.navigationController;
     [UIView transitionFromView:self.loginViewController.view toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
         self.window.rootViewController = newRoot;
         self.loginViewController = nil;
@@ -80,12 +77,12 @@
 {
     LoginViewController *newRoot = self.loginViewController;
     
-    UIView *fromView = self.tabBarController.view;
+    UIView *fromView = self.navigationController.view;
     
     [UIView transitionFromView:fromView toView:newRoot.view duration:0.35 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
         NSLog(@"finished:  %d", finished);
         self.window.rootViewController = newRoot;
-        self.tabBarController = nil;
+        self.navigationController = nil;
     }];
     
     [CrashlyticsKit setUserName:nil];
@@ -99,31 +96,16 @@
     return _loginViewController;
 }
 
-- (UITabBarController *)tabBarController
+- (UINavigationController *)navigationController
 {
-    if (_tabBarController == nil) {
-        ActivityTableViewController *avc = [[ActivityTableViewController alloc] init];
-        UINavigationController *navconA = [[UINavigationController alloc] initWithRootViewController:avc];
-        
-        LocationTableViewController *lvc = [[LocationTableViewController alloc] init];
-        UINavigationController *navconL = [[UINavigationController alloc] initWithRootViewController:lvc];
-        
-        PedometerTableViewController *pvc = [[PedometerTableViewController alloc] init];
-        UINavigationController *navconP = [[UINavigationController alloc] initWithRootViewController:pvc];
-        
-        UITabBarController *tbc = [[UITabBarController alloc] init];
-        tbc.viewControllers = @[navconA, navconL, navconP];
-        
-#ifdef LOG_TABLE
-        LogTableViewController *logvc = [[LogTableViewController alloc] init];
-        UINavigationController *navconLog = [[UINavigationController alloc] initWithRootViewController:logvc];
-        tbc.viewControllers = [tbc.viewControllers arrayByAddingObject:navconLog];
-#endif
-        
-        _tabBarController = tbc;
+    if (_navigationController == nil) {
+        WebViewController *wv = [[WebViewController alloc] init];
+        _navigationController = [[UINavigationController alloc] initWithRootViewController:wv];
     }
-    return _tabBarController;
+    return _navigationController;
 }
+
+
 
 - (BOOL)application: (UIApplication *)application
             openURL: (NSURL *)url

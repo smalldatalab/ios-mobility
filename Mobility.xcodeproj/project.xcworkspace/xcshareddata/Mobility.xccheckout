@@ -20,7 +20,7 @@
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C</key>
-		<string>../..OMHClient</string>
+		<string>../..OMHClient/</string>
 		<key>F888AFBF921C36B21FE3D77D6E6F89D711AE6FA4</key>
 		<string>../..</string>
 	</dict>
@@ -46,7 +46,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>6918CDE7BC87254145CB7880A0E0CA7B4D7DD71C</string>
 			<key>IDESourceControlWCCName</key>
-			<string>MobilityOMHClient</string>
+			<string>OMHClient</string>
 		</dict>
 	</array>
 </dict>

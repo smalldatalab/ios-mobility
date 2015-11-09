@@ -160,13 +160,14 @@
 {
     [self.locationManager stopTrackingLocation];
     [self.activityManager stopLogging];
+    [self.pedometerManager stopQueries];
     [self stopUploadTimer];
     [self stopLocationSampleTimer];
 }
 
 - (void)enteredBackground
 {
-    [self.activityManager stopLogging];
+//    [self.activityManager stopLogging];
     [self archiveDataPoints];
 //    [self uploadData];
 }
@@ -174,8 +175,8 @@
 - (void)enteredForeground
 {
     if (![OMHClient sharedClient].isSignedIn || !self.model.hasUser) return;
-    [self.activityManager startLogging];
-    [self uploadData];
+//    [self.activityManager startLogging];
+//    [self uploadData];
 }
 
 - (void)startUploadTimer

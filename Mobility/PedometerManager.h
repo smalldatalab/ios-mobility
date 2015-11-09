@@ -15,5 +15,6 @@
 @property (nonatomic, readonly) BOOL isQueryingPedometer;
 
 - (void)queryPedometer;
+- (void)stopQueries;
 
 @end

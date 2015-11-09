@@ -81,6 +81,19 @@
     return [dateFormatter stringFromDate:self];
 }
 
+- (NSString *)stringWithFormat_MMM_d_h_m_s
+{
+    static NSDateFormatter *dateFormatter = nil;
+    if (!dateFormatter) {
+        NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"MMM d h:m:s" options:0
+                                                                  locale:[NSLocale currentLocale]];
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:formatString];
+    }
+    
+    return [dateFormatter stringFromDate:self];
+}
+
 - (NSString *)stringWithFormatTemplate:(NSString *)formatTemplate
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

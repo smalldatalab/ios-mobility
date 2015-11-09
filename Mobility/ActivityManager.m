@@ -198,7 +198,7 @@
 
 - (void)getCurrentActivityWithCompletionBlock:(void (^)(CMMotionActivity *))completionBlock
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
     self.activitySampleCompletionBlock = completionBlock;
     if (!self.isLoggingActivities) {
         [self startUpdatingActivities];
@@ -230,7 +230,7 @@
 
 - (void)activityUpdateHandler:(CMMotionActivity *)cmActivity
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
     
     __block CMMotionActivity *blockActivity = cmActivity;
     [self.managedObjectContext performBlock:^{
@@ -288,7 +288,7 @@
 
 - (void)save
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
     [self archive];
     
     [self.managedObjectContext performBlock:^{
